@@ -1,0 +1,31 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  height: -webkit-fill-available;
+}
+
+body {
+  height: 100%;
+  overscroll-behavior: none;
+  background-color: rgba(43, 42, 42, 1);
+}
+
+.background-image {
+  height: calc(100vh - 3%);
+  width: calc(100vw - 2%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url('./assets/background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 15px;
+}
