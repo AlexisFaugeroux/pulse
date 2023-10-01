@@ -1,3 +1,5 @@
+@use './styles/variables' as v;
+
 *,
 *::after,
 *::before {
@@ -13,12 +15,13 @@ html {
 body {
   height: 100%;
   overscroll-behavior: none;
-  background-color: rgba(43, 42, 42, 1);
+  background-color: v.$darkGrey;
+  font-family: 'Kanit', sans-serif;
 }
 
 .background-image {
   height: calc(100vh - 3%);
-  width: calc(100vw - 2%);
+  width: calc(100vw - 5%);
   position: absolute;
   left: 50%;
   top: 50%;
@@ -28,4 +31,6 @@ body {
   background-size: cover;
   background-position: center;
   border-radius: 15px;
+  border: solid 2px;
+  border-color: v.$lightBlue;
 }

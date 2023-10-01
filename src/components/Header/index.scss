@@ -1,0 +1,59 @@
+@use '../../styles/variables' as v;
+
+.header-layout {
+  height: 60px;
+  border-radius: 15px 15px 0 0;
+  gap: 10rem;
+  background-color: black;
+  color: v.$textColor;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  h1 {
+    letter-spacing: 1.8px;
+  }
+
+  .preset-selector {
+    display: flex;
+    height: 45%;
+
+    button {
+      background-color: black;
+      border: none;
+    }
+
+    .preset-sreen {
+      width: 15rem;
+      margin-left: 5px;
+      margin-right: 5px;
+      text-align: center;
+      background-image: url('src/assets/screen-background.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .arrow-left,
+    .arrow-right {
+      color: v.$textColor;
+      border: solid;
+      border-width: 0 6px 6px 0;
+      display: inline-block;
+      padding: 4px;
+    }
+    .arrow-left {
+      transform: rotate(135deg);
+      -webkit-transform: rotate(135deg);
+    }
+    .arrow-right {
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+    }
+  }
+
+  .master-control {
+    display: flex;
+    align-items: center;
+  }
+}
