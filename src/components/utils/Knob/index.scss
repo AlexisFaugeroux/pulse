@@ -1,0 +1,58 @@
+@use '../../../styles/variables' as v;
+
+.control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  .knob {
+    display: flex;
+    position: relative;
+  }
+  .knob .ticks {
+    position: absolute;
+  }
+  .knob .ticks .tick {
+    position: absolute;
+    background: black;
+    box-shadow: inset 0 0 0 0 black;
+    width: 3px;
+    transition: box-shadow 0.3s;
+  }
+  .knob.outer {
+    right: 2px;
+    border-radius: 50%;
+    border: 1px solid #222;
+    border-bottom: 3px solid #222;
+    box-shadow:
+      0 5px 10px 2px black,
+      0 0 5px 3px v.$mainBlue,
+      0 0 0 6px v.$mainBlue;
+  }
+  .knob.inner {
+    border-radius: 50%;
+  }
+  .knob.inner .grip {
+    position: absolute;
+    width: 16%;
+    height: 16%;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    box-shadow: 0 0 3px 1px black;
+  }
+
+  .label {
+    margin-top: 20px;
+    padding: 3px 25px 3px 25px;
+    width: 91px;
+    border-radius: 10px;
+    background-color: v.$darkBlue;
+    text-align: center;
+    color: v.$textColor;
+    font-size: x-small;
+    font-weight: 500;
+    position: relative;
+  }
+}

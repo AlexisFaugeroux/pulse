@@ -1,13 +1,16 @@
 @use '../../styles/variables' as v;
 
+$headerWidth: calc(100vh - 3%);
+
 .header-layout {
   height: 60px;
+  padding-left: 3rem;
+  padding-right: 3rem;
   border-radius: 15px 15px 0 0;
-  gap: 10rem;
   background-color: black;
   color: v.$textColor;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 
   h1 {
@@ -54,6 +57,10 @@
 
   .master-control {
     display: flex;
-    align-items: center;
+    gap: 1.5rem;
+    align-items: baseline;
+    .master-control-label {
+      transform: translateY(-25%);
+    }
   }
 }

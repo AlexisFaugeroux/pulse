@@ -19,15 +19,7 @@ const Header: FC = () => {
 
       <div className="master-control">
         <span className="master-control-label">MASTER</span>
-        <Knob
-          size={100}
-          numTicks={25}
-          degrees={260}
-          min={1}
-          max={100}
-          value={30}
-          color={true}
-        />
+        <Knob label="master" type="master" />
       </div>
     </div>
   );
