@@ -1,9 +1,7 @@
 @use '../../styles/variables' as v;
 
-$headerWidth: calc(100vh - 3%);
-
 .header-layout {
-  height: 60px;
+  height: v.$headerHeight;
   padding-left: 3rem;
   padding-right: 3rem;
   border-radius: 15px 15px 0 0;

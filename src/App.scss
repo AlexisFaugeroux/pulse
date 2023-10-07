@@ -1,5 +1,10 @@
 @use './styles/variables' as v;
 
+$backgroundHeight: calc(100vh - 3%);
+$backgroundWidth: calc(100vw - 5%);
+
+$mainHeight: calc($backgroundHeight - v.$headerHeight);
+
 *,
 *::after,
 *::before {
@@ -19,9 +24,9 @@ body {
   font-family: 'Kanit', sans-serif;
 }
 
-.background-image {
-  height: calc(100vh - 3%);
-  width: calc(100vw - 5%);
+.background {
+  height: $backgroundHeight;
+  width: $backgroundWidth;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -33,4 +38,71 @@ body {
   border-radius: 15px;
   border: solid 2px;
   border-color: v.$lightBlue;
+}
+
+.main {
+  width: 100%;
+  height: $mainHeight;
+
+  .core {
+    height: 78%;
+    display: flex;
+    .left {
+      width: 33%;
+      padding: 5px;
+      flex-direction: column;
+      .oscillator {
+        background-color: v.$transparentBackground;
+        border: 1px solid red;
+        border-radius: 5px;
+        height: 31%;
+        padding: 2px;
+        margin-bottom: 3px;
+      }
+      .subnoise {
+        background-color: v.$transparentBackground;
+        border: 1px solid red;
+        border-radius: 5px;
+        height: 38%;
+      }
+    }
+    .center {
+      width: 27%;
+      padding: 5px;
+      flex-direction: column;
+      .envelopefilter {
+        height: 70%;
+        display: flex;
+        gap: 3px;
+        margin-bottom: 6px;
+        .envelope,
+        .filter {
+          background-color: v.$transparentBackground;
+          border: 1px solid green;
+          border-radius: 5px;
+          width: 50%;
+        }
+      }
+      .lfo {
+        border: 1px solid green;
+        background-color: v.$transparentBackground;
+        border-radius: 5px;
+        height: 30%;
+      }
+    }
+    .right {
+      padding: 5px;
+      width: 40%;
+      flex-direction: column;
+      .fx {
+        border: 1px solid blue;
+        border-radius: 5px;
+        height: 15.2%;
+        margin-bottom: 3px;
+      }
+      .header {
+        height: 7%;
+      }
+    }
+  }
 }

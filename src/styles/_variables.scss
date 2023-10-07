@@ -1,3 +1,7 @@
+//dim
+$headerHeight: 60px;
+$headerWidth: calc(100vh - 3%);
+
 // Grey
 $lightGrey: rgb(165, 164, 164);
 $mainGrey: rgba(102, 99, 99, 1);
@@ -31,3 +35,5 @@ $chorusColor: rgba(0, 222, 255, 1);
 $chorusColorDark: rgb(0, 219, 253, 1);
 $compressorColor: rgba(186, 174, 154, 1);
 $compressorColorDark: rgb(183, 141, 67);
+
+$transparentBackground: rgba(217, 217, 217, 0.1);
