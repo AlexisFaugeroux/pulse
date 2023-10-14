@@ -24,6 +24,7 @@ dist-ssr
 *.sw?
 
 .eslintrc.cjs
+.eslintrc.js
 .prettierignore
 .prettierrc.yml
 package-lock.json

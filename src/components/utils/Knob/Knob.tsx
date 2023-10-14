@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { convertRange, getDeg } from './helpers';
 import { theme } from '../../../styles/_variables';
-import './index.scss';
+import './Knob.scss';
 import { ControlTypes, type KnobProps } from './types';
 
 const Knob: FC<KnobProps> = ({ type, label }) => {

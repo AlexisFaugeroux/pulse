@@ -1,0 +1,29 @@
+@use '../../../styles/variables' as v;
+
+.key {
+  position: relative;
+  background-color: v.$textColor;
+  height: 125px;
+  width: 30px;
+  border: 2px solid v.$darkGrey;
+  border-top: 5px solid black;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0px 3px 2px black;
+  // left: 15px;
+}
+.flat {
+  position: relative;
+  background-color: v.$lightGreen;
+  border: 3px solid v.$darkBlue;
+  border-bottom: 5px solid v.$darkBlue;
+  border-top: 1px solid v.$darkGrey;
+  margin-left: -7.5px;
+  margin-right: -7.5px;
+  height: 80px;
+  width: 15px;
+  bottom: 41px;
+  z-index: 2;
+}
+.pressed {
+  background-color: v.$lightPink;
+}

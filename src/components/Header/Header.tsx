@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
-import './index.scss';
-import Knob from '../utils/Knob';
+import { FC } from 'react';
+import './Header.scss';
+import Knob from '../utils/Knob/Knob';
 
 const Header: FC = () => {
   return (

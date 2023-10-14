@@ -1,4 +1,5 @@
-import Header from './components/Header';
+import Header from './components/Header/Header';
+import Keyboard from './components/Keyboard/Keyboard';
 import './App.scss';
 
 function App() {
@@ -51,7 +52,7 @@ function App() {
           </div>
         </div>
 
-        <div className="keyboard"></div>
+        <Keyboard />
       </div>
     </div>
   );

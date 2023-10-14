@@ -1,0 +1,44 @@
+@use '../../styles/variables' as v;
+
+.keyboard-layout {
+  background-color: v.$darkGrey;
+  box-shadow: 0px 5px 2px black;
+  width: 550px;
+  transform: translate(-50%);
+  margin-left: 50%;
+  margin-top: 20px;
+  display: flex;
+}
+
+.octave-selector {
+  width: 65px;
+  padding-top: 24px;
+  padding-left: 12px;
+  .label {
+    color: v.$textColor;
+    font-size: x-small;
+    font-weight: 500;
+  }
+  input[type='number'] {
+    width: 40px;
+    height: 25px;
+    text-align: center;
+    color: v.$textColor;
+    border: 1px solid v.$mainBlue;
+    border-radius: 2px;
+    background-color: v.$textColor;
+    box-shadow: inset black 1px 5px 30px 1px;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+}
+
+.keys {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: end;
+  height: 150px;
+}
