@@ -6,7 +6,7 @@ export const theme = {
   mainBlue: 'rgba(44, 93, 129, 1)',
   darkBlue: 'rgba(26, 62, 91, 1)',
   lightGreen: 'rgba(42, 113, 136, 1)',
-  mainGreen: 'rgba(133, 198, 105, 1)',
+  mainGreen: 'rgb(128, 240, 80)',
   mainPink: 'rgba(249, 102, 172, 1)',
   textColor: 'rgba(217, 251, 255, 1)',
   distortionColor: 'rgba(247, 163, 73, 1)',

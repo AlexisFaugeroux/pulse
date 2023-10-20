@@ -48,17 +48,9 @@ body {
     height: 78%;
     display: flex;
     .left {
-      width: 33%;
+      width: 480px;
       padding: 5px;
       flex-direction: column;
-      .oscillator {
-        background-color: v.$transparentBackground;
-        border: 1px solid red;
-        border-radius: 5px;
-        height: 31%;
-        padding: 2px;
-        margin-bottom: 3px;
-      }
       .subnoise {
         background-color: v.$transparentBackground;
         border: 1px solid red;

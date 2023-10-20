@@ -1,6 +1,7 @@
 import Header from './components/Header/Header';
 import Keyboard from './components/Keyboard/Keyboard';
 import './App.scss';
+import Oscillator from './components/Oscillator/Oscillator';
 
 function App() {
   return (
@@ -9,20 +10,8 @@ function App() {
       <div className="main">
         <div className="core">
           <div className="left">
-            <div className="oscillator A">
-              <div className="osc-background">
-                <h2>Oscillator A</h2>
-                <div className="selector"></div>
-                <div className="knobs"></div>
-              </div>
-            </div>
-            <div className="oscillator B">
-              <div className="osc-background">
-                <h2>Oscillator B</h2>
-                <div className="selector"></div>
-                <div className="knobs"></div>
-              </div>
-            </div>
+           <Oscillator />
+           <Oscillator />
             <div className="subnoise">
               <div className="sub">
                 <div className="osc-background"></div>

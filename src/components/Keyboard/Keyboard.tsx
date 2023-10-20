@@ -20,10 +20,11 @@ const Keyboard: FC<KeyboardProps> = () => {
         setPressedKeys(
           (prevState) => [...prevState, e.key],
           // TODO: dispatch
-          () => console.log('Down :', pressedKeys))
+          () => console.log('Down :', pressedKeys),
+        );
       }
     },
-    [pressedKeys],
+    [pressedKeys, setPressedKeys],
   );
 
   const handleKeyUp = useCallback(
@@ -33,10 +34,11 @@ const Keyboard: FC<KeyboardProps> = () => {
         setPressedKeys(
           (prevState) => prevState.filter((_, i) => i !== index),
           // TODO: dispatch
-          () => console.log('Up :', pressedKeys))
+          () => console.log('Up :', pressedKeys),
+        );
       }
     },
-    [pressedKeys],
+    [pressedKeys, setPressedKeys],
   );
 
   useEffect(() => {

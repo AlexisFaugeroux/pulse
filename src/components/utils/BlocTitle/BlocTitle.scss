@@ -1,0 +1,15 @@
+@use '../../../styles/variables' as v;
+
+.blocTitle-layout {
+  background-color: v.$darkBlue;
+  border-radius: 2px;
+  padding: 2px 0px;
+  display: flex;
+  align-items: center;
+  h2 {
+    color: v.$textColor;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    margin-left: 7px;
+  }
+}

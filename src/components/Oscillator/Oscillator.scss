@@ -1,0 +1,29 @@
+@use '../../styles//variables' as v;
+
+.oscillator {
+  background-color: v.$transparentBackground;
+  border-radius: 2px;
+  height: 31%;
+  padding: 5px;
+  margin-bottom: 3px;
+  .osc-background {
+    background-color: v.$mainBlue;
+    border-radius: 2px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 7px 9px;
+  }
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  .knobs {
+    display: flex;
+    width: 60%;
+    gap: 7px;
+  }
+}
