@@ -63,15 +63,12 @@ body {
       padding: 5px;
       flex-direction: column;
       .envelopefilter {
-        height: 70%;
+        height: 407px;
         display: flex;
         gap: 3px;
         margin-bottom: 6px;
         .envelope,
         .filter {
-          background-color: v.$transparentBackground;
-          border: 1px solid green;
-          border-radius: 5px;
           width: 50%;
         }
       }

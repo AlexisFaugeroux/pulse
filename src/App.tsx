@@ -2,6 +2,7 @@ import Header from './components/Header/Header';
 import Keyboard from './components/Keyboard/Keyboard';
 import './App.scss';
 import Oscillator from './components/Oscillator/Oscillator';
+import Enveloppe from './components/Envelope/Enveloppe';
 
 function App() {
   return (
@@ -10,8 +11,8 @@ function App() {
       <div className="main">
         <div className="core">
           <div className="left">
-           <Oscillator />
-           <Oscillator />
+            <Oscillator />
+            <Oscillator />
             <div className="subnoise">
               <div className="sub">
                 <div className="osc-background"></div>
@@ -24,7 +25,7 @@ function App() {
 
           <div className="center ">
             <div className="envelopefilter">
-              <div className="envelope"></div>
+              <Enveloppe />
               <div className="filter"></div>
             </div>
             <div className="lfo"></div>
