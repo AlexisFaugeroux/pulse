@@ -3,11 +3,11 @@ import './OctaveSelector.scss';
 import activeIcon from '../../../assets/octave-light-switch-active.png';
 import inactiveIcon from '../../../assets/octave-light-switch-inactive.png';
 
-interface OctaveSelector {
+interface OctaveSelectorProps {
   size: 3 | 5 | 7;
 }
 
-const OctaveSelector: FC<OctaveSelector> = ({ size }) => {
+const OctaveSelector: FC<OctaveSelectorProps> = ({ size }) => {
   const [octaveOffset, setOctaveOffset] = useState(0);
 
   const min = (1 - size) / 2;

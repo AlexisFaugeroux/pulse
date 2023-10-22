@@ -10,33 +10,33 @@ import squareActive from '../../../assets/square-wave-active.png';
 import squareInactive from '../../../assets/square-wave-inactive.png';
 
 enum ActiveWave {
-  sine = 'sine',
-  triangle = 'triangle',
-  sawtooth = 'sawtooth',
-  square = 'square',
+  Sine = 'sine',
+  Triangle = 'triangle',
+  Sawtooth = 'sawtooth',
+  Square = 'square',
 }
 
 const WaveSelector: FC = () => {
-  const [activeWave, setActiveWave] = useState<ActiveWave>(ActiveWave.sine);
+  const [activeWave, setActiveWave] = useState<ActiveWave>(ActiveWave.Sine);
 
   const wavesToImages = [
     {
-      wave: ActiveWave.sine,
+      wave: ActiveWave.Sine,
       active: sineActive,
       inactive: sineInactive,
     },
     {
-      wave: ActiveWave.triangle,
+      wave: ActiveWave.Triangle,
       active: triangleActive,
       inactive: triangleInactive,
     },
     {
-      wave: ActiveWave.sawtooth,
+      wave: ActiveWave.Sawtooth,
       active: sawtoothActive,
       inactive: sawtoothInactive,
     },
     {
-      wave: ActiveWave.square,
+      wave: ActiveWave.Square,
       active: squareActive,
       inactive: squareInactive,
     },

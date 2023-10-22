@@ -59,7 +59,7 @@ body {
       }
     }
     .center {
-      width: 27%;
+      width: 380px;
       padding: 5px;
       flex-direction: column;
       .envelopefilter {
@@ -67,10 +67,6 @@ body {
         display: flex;
         gap: 3px;
         margin-bottom: 6px;
-        .envelope,
-        .filter {
-          width: 50%;
-        }
       }
       .lfo {
         border: 1px solid green;

@@ -3,6 +3,7 @@ import Keyboard from './components/Keyboard/Keyboard';
 import './App.scss';
 import Oscillator from './components/Oscillator/Oscillator';
 import Enveloppe from './components/Envelope/Enveloppe';
+import Filter from './components/Filter/Filter';
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
           <div className="center ">
             <div className="envelopefilter">
               <Enveloppe />
-              <div className="filter"></div>
+              <Filter />
             </div>
             <div className="lfo"></div>
           </div>

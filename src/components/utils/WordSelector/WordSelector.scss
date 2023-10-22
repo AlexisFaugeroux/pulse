@@ -1,0 +1,53 @@
+@use '../../../styles/variables' as v;
+
+.word-selector {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 7px;
+  margin-bottom: 5px;
+  width: 100%;
+  .word-selector-image {
+    background-image: url('../../../assets/waveSelector-background.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 45px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    button {
+      background-color: black;
+      border: none;
+    }
+    .arrow-left,
+    .arrow-right {
+      color: v.$textColor;
+      border: solid;
+      border-width: 0 4px 4px 0;
+      display: inline-block;
+      padding: 2px;
+    }
+    .arrow-left:hover,
+    .arrow-right:hover {
+      color: v.$lightBlue;
+    }
+    .arrow-left:active,
+    .arrow-right:active {
+      color: v.$mainBlue;
+    }
+    .arrow-left {
+      transform: rotate(135deg);
+      -webkit-transform: rotate(135deg);
+    }
+    .arrow-right {
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+    }
+    .word-selector-sreen {
+      color: v.$textColor;
+      font-style: italic;
+      font-size: small;
+      letter-spacing: 1px;
+      width: 40%;
+      text-align: center;
+    }
+  }
+}

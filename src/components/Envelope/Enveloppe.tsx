@@ -7,7 +7,7 @@ const Enveloppe: FC = () => {
   return (
     <div className="envelope">
       <div className="envelope-background">
-        <BlocTitle label="enveloppe" />
+        <BlocTitle label="envelope" />
         <div className="knobs">
           <Knob label="attack" type="default" />
           <Knob label="decay" type="default" />

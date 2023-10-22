@@ -281,3 +281,16 @@ export const NOTE_TO_KEYS = {
   'A#8': ['h', 'v'],
   B8: ['u', 'b'],
 };
+
+export const FILTER_VALUES = [
+  'Lowpass',
+  'Highpass',
+  'Bandpass',
+  'Lowshelf',
+  'Highshelf',
+  'Peaking',
+  'Notch',
+  'Allpass',
+];
+
+export const NOISE_VALUES = ['White', 'Pink', 'Brown'];
