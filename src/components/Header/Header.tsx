@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import './Header.scss';
+import { ControlTypes } from '../../utils/constants';
 import Knob from '../utils/Knob/Knob';
+import './Header.scss';
 
 const Header: FC = () => {
   return (
@@ -19,7 +20,7 @@ const Header: FC = () => {
 
       <div className="master-control">
         <span className="master-control-label">MASTER</span>
-        <Knob label="master" type="master" />
+        <Knob initialValue={33} label="master" type={ControlTypes.MASTER} />
       </div>
     </div>
   );

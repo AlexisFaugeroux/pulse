@@ -17,7 +17,7 @@
     padding: 7px 9px;
     .knobs {
       background-color: v.$lightGreen;
-      border: 1px solid v.$textColor;
+      border: 1px solid v.$lowerTextColor;
       border-radius: 5px;
       width: 120px;
       height: 100%;
@@ -25,6 +25,7 @@
       flex-direction: column;
       justify-content: space-around;
       align-items: center;
+      margin-top: 5px;
       padding-top: 5px;
     }
   }

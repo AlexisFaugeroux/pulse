@@ -48,7 +48,7 @@ body {
     height: 78%;
     display: flex;
     .left {
-      width: 480px;
+      width: 425px;
       padding: 5px;
       flex-direction: column;
       .subnoise {
@@ -59,7 +59,7 @@ body {
       }
     }
     .center {
-      width: 380px;
+      width: 360px;
       padding: 5px;
       flex-direction: column;
       .envelopefilter {

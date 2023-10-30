@@ -1,18 +1,42 @@
 import { FC } from 'react';
+import { ControlTypes } from '../../utils/constants';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
-import './Enveloppe.scss';
 import Knob from '../utils/Knob/Knob';
+import './Enveloppe.scss';
 
 const Enveloppe: FC = () => {
+  const knobs = [
+    {
+      label: 'attack',
+      initialValue: 5,
+    },
+    {
+      label: 'decay',
+      initialValue: 30,
+    },
+    {
+      label: 'sustain',
+      initialValue: 20,
+    },
+    {
+      label: 'release',
+      initialValue: 10,
+    },
+  ];
+
   return (
     <div className="envelope">
       <div className="envelope-background">
         <BlocTitle label="envelope" />
         <div className="knobs">
-          <Knob label="attack" type="default" />
-          <Knob label="decay" type="default" />
-          <Knob label="sustain" type="default" />
-          <Knob label="release" type="default" />
+          {knobs.map(({ initialValue, label }) => (
+            <Knob
+              key={`${label}`}
+              initialValue={initialValue}
+              label={label}
+              type={ControlTypes.DEFAULT}
+            />
+          ))}
         </div>
       </div>
     </div>

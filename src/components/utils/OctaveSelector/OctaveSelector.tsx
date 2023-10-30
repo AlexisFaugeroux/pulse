@@ -23,9 +23,10 @@ const OctaveSelector: FC<OctaveSelectorProps> = ({ size }) => {
       <div className="rangeWrap">
         <datalist id="values">
           {values.map((value) => (
-            <div className="lights">
+            <div key={`lights${value + Date.now()}`} className="lights">
               <button
-                key={value + Date.now()}
+                key={`button${value + Date.now()}`}
+                className="light"
                 style={{
                   backgroundImage: `url(${
                     octaveOffset === parseInt(value, 10)
@@ -42,7 +43,11 @@ const OctaveSelector: FC<OctaveSelectorProps> = ({ size }) => {
                 }}
               />
 
-              <option value={value} label={value.toString()} />
+              <option
+                key={`option${value + Date.now()}`}
+                value={value}
+                label={value.toString()}
+              />
             </div>
           ))}
         </datalist>

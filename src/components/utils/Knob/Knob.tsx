@@ -1,205 +1,248 @@
-import React, { FC, useState } from 'react';
-import { convertRange, getDeg } from './helpers';
+import { FC, useEffect, useRef, useState } from 'react';
+import { ControlTypes } from '../../../utils/constants';
+import { clampValue, normalizeValue } from './helpers';
+import SvgDefs from './SvgDefs';
 import { theme } from '../../../styles/_variables';
 import './Knob.scss';
-import { ControlTypes, type KnobProps } from './types';
 
-const Knob: FC<KnobProps> = ({ type, label }) => {
-  const size = 30;
-  const numTicks = 150;
-  const degrees = 200;
-  const min = 1;
+interface KnobProps {
+  initialValue: number;
+  label: string;
+  type: ControlTypes;
+}
+
+const Knob: FC<KnobProps> = ({ initialValue, label, type }) => {
+  const min = 0;
   const max = 100;
-  const value = 30;
+  const dragResistance = 300 / (max - min);
+  let dragStartPosition = 0;
 
-  const fullAngle = degrees;
-  const startAngle = (360 - degrees) / 2;
-  const endAngle = startAngle + degrees;
-  const margin = size * 0.15;
+  const [value, setValue] = useState(initialValue);
+  const [isActiveDrag, setIsActiveDrag] = useState(false);
+  const [isFocus, setIsFocus] = useState(false);
 
-  const [deg, setDeg] = useState<number>(
-    Math.floor(convertRange(min, max, startAngle, endAngle, value)),
-  );
+  const indicatorRingBgRef = useRef<SVGCircleElement>(null);
+  const indicatorRingRef = useRef<SVGPathElement>(null);
+  const indicatorDotRef = useRef<SVGCircleElement>(null);
 
-  const startDrag = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const target = e.target as Element;
-    const knob = target.getBoundingClientRect();
-    const pts = {
-      x: knob.left + knob.width / 2,
-      y: knob.top + knob.height / 2,
-    };
+  const handleMouseMove = (e: MouseEvent) => {
+    if (e.buttons & 1) {
+      const dragAmount = e.clientY - dragStartPosition;
+      setValue(clampValue(value - dragAmount / dragResistance, min, max));
+    } else {
+      const dragAmount = e.clientY - dragStartPosition;
+      setValue(clampValue(value - dragAmount / dragResistance, min, max));
+      clearDrag();
+    }
+  };
 
-    const moveHandler = (e: MouseEvent) => {
-      let currentDeg = getDeg(startAngle, endAngle, e.clientX, e.clientY, pts);
+  const handleMouseUp = (e: MouseEvent) => {
+    const dragAmount = e.clientY - dragStartPosition;
+    setValue(clampValue(value - dragAmount / dragResistance, min, max));
+    clearDrag();
+  };
 
-      if (currentDeg === startAngle) currentDeg--;
+  const clearDrag = () => {
+    document.body.classList.remove('knob-input__drag-active');
+    setIsActiveDrag(false);
+    document.body.removeEventListener('mousemove', handleMouseMove);
+    document.body.removeEventListener('mouseup', handleMouseUp);
+  };
 
-      const newValue = Math.floor(
-        convertRange(startAngle, endAngle, min, max, currentDeg),
+  useEffect(() => {
+    console.log('value', value);
+    let r = 0;
+
+    if (indicatorRingBgRef.current) {
+      const ringStyle = getComputedStyle(indicatorRingBgRef.current);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      r = parseFloat(ringStyle.r) - parseFloat(ringStyle.strokeWidth) / 2;
+    }
+
+    if (indicatorDotRef.current) {
+      indicatorDotRef.current.style.transformOrigin = '20px 20px';
+    }
+
+    const normVal = normalizeValue(value, min, max);
+    const theta = Math.PI * 2 * normVal + 0.5 * Math.PI;
+    const endX = r * Math.cos(theta) + 20;
+    const endY = r * Math.sin(theta) + 20;
+
+    if (indicatorRingRef.current && indicatorDotRef.current) {
+      indicatorRingRef.current.setAttribute(
+        'd',
+        `M20,20l0,${r}${
+          normVal > 0.5 ? `A${r},${r},0,0,1,20,${20 - r}` : ''
+        }A-${r},${r},0,0,1,${endX},${endY}Z`,
       );
-
-      setDeg(currentDeg);
-      console.log(newValue);
-    };
-    document.addEventListener('mousemove', moveHandler);
-    document.addEventListener('mouseup', () => {
-      document.removeEventListener('mousemove', moveHandler);
-    });
-  };
-
-  const renderTicks = () => {
-    const ticks = [];
-    const incr = fullAngle / numTicks;
-    const tickSize = margin + size / 2;
-    let boxShadowActive = '';
-
-    switch (type) {
-      case ControlTypes.DEFAULT:
-        boxShadowActive = `inset 5px 5px 5px 5px ${theme.mainGreen}, 0 0 0 0.5px ${theme.mainGreen}`;
-        break;
-      case ControlTypes.MASTER:
-        boxShadowActive = `inset 5px 5px 5px 5px ${theme.lightBlue}, 0 0 0 0.5px ${theme.lightBlue}`;
-        break;
-      case ControlTypes.DISTORTION:
-        boxShadowActive = `inset 5px 5px 5px 5px ${theme.distortionColor}, 0 0 0 0.5px ${theme.distortionColor}`;
-        break;
-      case ControlTypes.FLANGER:
-        boxShadowActive = `inset 5px 5px 5px 5px ${theme.flangerColor}, 0 0 0 0.5px ${theme.flangerColor}`;
-        break;
-      case ControlTypes.DELAY:
-        boxShadowActive = `inset 5px 5px 5px 5px ${theme.delayColor}, 0 0 0 0.5px ${theme.delayColor}`;
-        break;
-      case ControlTypes.REVERB:
-        boxShadowActive = `inset 5px 5px 5px 5px ${theme.reverbColor}, 0 0 0 0.5px ${theme.reverbColor}`;
-        break;
-      case ControlTypes.CHORUS:
-        boxShadowActive = `inset 5px 5px 5px 5px ${theme.chorusColor}, 0 0 0 0.5px ${theme.chorusColor}`;
-        break;
-      case ControlTypes.COMPRESSOR:
-        boxShadowActive = `inset 5px 5px 5px 5px ${theme.compressorColor}, 0 0 0 0.5px ${theme.compressorColor}`;
-        break;
-      default:
-        boxShadowActive = '';
-        return;
+      indicatorDotRef.current.style.transform = `rotate(${360 * normVal}deg)`;
     }
+  }, [indicatorRingRef, indicatorRingBgRef, indicatorDotRef, value]);
 
-    for (let deg = startAngle; deg <= endAngle; deg += incr) {
-      const tick = {
-        deg: deg,
-        tickStyle: {
-          height: tickSize + 7,
-          left: tickSize - 3,
-          top: tickSize + 2,
-          transform: `rotate(${deg}deg)`,
-          transformOrigin: 'top',
-        },
-        activeStyle: {
-          boxShadow: boxShadowActive,
-        },
-        lastOneStyle: {
-          boxShadow: `inset 5px 5px 5px 5px red`,
-        },
-      };
-      ticks.push(tick);
-    }
-    return ticks;
-  };
-
-  const dcpy = (o: Record<string, number | string>) => {
-    return JSON.parse(JSON.stringify(o));
-  };
-
-  const kStyle = {
-    width: size,
-    height: size,
-  };
-
-  const iStyle = dcpy(kStyle);
-  const oStyle = dcpy(kStyle);
-  oStyle.margin = margin;
-  const gStyle = {
-    background: '',
-  };
+  let indicatorRingFillColor = '';
+  let indicatorDotFillColor = '';
+  let indcatorDotStrokeColor = '';
 
   switch (type) {
-    case ControlTypes.DEFAULT:
-      oStyle.backgroundImage = `radial-gradient(100% 70%, ${theme.mainGrey} 45%, ${theme.darkGrey} 100%)`;
-      gStyle.background = theme.mainGreen;
-      break;
     case ControlTypes.MASTER:
-      oStyle.backgroundImage = `radial-gradient(100% 70%, ${theme.mainGrey} 6%, ${theme.darkGrey} 90%)`;
-      oStyle.boxShadow = `
-      0 5px 10px 2px black,
-      0 0 5px 3px black,
-      0 0 0 6px black`;
-      gStyle.background = theme.lightBlue;
+      indicatorRingFillColor = theme.lightBlue;
+      indicatorDotFillColor = theme.lightBlue;
+      break;
+    case ControlTypes.DEFAULT:
+      indicatorRingFillColor = theme.mainGreen;
+      indicatorDotFillColor = theme.mainGreen;
       break;
     case ControlTypes.DISTORTION:
-      oStyle.backgroundImage = `radial-gradient(100% 70%, ${theme.distortionColor} 45%, ${theme.darkGrey} 100%)`;
-      gStyle.background = theme.distortionColor;
+      indicatorRingFillColor = theme.distortionColor;
+      indicatorDotFillColor = theme.distortionColor;
+      indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.FLANGER:
-      oStyle.backgroundImage = `radial-gradient(100% 70%, ${theme.flangerColor} 45%, ${theme.darkGrey} 100%)`;
-      gStyle.background = theme.flangerColor;
+      indicatorRingFillColor = theme.flangerColor;
+      indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.DELAY:
-      oStyle.backgroundImage = `radial-gradient(100% 70%, ${theme.delayColor} 45%, ${theme.darkGrey} 100%)`;
-      gStyle.background = theme.delayColor;
+      indicatorRingFillColor = theme.delayColor;
+      indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.REVERB:
-      oStyle.backgroundImage = `radial-gradient(100% 70%, ${theme.reverbColor} 45%, ${theme.darkGrey} 100%)`;
-      gStyle.background = theme.reverbColor;
+      indicatorRingFillColor = theme.reverbColor;
+      indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.CHORUS:
-      oStyle.backgroundImage = `radial-gradient(100% 70%, ${theme.chorusColor} 45%, ${theme.darkGrey} 100%)`;
-      gStyle.background = theme.chorusColor;
+      indicatorRingFillColor = theme.chorusColor;
+      indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.COMPRESSOR:
-      gStyle.background = theme.compressorColor;
+      indicatorRingFillColor = theme.compressorColor;
+      indcatorDotStrokeColor = 'black';
       break;
-    default:
-      oStyle.backgroundImage = '';
-      gStyle.background = '';
-      return;
   }
 
-  iStyle.transform = `rotate(${deg}deg)`;
-
   return (
-    <div className="control">
-      <div className="knob" style={kStyle}>
-        <div className="ticks">
-          {numTicks
-            ? renderTicks()?.map((tick, i) => (
-                <div
-                  key={i}
-                  className={`tick ${tick.deg <= deg ? 'active' : ''}`}
-                  style={
-                    tick.deg > deg
-                      ? tick.tickStyle
-                      : i >= numTicks - 1
-                      ? {
-                          ...tick.tickStyle,
-                          boxShadow: tick.lastOneStyle.boxShadow,
-                        }
-                      : { ...tick.tickStyle, ...tick.activeStyle }
-                  }
-                />
-              ))
-            : null}
+    <div className="knob">
+      <SvgDefs />
+      <div className="knob__control">
+        <div
+          className={`knob-input
+          ${isActiveDrag ? 'drag-active' : ''}
+          ${isFocus ? 'focus-active' : ''}
+          `}
+        >
+          <svg className="knob-input__visual" viewBox="0 0 40 40">
+            <circle
+              className="focus-indicator"
+              cx={20}
+              cy={20}
+              r={18}
+              fill="#4eccff"
+              filter="url(#glow)"
+            ></circle>
+            <circle
+              className="indicator-ring-bg"
+              cx={20}
+              cy={20}
+              r={18}
+              fill="#353b3f"
+              stroke="#23292d"
+              ref={indicatorRingBgRef}
+            ></circle>
+            <path
+              className="indicator-ring"
+              d="M20,20Z"
+              fill={indicatorRingFillColor}
+              ref={indicatorRingRef}
+            ></path>
+            <g className="dial">
+              <circle
+                cx={20}
+                cy={20}
+                r={16}
+                fill="url(#grad-dial-soft-shadow)"
+              ></circle>
+              <ellipse
+                cx={20}
+                cy={22}
+                rx={14}
+                ry={14.5}
+                fill="#242a2e"
+                opacity={0.15}
+              ></ellipse>
+              <circle
+                cx={20}
+                cy={20}
+                r={14}
+                fill={`url(#grad-dial-base-${type})`}
+                stroke="#242a2e"
+                strokeWidth={3}
+              ></circle>
+              <circle
+                cx={20}
+                cy={20}
+                r={13}
+                fill="transparent"
+                stroke="url(#grad-dial-highlight)"
+                strokeWidth={1.5}
+              ></circle>
+              <circle
+                className="dial-highlight"
+                cx={20}
+                cy={20}
+                r="14"
+                fill="#ffffff"
+              ></circle>
+              <circle
+                className="indicator-dot"
+                cx={20}
+                cy={30}
+                r={1.5}
+                fill={indicatorDotFillColor}
+                stroke={indcatorDotStrokeColor}
+                ref={indicatorDotRef}
+              ></circle>
+            </g>
+          </svg>
+          <input
+            type="range"
+            className="knob-input__input"
+            min={min}
+            max={max}
+            value={value}
+            onChange={(e) => {
+              const normVal = normalizeValue(
+                parseFloat(e.target.value),
+                min,
+                max,
+              );
+              setValue(normVal);
+            }}
+            onMouseDown={(e) => {
+              clearDrag();
+              e.preventDefault();
+              document.body.classList.add('knob-input__drag-active');
+              setIsActiveDrag(true);
+              dragStartPosition = e.clientY;
+              setValue(parseFloat(e.currentTarget.value));
+              document.body.addEventListener('mousemove', handleMouseMove);
+              document.body.addEventListener('mouseup', handleMouseUp);
+            }}
+            onDoubleClick={() => {
+              clearDrag();
+              setValue(initialValue);
+            }}
+            onFocus={() => {
+              setIsFocus(true);
+            }}
+            onBlur={() => {
+              setIsFocus(false);
+            }}
+          />
         </div>
-
-        <div className="knob outer" style={oStyle} onMouseDown={startDrag}>
-          <div className="knob inner" style={iStyle}>
-            <div className="grip" style={gStyle} />
-          </div>
-        </div>
+        {type !== ControlTypes.MASTER && (
+          <div className="knob__label">{label}</div>
+        )}
       </div>
-
-      {type !== ControlTypes.MASTER && (
-        <div className="label">{label.toLocaleUpperCase()}</div>
-      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ $thumb-w: 1.2rem;
 $thumb-h: 1.2rem;
 $thumb-pad: 0.1rem;
 $ot-w: 7.5rem;
-$ot-h: ($thumb-h * 0.5);
+$ot-h: ($thumb-h * 0.4);
 $it-w: ($ot-w - ($thumb-pad * 2));
 $it-h: 0.2rem;
 
@@ -24,7 +24,7 @@ $thumb-bg: #66696b;
 
 .octave-selector-layout {
   background-color: v.$lightGreen;
-  border: 1px solid v.$textColor;
+  border: 1px solid v.$lowerTextColor;
   border-radius: 5px;
   width: 135px;
   display: flex;
@@ -49,19 +49,16 @@ $thumb-bg: #66696b;
 
   input[type='range'] {
     display: flex;
-    //	margin: auto;
     width: $ot-w;
     height: $ot-h;
     -webkit-appearance: none;
     background: linear-gradient(
       180deg,
-      v.$whiteGrey,
-      v.$whiteGrey,
-      v.$whiteGrey
+      v.$lowerTextColor,
+      v.$lowerTextColor,
+      v.$lowerTextColor
     );
     border-radius: $ot-h;
-    // outline: 1px ridge $clr-list;
-    // outline-offset: ((($thumb-h - $ot-h) / 4) + ($thumb-pad / 4));
     box-shadow:
       0 3px 2px -1px $fw25 inset,
       0 0 10px 0 $fb50,
@@ -79,7 +76,6 @@ $thumb-bg: #66696b;
         0 1px 1px 0 $fw25,
         0 2px 2px 0 $fw15;
       border: 1px solid $fb25;
-      // margin: 0 ($thumb-pad*2);
     }
 
     // Add padding to ends to shrink down the inner track
@@ -90,9 +86,6 @@ $thumb-bg: #66696b;
       height: $it-h;
       margin: 0 0.2rem;
       transform: translateY(-220%);
-    }
-
-    &::-moz-range-track {
     }
 
     // Shape, bg, shading
@@ -129,36 +122,22 @@ $thumb-bg: #66696b;
         0 3px 2px 1px $fb25,
         0 6px 4px 3px $fb15;
       border-radius: calc($thumb-h/2);
-      cursor: pointer;
-      //		-webkit-appearance: none;
+      cursor: grab;
     }
 
     // Thumb needs to be centered vertically using either a negative margin,
     // or translateY
     &::-webkit-slider-thumb {
-      transform: translatey((-$ot-h) + 0.15rem);
+      transform: translatey((-$ot-h) + 0rem);
       width: $thumb-w;
       height: $thumb-h;
       background: radial-gradient(
-          #444 45%,
-          #555 50%,
-          #222 55%,
-          v.$whiteGrey 57.5%,
-          v.$whiteGrey 100%
-        ),
-        conic-gradient(
-          #4b4b4b 10deg,
-          #777 45deg,
-          #5b5b6b 70deg,
-          #9f9f9f 105deg,
-          #444 140deg,
-          #aaa 185deg,
-          #666 210deg,
-          #999 245deg,
-          #777 285deg,
-          #9f9f9f 320deg,
-          #4b4b4b
-        );
+        #444 45%,
+        #555 50%,
+        #222 55%,
+        v.$lowerTextColor 57.5%,
+        v.$lowerTextColor 100%
+      );
       background-blend-mode: overlay;
       box-shadow:
         0 0 1px 1px fade(white, 35%) inset,
@@ -168,11 +147,8 @@ $thumb-bg: #66696b;
         0 3px 2px 1px $fb25,
         0 6px 4px 3px $fb15;
       border-radius: calc($thumb-h/2);
-      cursor: pointer;
+      cursor: grab;
       -webkit-appearance: none;
-    }
-
-    &::-moz-range-thumb {
     }
   }
 
@@ -184,33 +160,23 @@ $thumb-bg: #66696b;
     transform: translatey(0.1rem);
     margin-bottom: 2px;
     option {
-      //   background: #444;
       z-index: 1;
       display: flex;
       position: relative;
-      //   padding: 0 0.25rem;
-      //   border: 1px solid v.$textColor;
-      //   border-radius: 0.5rem;
       text-shadow: 0 1px 1px 0 v.$lightGreen;
       box-shadow: 0 1px 1px 0 v.$lightGreen;
       font-size: x-small;
-      color: v.$textColor;
-
-      //   &:before {
-      //     content: '';
-      //     display: inline-block;
-      //     position: relative;
-      //     left: 50%;
-      //     height: 0.35rem;
-      //     width: 1px;
-      //     background: $clr-list;
-      //     transform: translatey(300%);
-      //   }
+      color: v.$lowerTextColor;
     }
   }
   .label {
-    color: v.$textColor;
+    color: v.$lowerTextColor;
     font-size: x-small;
     font-weight: 500;
+    margin-bottom: 2px;
   }
+}
+
+.light:hover {
+  filter: brightness(1.1);
 }

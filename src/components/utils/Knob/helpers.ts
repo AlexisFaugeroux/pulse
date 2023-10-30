@@ -1,34 +1,28 @@
-export function convertRange(
-  oldMin: number,
-  oldMax: number,
-  newMin: number,
-  newMax: number,
-  oldValue: number,
-) {
-  return ((oldValue - oldMin) * (newMax - newMin)) / (oldMax - oldMin) + newMin;
+export const clampValue = (val: number, min: number, max: number) => {
+  return Math.min(Math.max(val, min), max);
+};
+
+export const normalizeValue = (val: number, min: number, max: number) => {
+  return (val - min) / (max - min);
+};
+
+export function getSupportedPropertyName(properties: string[]) {
+  for (let i = 0; i < properties.length; i++)
+    if (
+      typeof document.body.style[
+        properties[i] as keyof typeof document.body.style
+      ] !== 'undefined'
+    )
+      return properties[i];
+  return null;
 }
 
-export function getDeg(
-  startAngle: number,
-  endAngle: number,
-  cX: number,
-  cY: number,
-  pts: {
-    x: number;
-    y: number;
-  },
-) {
-  const x = cX - pts.x;
-  const y = cY - pts.y;
-
-  let deg = (Math.atan(y / x) * 180) / Math.PI;
-
-  if ((x < 0 && y >= 0) || (x < 0 && y < 0)) {
-    deg += 90;
-  } else {
-    deg += 270;
-  }
-
-  const finalDeg = Math.min(Math.max(startAngle, deg), endAngle);
-  return finalDeg;
+export function getTransformProperty() {
+  return getSupportedPropertyName([
+    'transform',
+    'msTransform',
+    'webkitTransform',
+    'mozTransform',
+    'oTransform',
+  ]);
 }

@@ -9,6 +9,7 @@ export const theme = {
   mainGreen: 'rgb(128, 240, 80)',
   mainPink: 'rgba(249, 102, 172, 1)',
   textColor: 'rgba(217, 251, 255, 1)',
+  lowerTextColor: '#c1c5c5',
   distortionColor: 'rgba(247, 163, 73, 1)',
   distortionColorDark: 'rgb(255, 147, 32)',
   flangerColor: 'rgba(224, 102, 188, 1)',

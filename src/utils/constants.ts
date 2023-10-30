@@ -282,6 +282,17 @@ export const NOTE_TO_KEYS = {
   B8: ['u', 'b'],
 };
 
+export enum ControlTypes {
+  MASTER = 'master',
+  DEFAULT = 'default',
+  DISTORTION = 'distortion',
+  FLANGER = 'flanger',
+  DELAY = 'delay',
+  REVERB = 'reverb',
+  CHORUS = 'chorus',
+  COMPRESSOR = 'compress',
+}
+
 export const FILTER_VALUES = [
   'Lowpass',
   'Highpass',
