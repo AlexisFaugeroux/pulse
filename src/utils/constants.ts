@@ -293,6 +293,13 @@ export enum ControlTypes {
   COMPRESSOR = 'compress',
 }
 
+export enum Waves {
+  SINE = 'sine',
+  TRIANGLE = 'triangle',
+  SAWTOOTH = 'sawtooth',
+  SQUARE = 'square',
+}
+
 export const FILTER_VALUES = [
   'Lowpass',
   'Highpass',

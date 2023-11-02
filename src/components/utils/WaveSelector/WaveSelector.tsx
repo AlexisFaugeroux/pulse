@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import './WaveSelector.scss';
+import { Waves } from '../../../utils/constants';
 import sineActive from '../../../assets/sine-wave-active.png';
 import sineInactive from '../../../assets/sine-wave-inactive.png';
 import triangleActive from '../../../assets/triangle-wave-active.png';
@@ -8,50 +8,49 @@ import sawtoothActive from '../../../assets/saw-wave-active.png';
 import sawtoothInactive from '../../../assets/saw-wave-inactive.png';
 import squareActive from '../../../assets/square-wave-active.png';
 import squareInactive from '../../../assets/square-wave-inactive.png';
+import './WaveSelector.scss';
 
-enum ActiveWave {
-  Sine = 'sine',
-  Triangle = 'triangle',
-  Sawtooth = 'sawtooth',
-  Square = 'square',
+interface WaveSelectorProps {
+  waves: Waves[];
 }
 
-const WaveSelector: FC = () => {
-  const [activeWave, setActiveWave] = useState<ActiveWave>(ActiveWave.Sine);
+const WaveSelector: FC<WaveSelectorProps> = ({ waves }) => {
+  const [activeWave, setActiveWave] = useState<Waves>(Waves.SINE);
 
-  const wavesToImages = [
-    {
-      wave: ActiveWave.Sine,
-      active: sineActive,
-      inactive: sineInactive,
-    },
-    {
-      wave: ActiveWave.Triangle,
-      active: triangleActive,
-      inactive: triangleInactive,
-    },
-    {
-      wave: ActiveWave.Sawtooth,
-      active: sawtoothActive,
-      inactive: sawtoothInactive,
-    },
-    {
-      wave: ActiveWave.Square,
-      active: squareActive,
-      inactive: squareInactive,
-    },
-  ];
+  const wavesToImages = waves.map((wave) => ({
+    wave,
+    activeImg:
+      wave === Waves.SINE
+        ? sineActive
+        : wave === Waves.TRIANGLE
+        ? triangleActive
+        : wave === Waves.SAWTOOTH
+        ? sawtoothActive
+        : wave === Waves.SQUARE
+        ? squareActive
+        : '',
+    inactiveImg:
+      wave === Waves.SINE
+        ? sineInactive
+        : wave === Waves.TRIANGLE
+        ? triangleInactive
+        : wave === Waves.SAWTOOTH
+        ? sawtoothInactive
+        : wave === Waves.SQUARE
+        ? squareInactive
+        : '',
+  }));
 
   return (
     <div className="selector">
       <div className="selector-image">
-        {wavesToImages.map(({ wave, active, inactive }) => (
+        {wavesToImages.map(({ wave, activeImg, inactiveImg }) => (
           <button
             key={wave}
             onClick={() => setActiveWave(wave)}
             style={{
               backgroundImage: `url(${
-                activeWave === wave ? active : inactive
+                activeWave === wave ? activeImg : inactiveImg
               })`,
               backgroundSize: 'cover',
               backgroundColor: 'transparent',

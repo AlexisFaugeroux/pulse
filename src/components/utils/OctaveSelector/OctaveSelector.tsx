@@ -19,7 +19,11 @@ const OctaveSelector: FC<OctaveSelectorProps> = ({ size }) => {
   }
 
   return (
-    <div className="octave-selector-layout">
+    <div
+      className={`octave-selector-layout ${
+        size === 3 ? 'octave-selector-layout__small' : ''
+      }`}
+    >
       <div className="rangeWrap">
         <datalist id="values">
           {values.map((value) => (

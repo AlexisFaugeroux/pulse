@@ -1,9 +1,11 @@
 import Header from './components/Header/Header';
 import Keyboard from './components/Keyboard/Keyboard';
-import './App.scss';
 import Oscillator from './components/Oscillator/Oscillator';
 import Enveloppe from './components/Envelope/Enveloppe';
 import Filter from './components/Filter/Filter';
+import SubOsc from './components/SubOsc/SubOsc';
+import NoiseOsc from './components/NoiseOsc/NoiseOsc';
+import './App.scss';
 
 function App() {
   return (
@@ -12,15 +14,11 @@ function App() {
       <div className="main">
         <div className="core">
           <div className="left">
-            <Oscillator />
-            <Oscillator />
+            <Oscillator label="oscillator a" />
+            <Oscillator label="oscillator b" />
             <div className="subnoise">
-              <div className="sub">
-                <div className="osc-background"></div>
-              </div>
-              <div className="noise">
-                <div className="osc-background"></div>
-              </div>
+              <SubOsc />
+              <NoiseOsc />
             </div>
           </div>
 

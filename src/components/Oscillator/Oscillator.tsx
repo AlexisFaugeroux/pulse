@@ -1,12 +1,18 @@
 import { FC } from 'react';
-import { ControlTypes } from '../../utils/constants';
+import { ControlTypes, Waves } from '../../utils/constants';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
 import WaveSelector from '../utils/WaveSelector/WaveSelector';
 import Knob from '../utils/Knob/Knob';
 import OctaveSelector from '../utils/OctaveSelector/OctaveSelector';
 import './Oscillator.scss';
 
-const Oscillator: FC = () => {
+interface OscillatorProps {
+  label: string;
+}
+
+const Oscillator: FC<OscillatorProps> = ({ label }) => {
+  const waves = [Waves.SINE, Waves.TRIANGLE, Waves.SAWTOOTH, Waves.SQUARE];
+
   const knobs = [
     {
       label: 'level',
@@ -25,8 +31,8 @@ const Oscillator: FC = () => {
   return (
     <div className="oscillator A">
       <div className="osc-background">
-        <BlocTitle label="oscillator a" />
-        <WaveSelector />
+        <BlocTitle label={label} />
+        <WaveSelector waves={waves} />
         <div className="controls">
           <div className="knobs">
             {knobs.map(({ initialValue, label }) => (

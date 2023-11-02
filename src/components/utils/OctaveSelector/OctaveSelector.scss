@@ -2,8 +2,8 @@
 
 $thumb-w: 1.2rem;
 $thumb-h: 1.2rem;
-$thumb-pad: 0.1rem;
-$ot-w: 7.5rem;
+$thumb-pad: 15px;
+$ot-w: 115px;
 $ot-h: ($thumb-h * 0.4);
 $it-w: ($ot-w - ($thumb-pad * 2));
 $it-h: 0.2rem;
@@ -26,7 +26,8 @@ $thumb-bg: #66696b;
   background-color: v.$lightGreen;
   border: 1px solid v.$lowerTextColor;
   border-radius: 5px;
-  width: 135px;
+  min-width: 75px;
+  max-width: 135px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,13 +44,14 @@ $thumb-bg: #66696b;
     margin: auto;
     max-width: 100%;
     flex: 0;
-    padding: 0.3rem 1rem;
+    padding: 0.3rem 7px;
     gap: 0.5rem;
   }
 
   input[type='range'] {
     display: flex;
-    width: $ot-w;
+    width: 100%;
+    max-width: $ot-w;
     height: $ot-h;
     -webkit-appearance: none;
     background: linear-gradient(
@@ -156,7 +158,8 @@ $thumb-bg: #66696b;
     display: flex;
     justify-content: space-around;
     color: $clr-list;
-    width: ($ot-w);
+    width: 100%;
+    max-width: $ot-w;
     transform: translatey(0.1rem);
     margin-bottom: 2px;
     option {
@@ -177,6 +180,6 @@ $thumb-bg: #66696b;
   }
 }
 
-.light:hover {
-  filter: brightness(1.1);
+.octave-selector-layout__small {
+  width: 90px;
 }
