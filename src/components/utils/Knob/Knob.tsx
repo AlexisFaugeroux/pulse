@@ -100,22 +100,27 @@ const Knob: FC<KnobProps> = ({ initialValue, label, type }) => {
       break;
     case ControlTypes.FLANGER:
       indicatorRingFillColor = theme.flangerColor;
+      indicatorDotFillColor = theme.flangerColor;
       indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.DELAY:
       indicatorRingFillColor = theme.delayColor;
+      indicatorDotFillColor = theme.delayColor;
       indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.REVERB:
       indicatorRingFillColor = theme.reverbColor;
+      indicatorDotFillColor = theme.reverbColor;
       indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.CHORUS:
       indicatorRingFillColor = theme.chorusColor;
+      indicatorDotFillColor = theme.chorusColor;
       indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.COMPRESSOR:
       indicatorRingFillColor = theme.compressorColor;
+      indicatorDotFillColor = theme.compressorColor;
       indcatorDotStrokeColor = 'black';
       break;
   }

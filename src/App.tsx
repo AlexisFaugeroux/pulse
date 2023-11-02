@@ -5,6 +5,7 @@ import Enveloppe from './components/Envelope/Enveloppe';
 import Filter from './components/Filter/Filter';
 import SubOsc from './components/SubOsc/SubOsc';
 import NoiseOsc from './components/NoiseOsc/NoiseOsc';
+import FXRack from './components/FXRack/FXRack';
 import './App.scss';
 
 function App() {
@@ -31,13 +32,7 @@ function App() {
           </div>
 
           <div className="right">
-            <div className="fx header"></div>
-            <div className="fx distortion"></div>
-            <div className="fx flanger"></div>
-            <div className="fx delay"></div>
-            <div className="fx reverb"></div>
-            <div className="fx chorus"></div>
-            <div className="fx compressor"></div>
+            <FXRack />
           </div>
         </div>
 

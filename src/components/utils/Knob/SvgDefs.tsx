@@ -27,46 +27,46 @@ const SvgDefs: FC = () => {
           x2={0}
           y2={1}
         >
-          <stop offset="25%" stopColor={theme.distortionColorDark} />
+          <stop offset="85%" stopColor={theme.distortionColor} />
           <stop offset="100%" stopColor="#2b3238" />
         </linearGradient>
 
         <linearGradient id="grad-dial-base-flanger" x1={0} y1={0} x2={0} y2={1}>
-          <stop offset="0%" stopColor={theme.flangerColorDark} />
+          <stop offset="85%" stopColor={theme.flangerColor} />
           <stop offset="100%" stopColor="#2b3238" />
         </linearGradient>
 
         <linearGradient id="grad-dial-base-delay" x1={0} y1={0} x2={0} y2={1}>
-          <stop offset="0%" stopColor={theme.delayColorDark} />
+          <stop offset="85%" stopColor={theme.delayColor} />
           <stop offset="100%" stopColor="#2b3238" />
         </linearGradient>
 
         <linearGradient id="grad-dial-base-reverb" x1={0} y1={0} x2={0} y2={1}>
-          <stop offset="0%" stopColor={theme.reverbColorDark} />
+          <stop offset="85%" stopColor={theme.reverbColor} />
           <stop offset="100%" stopColor="#2b3238" />
         </linearGradient>
 
         <linearGradient id="grad-dial-base-chorus" x1={0} y1={0} x2={0} y2={1}>
-          <stop offset="0%" stopColor={theme.chorusColorDark} />
+          <stop offset="85%" stopColor={theme.chorusColor} />
           <stop offset="100%" stopColor="#2b3238" />
         </linearGradient>
 
         <linearGradient
-          id="grad-dial-base-compress"
+          id="grad-dial-base-compressor"
           x1={0}
           y1={0}
           x2={0}
           y2={1}
         >
-          <stop offset="0%" stopColor="#52595f" />
-          <stop offset="100%" stopColor={theme.compressorColorDark} />
+          <stop offset="85%" stopColor={theme.compressorColor} />
+          <stop offset="100%" stopColor="#2b3238" />
         </linearGradient>
 
         <linearGradient id="grad-dial-highlight" x1={0} y1={0} x2={0} y2={1}>
           <stop offset="0%" stopColor="#70777d" stopOpacity={1} />
           <stop offset="40%" stopColor="#70777d" stopOpacity={0} />
           <stop offset="55%" stopColor="#70777d" stopOpacity={0} />
-          <stop offset="100%" stopColor="#70777d" stopOpacity={0.3} />
+          <stop offset="100%" stopColor="#70777d" stopOpacity={0.5} />
         </linearGradient>
         <filter id="glow">
           <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation={2} />

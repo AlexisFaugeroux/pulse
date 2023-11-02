@@ -1,0 +1,264 @@
+@use '../../../styles/variables' as v;
+
+.rack {
+  height: 15.2%;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  .rack-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 90%;
+    border: 1px solid v.$mainBlue;
+    border-bottom: 3px solid v.$mainBlue;
+    border-radius: 3px;
+    background-color: v.$transparentBackground;
+    overflow: hidden;
+    transition: 0.5s;
+    .line {
+      position: absolute;
+      display: block;
+    }
+    .line-top__active {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      animation: animate1 1s infinite;
+    }
+    .line-right__active {
+      top: -100%;
+      right: 0;
+      width: 3px;
+      height: 100%;
+      animation: animate2 1s infinite;
+      animation-delay: 0.25s;
+    }
+    .line-bottom__active {
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 3px;
+      animation: animate3 1s infinite;
+      animation-delay: 0.5s;
+    }
+    .line-left__active {
+      bottom: -100%;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      animation: animate4 1s infinite;
+      animation-delay: 0.75s;
+    }
+    .line-top__distortion__active {
+      background: linear-gradient(90deg, transparent, v.$distortionColor);
+    }
+    .line-right__distortion__active {
+      background: linear-gradient(180deg, transparent, v.$distortionColor);
+    }
+    .line-bottom__distortion__active {
+      background: linear-gradient(270deg, transparent, v.$distortionColor);
+    }
+    .line-left__distortion__active {
+      background: linear-gradient(360deg, transparent, v.$distortionColor);
+    }
+    .line-top__flanger__active {
+      background: linear-gradient(90deg, transparent, v.$flangerColor);
+    }
+    .line-right__flanger__active {
+      background: linear-gradient(180deg, transparent, v.$flangerColor);
+    }
+    .line-bottom__flanger__active {
+      background: linear-gradient(270deg, transparent, v.$flangerColor);
+    }
+    .line-left__flanger__active {
+      background: linear-gradient(360deg, transparent, v.$flangerColor);
+    }
+    .line-top__delay__active {
+      background: linear-gradient(90deg, transparent, v.$delayColor);
+    }
+    .line-right__delay__active {
+      background: linear-gradient(180deg, transparent, v.$delayColor);
+    }
+    .line-bottom__delay__active {
+      background: linear-gradient(270deg, transparent, v.$delayColor);
+    }
+    .line-left__delay__active {
+      background: linear-gradient(360deg, transparent, v.$delayColor);
+    }
+    .line-top__reverb__active {
+      background: linear-gradient(90deg, transparent, v.$reverbColor);
+    }
+    .line-right__reverb__active {
+      background: linear-gradient(180deg, transparent, v.$reverbColor);
+    }
+    .line-bottom__reverb__active {
+      background: linear-gradient(270deg, transparent, v.$reverbColor);
+    }
+    .line-left__reverb__active {
+      background: linear-gradient(360deg, transparent, v.$reverbColor);
+    }
+    .line-top__chorus__active {
+      background: linear-gradient(90deg, transparent, v.$chorusColor);
+    }
+    .line-right__chorus__active {
+      background: linear-gradient(180deg, transparent, v.$chorusColor);
+    }
+    .line-bottom__chorus__active {
+      background: linear-gradient(270deg, transparent, v.$chorusColor);
+    }
+    .line-left__chorus__active {
+      background: linear-gradient(360deg, transparent, v.$chorusColor);
+    }
+    .line-top__compressor__active {
+      background: linear-gradient(90deg, transparent, v.$compressorColor);
+    }
+    .line-right__compressor__active {
+      background: linear-gradient(180deg, transparent, v.$compressorColor);
+    }
+    .line-bottom__compressor__active {
+      background: linear-gradient(270deg, transparent, v.$compressorColor);
+    }
+    .line-left__compressor__active {
+      background: linear-gradient(360deg, transparent, v.$compressorColor);
+    }
+    @keyframes animate1 {
+      0% {
+        left: -100%;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+    @keyframes animate2 {
+      0% {
+        top: -100%;
+      }
+      100% {
+        top: 100%;
+      }
+    }
+    @keyframes animate3 {
+      0% {
+        right: -100%;
+      }
+      100% {
+        right: 100%;
+      }
+    }
+    @keyframes animate4 {
+      0% {
+        bottom: -100%;
+      }
+      100% {
+        bottom: 100%;
+      }
+    }
+    .rack-button {
+      height: 40%;
+      width: 120px;
+      border-radius: 0px 20px 20px 0px;
+      border: 2px solid v.$mainBlue;
+      border-bottom: 5px solid v.$mainBlue;
+      text-align: left;
+      padding-left: 7px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.7px;
+      cursor: grab;
+    }
+    .rack-button:hover {
+      border: 2px solid v.$lightGrey;
+    }
+    .rack-button__distortion:hover {
+      box-shadow:
+        0 0 5px v.$distortionColor,
+        0 0 25px v.$distortionColor,
+        0 0 50px v.$distortionColor,
+        0 0 200px v.$distortionColor;
+    }
+    .rack-button__flanger:hover {
+      box-shadow:
+        0 0 5px v.$flangerColor,
+        0 0 25px v.$flangerColor,
+        0 0 50px v.$flangerColor,
+        0 0 200px v.$flangerColor;
+    }
+    .rack-button__delay:hover {
+      box-shadow:
+        0 0 5px v.$delayColor,
+        0 0 25px v.$delayColor,
+        0 0 50px v.$delayColor,
+        0 0 200px v.$delayColor;
+    }
+    .rack-button__reverb:hover {
+      box-shadow:
+        0 0 5px v.$reverbColor,
+        0 0 25px v.$reverbColor,
+        0 0 50px v.$reverbColor,
+        0 0 200px v.$reverbColor;
+    }
+    .rack-button__chorus:hover {
+      box-shadow:
+        0 0 5px v.$chorusColor,
+        0 0 25px v.$chorusColor,
+        0 0 50px v.$chorusColor,
+        0 0 200px v.$chorusColor;
+    }
+    .rack-button__compressor:hover {
+      box-shadow:
+        0 0 5px v.$compressorColor,
+        0 0 25px v.$compressorColor,
+        0 0 50px v.$compressorColor,
+        0 0 200px v.$compressorColor;
+    }
+    .rack-button__active {
+      cursor: grab !important;
+      border: 2px solid v.$lightGrey;
+      border-bottom: 5px solid v.$lightGrey;
+    }
+    .rack-button__distortion__active {
+      box-shadow:
+        10px 2px 50px v.$distortionColor,
+        0px 3px 5px v.$distortionColor,
+        0px 0 10px v.$distortionColor;
+    }
+    .rack-button__flanger__active {
+      box-shadow:
+        10px 2px 50px v.$flangerColor,
+        0px 3px 5px v.$flangerColor,
+        0px 0 10px v.$flangerColor;
+    }
+    .rack-button__delay__active {
+      box-shadow:
+        10px 2px 50px v.$delayColor,
+        0px 3px 5px v.$delayColor,
+        0px 0 10px v.$delayColor;
+    }
+    .rack-button__reverb__active {
+      box-shadow:
+        10px 2px 50px v.$reverbColor,
+        0px 3px 5px v.$reverbColor,
+        0px 0 10px v.$reverbColor;
+    }
+    .rack-button__chorus__active {
+      box-shadow:
+        10px 2px 50px v.$chorusColor,
+        0px 3px 5px v.$chorusColor,
+        0px 0 10px v.$chorusColor;
+    }
+    .rack-button__compressor__active {
+      box-shadow:
+        10px 2px 50px v.$compressorColor,
+        0px 3px 5px v.$compressorColor,
+        0px 0 10px v.$compressorColor;
+    }
+    .rack-knobs {
+      display: flex;
+      gap: 15px;
+      margin-left: 30px;
+    }
+  }
+}

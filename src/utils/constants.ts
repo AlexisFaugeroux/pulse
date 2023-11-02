@@ -290,7 +290,7 @@ export enum ControlTypes {
   DELAY = 'delay',
   REVERB = 'reverb',
   CHORUS = 'chorus',
-  COMPRESSOR = 'compress',
+  COMPRESSOR = 'compressor',
 }
 
 export enum Waves {
@@ -312,3 +312,12 @@ export const FILTER_VALUES = [
 ];
 
 export const NOISE_VALUES = ['White', 'Pink', 'Brown'];
+
+export const FXs = [
+  'distortion',
+  'flanger',
+  'delay',
+  'reverb',
+  'chorus',
+  'compressor',
+];
