@@ -62,16 +62,9 @@ body {
       padding: 5px;
       flex-direction: column;
       .envelopefilter {
-        height: 407px;
+        height: 62.85%;
         display: flex;
         gap: 3px;
-        margin-bottom: 6px;
-      }
-      .lfo {
-        border: 1px solid green;
-        background-color: v.$transparentBackground;
-        border-radius: 5px;
-        height: 30%;
       }
     }
     .right {

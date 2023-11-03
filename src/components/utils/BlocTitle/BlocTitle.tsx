@@ -18,7 +18,7 @@ const BlocTitle: FC<BlocTitle> = ({ label }) => {
         style={{
           backgroundImage: `url(${isActive ? switchOn : switchOff})`,
           backgroundSize: 'cover',
-          borderRadius: '7px',
+          borderRadius: '5px',
           objectFit: 'cover',
           cursor: 'pointer',
           border: 'none',

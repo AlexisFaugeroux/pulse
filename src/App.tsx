@@ -6,6 +6,7 @@ import Filter from './components/Filter/Filter';
 import SubOsc from './components/SubOsc/SubOsc';
 import NoiseOsc from './components/NoiseOsc/NoiseOsc';
 import FXRack from './components/FXRack/FXRack';
+import LFO from './components/LFO/LFO';
 import './App.scss';
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
               <Enveloppe />
               <Filter />
             </div>
-            <div className="lfo"></div>
+            <LFO />
           </div>
 
           <div className="right">
