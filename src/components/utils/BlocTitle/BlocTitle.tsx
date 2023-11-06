@@ -1,15 +1,15 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import '../BlocTitle/BlocTitle.scss';
 import switchOn from '../../../assets/main-light-switch-on.png';
 import switchOff from '../../../assets/main-light-switch-off.png';
 
 interface BlocTitle {
   label: string;
+  isActive: boolean;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const BlocTitle: FC<BlocTitle> = ({ label }) => {
-  const [isActive, setIsActive] = useState(false);
-
+const BlocTitle: FC<BlocTitle> = ({ label, isActive, setIsActive }) => {
   return (
     <div className="blocTitle-layout">
       <button
@@ -25,6 +25,7 @@ const BlocTitle: FC<BlocTitle> = ({ label }) => {
           width: '20px',
           height: '20px',
           marginLeft: '5px',
+          zIndex: 150,
         }}
       />
       <h2>{label.toUpperCase()}</h2>

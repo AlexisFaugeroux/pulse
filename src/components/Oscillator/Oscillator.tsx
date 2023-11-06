@@ -1,5 +1,6 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { ControlTypes, Waves } from '../../utils/constants';
+import InactivePanel from '../utils/InactivePanel/InactivePanel';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
 import WaveSelector from '../utils/WaveSelector/WaveSelector';
 import Knob from '../utils/Knob/Knob';
@@ -11,8 +12,9 @@ interface OscillatorProps {
 }
 
 const Oscillator: FC<OscillatorProps> = ({ label }) => {
-  const waves = [Waves.SINE, Waves.TRIANGLE, Waves.SAWTOOTH, Waves.SQUARE];
+  const [isActive, setIsActive] = useState(true);
 
+  const waves = [Waves.SINE, Waves.TRIANGLE, Waves.SAWTOOTH, Waves.SQUARE];
   const knobs = [
     {
       label: 'level',
@@ -30,8 +32,13 @@ const Oscillator: FC<OscillatorProps> = ({ label }) => {
 
   return (
     <div className="oscillator A">
+      <InactivePanel isActive={isActive} />
       <div className="osc-background">
-        <BlocTitle label={label} />
+        <BlocTitle
+          label={label}
+          isActive={isActive}
+          setIsActive={setIsActive}
+        />
         <WaveSelector waves={waves} />
         <div className="controls">
           <div className="knobs">
