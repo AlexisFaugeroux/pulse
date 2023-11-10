@@ -22,8 +22,8 @@ const BlocTitle: FC<BlocTitle> = ({ label, isActive, setIsActive }) => {
           objectFit: 'cover',
           cursor: 'pointer',
           border: 'none',
-          width: '20px',
-          height: '20px',
+          width: '18px',
+          height: '18px',
           marginLeft: '5px',
           zIndex: 150,
         }}
