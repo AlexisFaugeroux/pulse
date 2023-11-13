@@ -1,12 +1,17 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useContext, useEffect, useState } from 'react';
+import { Context } from '../../context/context';
+import { OscillatorA_ActionTypes } from '../../context/type';
 import { ALLOWED_KEYS, NOTES, NOTE_TO_KEYS } from '../../utils/constants';
 import './Keyboard.scss';
+import {
+  getFrequencyFromNote,
+  getKeyGroupOnKeyboard,
+  getNoteFromKeyPressed,
+  isNoteInKeyboardOctaveRange,
+} from './helpers';
 
-interface KeyboardProps {
-  offset?: number;
-}
-
-const Keyboard: FC<KeyboardProps> = () => {
+const Keyboard: FC = () => {
+  const { dispatch } = useContext(Context);
   const [pressedKeys, setPressedKeys] = useState<string[]>([]);
   const [offset, setOffset] = useState<number>(0);
 
@@ -14,11 +19,23 @@ const Keyboard: FC<KeyboardProps> = () => {
     (e: KeyboardEvent) => {
       e.preventDefault();
       if (e.repeat) return;
+
       if (!pressedKeys.includes(e.key) && ALLOWED_KEYS.includes(e.key)) {
         setPressedKeys([...pressedKeys, e.key]);
+
+        const keyGroup = getKeyGroupOnKeyboard(e.key);
+        const note = getNoteFromKeyPressed(keyGroup, e.key, offset);
+        const frequency = getFrequencyFromNote(note);
+        dispatch({
+          type: OscillatorA_ActionTypes.Create,
+          payload: {
+            note,
+            frequency,
+          },
+        });
       }
     },
-    [pressedKeys, setPressedKeys],
+    [pressedKeys, setPressedKeys, offset, dispatch],
   );
 
   const handleKeyUp = useCallback(
@@ -26,9 +43,20 @@ const Keyboard: FC<KeyboardProps> = () => {
       const index = pressedKeys.indexOf(e.key);
       if (index > -1) {
         setPressedKeys(pressedKeys.filter((_, i) => i !== index));
+
+        const keyGroup = getKeyGroupOnKeyboard(e.key);
+        const note = getNoteFromKeyPressed(keyGroup, e.key, offset);
+        const frequency = getFrequencyFromNote(note);
+        dispatch({
+          type: OscillatorA_ActionTypes.Kill,
+          payload: {
+            note,
+            frequency,
+          },
+        });
       }
     },
-    [pressedKeys, setPressedKeys],
+    [pressedKeys, setPressedKeys, offset, dispatch],
   );
 
   useEffect(() => {
@@ -41,10 +69,6 @@ const Keyboard: FC<KeyboardProps> = () => {
     };
   }, [handleKeyDown, handleKeyUp]);
 
-  useEffect(() => {
-    console.log(pressedKeys);
-  }, [pressedKeys]);
-
   return (
     <div className="keyboard-layout">
       <div className="octave-selector">
@@ -54,7 +78,7 @@ const Keyboard: FC<KeyboardProps> = () => {
             type="number"
             value={offset}
             min={-2}
-            max={5}
+            max={7}
             onChange={(e) => {
               setOffset(parseInt(e.currentTarget.value, 10));
             }}
@@ -63,52 +87,62 @@ const Keyboard: FC<KeyboardProps> = () => {
       </div>
       <div className="keys">
         {NOTES.map(
-          ({ note, freq }, index) =>
-            index >= 24 + offset * 12 &&
-            index < 48 + offset * 12 && (
+          ({ note, frequency }, index) =>
+            isNoteInKeyboardOctaveRange(index, offset) && (
               <div
-                id={
-                  NOTE_TO_KEYS[note as keyof typeof NOTE_TO_KEYS][
-                    offset % 2 === 0 ? 0 : 1
-                  ]
-                }
+                id={NOTE_TO_KEYS[note][offset % 2 === 0 ? 0 : 1]}
                 className={`key 
                 ${note.length === 3 ? 'flat' : ''}
                 ${
                   pressedKeys.includes(
-                    NOTE_TO_KEYS[note as keyof typeof NOTE_TO_KEYS][
-                      offset % 2 === 0 ? 0 : 1
-                    ],
+                    NOTE_TO_KEYS[note][offset % 2 === 0 ? 0 : 1],
                   )
                     ? 'pressed'
                     : ''
                 }
                 `}
                 onMouseDown={(e) => {
-                  console.log(e.currentTarget.id);
                   if (
                     !pressedKeys.includes(e.currentTarget.id) &&
                     ALLOWED_KEYS.includes(e.currentTarget.id)
                   ) {
                     setPressedKeys([...pressedKeys, e.currentTarget.id]);
+                    dispatch({
+                      type: OscillatorA_ActionTypes.Create,
+                      payload: {
+                        note,
+                        frequency,
+                      },
+                    });
                   }
-
-                  // TODO: dispatch
                 }}
                 onMouseUp={(e) => {
-                  console.log(e);
                   const index = pressedKeys.indexOf(e.currentTarget.id);
+
                   if (index > -1) {
                     setPressedKeys(pressedKeys.filter((_, i) => i !== index));
+                    dispatch({
+                      type: OscillatorA_ActionTypes.Kill,
+                      payload: {
+                        note,
+                        frequency,
+                      },
+                    });
                   }
                 }}
                 onMouseOut={(e) => {
-                  console.log(e);
                   const index = pressedKeys.indexOf(e.currentTarget.id);
+
                   if (index > -1) {
                     setPressedKeys(pressedKeys.filter((_, i) => i !== index));
+                    dispatch({
+                      type: OscillatorA_ActionTypes.Kill,
+                      payload: {
+                        note,
+                        frequency,
+                      },
+                    });
                   }
-                  // TODO: dispatch
                 }}
               />
             ),

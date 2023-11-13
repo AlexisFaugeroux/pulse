@@ -1,13 +1,13 @@
 import { FC, useState } from 'react';
-import { Waves } from '../../../utils/constants';
-import sineActive from '../../../assets/sine-wave-active.png';
-import sineInactive from '../../../assets/sine-wave-inactive.png';
-import triangleActive from '../../../assets/triangle-wave-active.png';
-import triangleInactive from '../../../assets/triangle-wave-inactive.png';
 import sawtoothActive from '../../../assets/saw-wave-active.png';
 import sawtoothInactive from '../../../assets/saw-wave-inactive.png';
+import sineActive from '../../../assets/sine-wave-active.png';
+import sineInactive from '../../../assets/sine-wave-inactive.png';
 import squareActive from '../../../assets/square-wave-active.png';
 import squareInactive from '../../../assets/square-wave-inactive.png';
+import triangleActive from '../../../assets/triangle-wave-active.png';
+import triangleInactive from '../../../assets/triangle-wave-inactive.png';
+import { Waves } from '../../../utils/constants';
 import './WaveSelector.scss';
 
 interface WaveSelectorProps {
@@ -47,6 +47,7 @@ const WaveSelector: FC<WaveSelectorProps> = ({ waves }) => {
         {wavesToImages.map(({ wave, activeImg, inactiveImg }) => (
           <button
             key={wave}
+            id={wave}
             onClick={() => setActiveWave(wave)}
             style={{
               backgroundImage: `url(${
