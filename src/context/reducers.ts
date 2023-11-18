@@ -2,32 +2,47 @@ import { audioContext, masterGain } from '../nodesConfig';
 import { InitialSettingsState, OscSettings } from '../types/types';
 import Oscillator from '../utils/classes/Oscillator';
 import {
-  OscillatorA_ActionTypes,
-  type OscillatorASettingsActions,
+  Oscillators_ActionTypes,
+  type OscillatorSettingsActions,
 } from './type';
 
-export let currentOscillators: Oscillator[] = [];
+let currentOscillators: Oscillator[] = [];
 
-const oscillatorAReducer = (
-  state: OscSettings,
-  action: OscillatorASettingsActions,
+const oscillatorsReducer = (
+  state: {
+    oscillatorA: OscSettings;
+    oscillatorB: OscSettings;
+  },
+  action: OscillatorSettingsActions,
 ) => {
   switch (action.type) {
-    case OscillatorA_ActionTypes.Create:
+    case Oscillators_ActionTypes.Create:
       {
-        const newOscillator = new Oscillator(
-          audioContext,
-          masterGain,
-          state.type,
-          action.payload.frequency,
-          state.detune,
-          state.adsr,
-        );
-        currentOscillators.push(newOscillator);
+        if (state.oscillatorA.isActive) {
+          const newOscillator = new Oscillator(
+            audioContext,
+            masterGain,
+            state.oscillatorA.type,
+            action.payload.frequency,
+            state.oscillatorA.detune,
+            state.oscillatorA.adsr,
+          );
+          currentOscillators.push(newOscillator);
+        } else if (state.oscillatorB.isActive) {
+          const newOscillator = new Oscillator(
+            audioContext,
+            masterGain,
+            state.oscillatorB.type,
+            action.payload.frequency,
+            state.oscillatorB.detune,
+            state.oscillatorB.adsr,
+          );
+          currentOscillators.push(newOscillator);
+        }
       }
       return { ...state };
 
-    case OscillatorA_ActionTypes.Kill:
+    case Oscillators_ActionTypes.Kill:
       {
         const activeOscillators: Oscillator[] = [];
 
@@ -45,10 +60,28 @@ const oscillatorAReducer = (
       }
       return { ...state };
 
-    case OscillatorA_ActionTypes.UpdateSettings:
+    case Oscillators_ActionTypes.Activate:
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...state[action.payload.id as keyof typeof state],
+          isActive: true,
+        },
+      };
+
+    case Oscillators_ActionTypes.Deactivate:
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...state[action.payload.id as keyof typeof state],
+          isActive: false,
+        },
+      };
+
+    case Oscillators_ActionTypes.UpdateSettings:
       return { ...state, [action.payload.id]: action.payload.value };
 
-    case OscillatorA_ActionTypes.UpdateType:
+    case Oscillators_ActionTypes.UpdateType:
       return { ...state, type: action.payload.id as OscillatorType };
 
     default:
@@ -58,8 +91,8 @@ const oscillatorAReducer = (
 };
 
 export const mainReducer = (
-  { oscillatorA }: InitialSettingsState,
-  action: OscillatorASettingsActions,
+  { oscillators }: InitialSettingsState,
+  action: OscillatorSettingsActions,
 ) => ({
-  oscillatorA: oscillatorAReducer(oscillatorA, action),
+  oscillators: oscillatorsReducer(oscillators, action),
 });

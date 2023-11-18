@@ -1,18 +1,26 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
+import { Context } from '../../context/context';
+import { Oscillators_ActionTypes } from '../../context/type';
 import { ControlTypes, Waves } from '../../utils/constants';
-import InactivePanel from '../utils/InactivePanel/InactivePanel';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
-import WaveSelector from '../utils/WaveSelector/WaveSelector';
+import InactivePanel from '../utils/InactivePanel/InactivePanel';
 import Knob from '../utils/Knob/Knob';
 import OctaveSelector from '../utils/OctaveSelector/OctaveSelector';
+import WaveSelector from '../utils/WaveSelector/WaveSelector';
 import './Oscillator.scss';
 
 interface OscillatorProps {
+  id: 'oscillatorA' | 'oscillatorB';
   label: string;
 }
 
-const Oscillator: FC<OscillatorProps> = ({ label }) => {
-  const [isActive, setIsActive] = useState(true);
+const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
+  const { state, dispatch } = useContext(Context);
+  const [isActive, setIsActive] = useState(
+    id === 'oscillatorA'
+      ? state.oscillators.oscillatorA.isActive
+      : state.oscillators.oscillatorB.isActive,
+  );
 
   const waves = [Waves.SINE, Waves.TRIANGLE, Waves.SAWTOOTH, Waves.SQUARE];
   const knobs = [
@@ -30,8 +38,22 @@ const Oscillator: FC<OscillatorProps> = ({ label }) => {
     },
   ];
 
+  useEffect(() => {
+    if (isActive) {
+      dispatch({
+        type: Oscillators_ActionTypes.Activate,
+        payload: { id },
+      });
+    } else {
+      dispatch({
+        type: Oscillators_ActionTypes.Deactivate,
+        payload: { id },
+      });
+    }
+  }, [isActive, dispatch, id]);
+
   return (
-    <div className="oscillator A">
+    <div className="oscillator">
       <InactivePanel isActive={isActive} />
       <div className="osc-background">
         <BlocTitle

@@ -2,11 +2,11 @@ import { Dispatch, PropsWithChildren, createContext, useReducer } from 'react';
 import { initialSettings } from '../nodesConfig';
 import { InitialSettingsState } from '../types/types';
 import { mainReducer } from './reducers';
-import type { OscillatorASettingsActions } from './type';
+import type { OscillatorSettingsActions } from './type';
 
 const Context = createContext<{
   state: InitialSettingsState;
-  dispatch: Dispatch<OscillatorASettingsActions>;
+  dispatch: Dispatch<OscillatorSettingsActions>;
 }>({
   state: initialSettings,
   dispatch: () => null,

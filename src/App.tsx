@@ -18,8 +18,8 @@ function App() {
         <div className="main">
           <div className="core">
             <div className="left">
-              <Oscillator label="oscillator a" />
-              <Oscillator label="oscillator b" />
+              <Oscillator id="oscillatorA" label="oscillator a" />
+              <Oscillator id="oscillatorB" label="oscillator b" />
               <div className="subnoise">
                 <SubOsc />
                 <NoiseOsc />

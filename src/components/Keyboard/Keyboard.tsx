@@ -1,6 +1,6 @@
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { Context } from '../../context/context';
-import { OscillatorA_ActionTypes } from '../../context/type';
+import { Oscillators_ActionTypes } from '../../context/type';
 import { ALLOWED_KEYS, NOTES, NOTE_TO_KEYS } from '../../utils/constants';
 import './Keyboard.scss';
 import {
@@ -27,7 +27,7 @@ const Keyboard: FC = () => {
         const note = getNoteFromKeyPressed(keyGroup, e.key, offset);
         const frequency = getFrequencyFromNote(note);
         dispatch({
-          type: OscillatorA_ActionTypes.Create,
+          type: Oscillators_ActionTypes.Create,
           payload: {
             note,
             frequency,
@@ -48,7 +48,7 @@ const Keyboard: FC = () => {
         const note = getNoteFromKeyPressed(keyGroup, e.key, offset);
         const frequency = getFrequencyFromNote(note);
         dispatch({
-          type: OscillatorA_ActionTypes.Kill,
+          type: Oscillators_ActionTypes.Kill,
           payload: {
             note,
             frequency,
@@ -108,7 +108,7 @@ const Keyboard: FC = () => {
                   ) {
                     setPressedKeys([...pressedKeys, e.currentTarget.id]);
                     dispatch({
-                      type: OscillatorA_ActionTypes.Create,
+                      type: Oscillators_ActionTypes.Create,
                       payload: {
                         note,
                         frequency,
@@ -122,7 +122,7 @@ const Keyboard: FC = () => {
                   if (index > -1) {
                     setPressedKeys(pressedKeys.filter((_, i) => i !== index));
                     dispatch({
-                      type: OscillatorA_ActionTypes.Kill,
+                      type: Oscillators_ActionTypes.Kill,
                       payload: {
                         note,
                         frequency,
@@ -136,7 +136,7 @@ const Keyboard: FC = () => {
                   if (index > -1) {
                     setPressedKeys(pressedKeys.filter((_, i) => i !== index));
                     dispatch({
-                      type: OscillatorA_ActionTypes.Kill,
+                      type: Oscillators_ActionTypes.Kill,
                       payload: {
                         note,
                         frequency,

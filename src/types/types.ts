@@ -1,4 +1,5 @@
 export type OscSettings = {
+  isActive: boolean;
   type: OscillatorType;
   detune: number;
   adsr: EnvelopeSettings;
@@ -19,5 +20,8 @@ export type FilterSettings = {
 };
 
 export type InitialSettingsState = {
-  oscillatorA: OscSettings;
+  oscillators: {
+    oscillatorA: OscSettings;
+    oscillatorB: OscSettings;
+  };
 };

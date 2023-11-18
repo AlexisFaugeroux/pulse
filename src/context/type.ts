@@ -9,30 +9,38 @@ export type ActionMap<M extends { [index: string]: unknown }> = {
       };
 };
 
-export enum OscillatorA_ActionTypes {
+export enum Oscillators_ActionTypes {
   Create = 'OSCA_START',
   Kill = 'OSCA_STOP',
+  Activate = 'OSCA_ACTIVATE',
+  Deactivate = 'OSCA_DEACTIVATE',
   UpdateSettings = 'OSCA_UPDATE__SETTINGS',
   UpdateType = 'OSCA_UPDATE_TYPE',
 }
 
 export type OscillatorSettingsPayload = {
-  [OscillatorA_ActionTypes.Create]: {
+  [Oscillators_ActionTypes.Create]: {
     note: string;
     frequency: number;
   };
-  [OscillatorA_ActionTypes.Kill]: {
+  [Oscillators_ActionTypes.Kill]: {
     note: string;
     frequency: number;
   };
-  [OscillatorA_ActionTypes.UpdateSettings]: {
+  [Oscillators_ActionTypes.Activate]: {
+    id: string;
+  };
+  [Oscillators_ActionTypes.Deactivate]: {
+    id: string;
+  };
+  [Oscillators_ActionTypes.UpdateSettings]: {
     id: string;
     value: number;
   };
-  [OscillatorA_ActionTypes.UpdateType]: {
+  [Oscillators_ActionTypes.UpdateType]: {
     id: string;
   };
 };
 
-export type OscillatorASettingsActions =
+export type OscillatorSettingsActions =
   ActionMap<OscillatorSettingsPayload>[keyof ActionMap<OscillatorSettingsPayload>];
