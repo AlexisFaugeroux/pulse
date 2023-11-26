@@ -24,4 +24,8 @@ export type InitialSettingsState = {
     oscillatorA: OscSettings;
     oscillatorB: OscSettings;
   };
+  gains: {
+    oscAGainValue: number;
+    oscBGainValue: number;
+  };
 };

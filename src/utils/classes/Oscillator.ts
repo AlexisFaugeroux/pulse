@@ -43,10 +43,14 @@ export default class Oscillator {
 
     this.gateGain.gain.cancelScheduledValues(currentTime);
     this.gateGain.gain.setValueAtTime(0, currentTime + this.easing);
+
+    // Attack
     this.gateGain.gain.linearRampToValueAtTime(
       1,
       currentTime + this.envelope.attack + this.easing,
     );
+
+    // Decay & Sustain
     this.gateGain.gain.linearRampToValueAtTime(
       this.envelope.sustain,
       currentTime + this.envelope.attack + this.envelope.decay + this.easing,
@@ -57,6 +61,8 @@ export default class Oscillator {
     const { currentTime } = this.audioContext;
 
     this.gateGain.gain.cancelScheduledValues(currentTime);
+
+    // Release
     this.gateGain.gain.setTargetAtTime(
       0,
       currentTime,

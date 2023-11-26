@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { Context } from '../../context/context';
-import { Oscillators_ActionTypes } from '../../context/type';
+import { Oscillator_ActionTypes } from '../../context/types/index';
 import { ControlTypes, Waves } from '../../utils/constants';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
 import InactivePanel from '../utils/InactivePanel/InactivePanel';
@@ -16,17 +16,18 @@ interface OscillatorProps {
 
 const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
   const { state, dispatch } = useContext(Context);
+  const { oscillatorA, oscillatorB } = state.oscillators;
+  const { oscAGainValue, oscBGainValue } = state.gains;
+
   const [isActive, setIsActive] = useState(
-    id === 'oscillatorA'
-      ? state.oscillators.oscillatorA.isActive
-      : state.oscillators.oscillatorB.isActive,
+    id === 'oscillatorA' ? oscillatorA.isActive : oscillatorB.isActive,
   );
 
   const waves = [Waves.SINE, Waves.TRIANGLE, Waves.SAWTOOTH, Waves.SQUARE];
   const knobs = [
     {
       label: 'level',
-      initialValue: 70,
+      initialValue: id === 'oscillatorA' ? oscAGainValue : oscBGainValue,
     },
     {
       label: 'unisson',
@@ -41,12 +42,12 @@ const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
   useEffect(() => {
     if (isActive) {
       dispatch({
-        type: Oscillators_ActionTypes.Activate,
+        type: Oscillator_ActionTypes.Activate,
         payload: { id },
       });
     } else {
       dispatch({
-        type: Oscillators_ActionTypes.Deactivate,
+        type: Oscillator_ActionTypes.Deactivate,
         payload: { id },
       });
     }
@@ -67,6 +68,7 @@ const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
             {knobs.map(({ initialValue, label }) => (
               <Knob
                 key={`${label}`}
+                parent={id}
                 initialValue={initialValue}
                 label={label}
                 type={ControlTypes.DEFAULT}

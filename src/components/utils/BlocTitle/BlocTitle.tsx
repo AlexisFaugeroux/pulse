@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import '../BlocTitle/BlocTitle.scss';
-import switchOn from '../../../assets/main-light-switch-on.png';
 import switchOff from '../../../assets/main-light-switch-off.png';
+import switchOn from '../../../assets/main-light-switch-on.png';
+import '../BlocTitle/BlocTitle.scss';
 
 interface BlocTitle {
   label: string;

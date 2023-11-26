@@ -1,22 +1,29 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import { ControlTypes } from '../../../utils/constants';
-import { clampValue, normalizeValue } from './helpers';
-import SvgDefs from './SvgDefs';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { Context } from '../../../context/context';
+import {
+  Gain_ActionTypes,
+  Oscillator_ActionTypes,
+} from '../../../context/types/index';
 import { theme } from '../../../styles/_variables';
+import { ControlTypes } from '../../../utils/constants';
 import './Knob.scss';
+import SvgDefs from './SvgDefs';
+import { clampValue } from './helpers';
 
 interface KnobProps {
+  parent: string;
   initialValue: number;
   label: string;
   type: ControlTypes;
 }
 
-const Knob: FC<KnobProps> = ({ initialValue, label, type }) => {
+const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
   const min = 0;
-  const max = 100;
+  const max = 1;
   const dragResistance = 300 / (max - min);
   let dragStartPosition = 0;
 
+  const { dispatch } = useContext(Context);
   const [value, setValue] = useState(initialValue);
   const [isActiveDrag, setIsActiveDrag] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
@@ -30,8 +37,6 @@ const Knob: FC<KnobProps> = ({ initialValue, label, type }) => {
       const dragAmount = e.clientY - dragStartPosition;
       setValue(clampValue(value - dragAmount / dragResistance, min, max));
     } else {
-      const dragAmount = e.clientY - dragStartPosition;
-      setValue(clampValue(value - dragAmount / dragResistance, min, max));
       clearDrag();
     }
   };
@@ -39,18 +44,19 @@ const Knob: FC<KnobProps> = ({ initialValue, label, type }) => {
   const handleMouseUp = (e: MouseEvent) => {
     const dragAmount = e.clientY - dragStartPosition;
     setValue(clampValue(value - dragAmount / dragResistance, min, max));
+
     clearDrag();
   };
 
   const clearDrag = () => {
     document.body.classList.remove('knob-input__drag-active');
     setIsActiveDrag(false);
+
     document.body.removeEventListener('mousemove', handleMouseMove);
     document.body.removeEventListener('mouseup', handleMouseUp);
   };
 
   useEffect(() => {
-    console.log('value', value);
     let r = 0;
 
     if (indicatorRingBgRef.current) {
@@ -64,8 +70,7 @@ const Knob: FC<KnobProps> = ({ initialValue, label, type }) => {
       indicatorDotRef.current.style.transformOrigin = '20px 20px';
     }
 
-    const normVal = normalizeValue(value, min, max);
-    const theta = Math.PI * 2 * normVal + 0.5 * Math.PI;
+    const theta = Math.PI * 2 * value + 0.5 * Math.PI;
     const endX = r * Math.cos(theta) + 20;
     const endY = r * Math.sin(theta) + 20;
 
@@ -73,12 +78,22 @@ const Knob: FC<KnobProps> = ({ initialValue, label, type }) => {
       indicatorRingRef.current.setAttribute(
         'd',
         `M20,20l0,${r}${
-          normVal > 0.5 ? `A${r},${r},0,0,1,20,${20 - r}` : ''
+          value > 0.5 ? `A${r},${r},0,0,1,20,${20 - r}` : ''
         }A-${r},${r},0,0,1,${endX},${endY}Z`,
       );
-      indicatorDotRef.current.style.transform = `rotate(${360 * normVal}deg)`;
+      indicatorDotRef.current.style.transform = `rotate(${360 * value}deg)`;
     }
   }, [indicatorRingRef, indicatorRingBgRef, indicatorDotRef, value]);
+
+  useEffect(() => {
+    dispatch({
+      type:
+        label === 'level'
+          ? Gain_ActionTypes.UpdateSettings
+          : Oscillator_ActionTypes.UpdateSettings,
+      payload: { id: label, parent, value },
+    });
+  }, [label, parent, value, dispatch]);
 
   let indicatorRingFillColor = '';
   let indicatorDotFillColor = '';
@@ -213,27 +228,27 @@ const Knob: FC<KnobProps> = ({ initialValue, label, type }) => {
             className="knob-input__input"
             min={min}
             max={max}
+            step="any"
             value={value}
             onChange={(e) => {
-              const normVal = normalizeValue(
-                parseFloat(e.target.value),
-                min,
-                max,
-              );
-              setValue(normVal);
+              setValue(parseFloat(e.target.value));
             }}
             onMouseDown={(e) => {
               clearDrag();
               e.preventDefault();
+
               document.body.classList.add('knob-input__drag-active');
               setIsActiveDrag(true);
+
               dragStartPosition = e.clientY;
               setValue(parseFloat(e.currentTarget.value));
+
               document.body.addEventListener('mousemove', handleMouseMove);
               document.body.addEventListener('mouseup', handleMouseUp);
             }}
             onDoubleClick={() => {
               clearDrag();
+
               setValue(initialValue);
             }}
             onFocus={() => {
