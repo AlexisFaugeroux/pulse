@@ -8,12 +8,18 @@ export default class Oscillator {
     public frequency: number,
     public detune: number,
     public adsr: EnvelopeSettings | null,
+    public parent: string,
   ) {
     this.audioContext = audioContext;
     this.node = this.audioContext.createOscillator();
     this.node.type = type;
     this.node.frequency.value = frequency;
-    this.node.detune.setValueAtTime(detune, this.audioContext.currentTime);
+    this.node.detune.setValueAtTime(
+      detune * 100,
+      this.audioContext.currentTime,
+    );
+
+    this.parent = parent;
 
     this.envelope = adsr
       ? adsr

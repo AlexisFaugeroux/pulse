@@ -3,6 +3,10 @@ import { Gain_ActionTypes, Gain_SettingsActions } from '../types';
 
 const TIME_CONSTANT = 0.01;
 
+function normalizeValue(n: number) {
+  return isFinite(n) ? n : Math.round((n + Number.EPSILON) * 100) / 100;
+}
+
 const gainsReducer = (
   state: {
     oscAGainValue: number;
@@ -10,21 +14,25 @@ const gainsReducer = (
   },
   action: Gain_SettingsActions,
 ) => {
+  const { value, parent } = action.payload;
+
   switch (action.type) {
     case Gain_ActionTypes.UpdateSettings:
-      if (action.payload.parent === 'oscillatorA') {
+      if (parent === 'oscillatorA') {
         oscAGain.gain.setTargetAtTime(
-          action.payload.value,
+          normalizeValue(value),
+          audioContext.currentTime,
+          TIME_CONSTANT,
+        );
+        return { ...state };
+      } else if (parent === 'oscillatorB') {
+        oscBGain.gain.setTargetAtTime(
+          normalizeValue(value),
           audioContext.currentTime,
           TIME_CONSTANT,
         );
         return { ...state };
       } else {
-        oscBGain.gain.setTargetAtTime(
-          action.payload.value,
-          audioContext.currentTime,
-          TIME_CONSTANT,
-        );
         return { ...state };
       }
     default:

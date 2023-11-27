@@ -1,5 +1,10 @@
 import { InitialSettingsState } from './types/types';
 
+// Ajouter une propriété parent à la classe Oscillator
+// pour identifier le parent de l'oscillator
+// se servir de cette info pour fitler les osc actifs
+// et ajuster le detune en temps réel
+
 export const audioContext = new AudioContext();
 export const audioContextOutput = audioContext.destination;
 
@@ -14,6 +19,7 @@ masterGain.connect(audioContextOutput);
 export const initialSettings: InitialSettingsState = {
   oscillators: {
     oscillatorA: {
+      id: 'oscillatorA',
       isActive: true,
       type: 'sine',
       detune: 0,
@@ -25,6 +31,7 @@ export const initialSettings: InitialSettingsState = {
       },
     },
     oscillatorB: {
+      id: 'oscillatorB',
       isActive: false,
       type: 'sine',
       detune: 0,

@@ -1,4 +1,5 @@
 export type OscSettings = {
+  id: 'oscillatorA' | 'oscillatorB';
   isActive: boolean;
   type: OscillatorType;
   detune: number;

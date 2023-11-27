@@ -28,6 +28,7 @@ const oscillatorsReducer = (
             action.payload.frequency,
             oscillatorA.detune,
             oscillatorA.adsr,
+            oscillatorA.id,
           );
           const newOscillatorB = new Oscillator(
             audioContext,
@@ -36,6 +37,7 @@ const oscillatorsReducer = (
             action.payload.frequency,
             oscillatorB.detune,
             oscillatorB.adsr,
+            oscillatorB.id,
           );
           currentOscillators.push(newOscillatorA, newOscillatorB);
         } else if (oscillatorA.isActive) {
@@ -46,6 +48,7 @@ const oscillatorsReducer = (
             action.payload.frequency,
             oscillatorA.detune,
             oscillatorA.adsr,
+            oscillatorA.id,
           );
           currentOscillators.push(newOscillator);
         } else if (oscillatorB.isActive) {
@@ -56,6 +59,7 @@ const oscillatorsReducer = (
             action.payload.frequency,
             oscillatorB.detune,
             oscillatorB.adsr,
+            oscillatorB.id,
           );
           currentOscillators.push(newOscillator);
         }
@@ -80,42 +84,50 @@ const oscillatorsReducer = (
       }
       return { ...state };
 
-    case Oscillator_ActionTypes.Activate:
+    case Oscillator_ActionTypes.Activate: {
+      const { id } = action.payload;
       return {
         ...state,
-        [action.payload.id]: {
-          ...state[action.payload.id as keyof typeof state],
-          isActive: true,
-        },
+        [id]: { ...state[id as keyof typeof state], isActive: true },
       };
+    }
 
-    case Oscillator_ActionTypes.Deactivate:
+    case Oscillator_ActionTypes.Deactivate: {
+      const { id } = action.payload;
+
       return {
         ...state,
-        [action.payload.id]: {
-          ...state[action.payload.id as keyof typeof state],
-          isActive: false,
-        },
+        [id]: { ...state[id as keyof typeof state], isActive: false },
       };
+    }
 
-    case Oscillator_ActionTypes.UpdateSettings:
-      if (action.payload.parent === 'oscillatorA') {
+    case Oscillator_ActionTypes.UpdateSettings: {
+      const { id, value, parent } = action.payload;
+
+      if (parent === 'oscillatorA') {
+        currentOscillators.forEach((oscillator) => {
+          if (id === 'detune' && oscillator.parent === parent) {
+            oscillator.node.detune.value = value * 100;
+          }
+        });
         return {
           ...state,
-          oscillatorA: {
-            ...oscillatorA,
-            [action.payload.id]: action.payload.value,
-          },
+          oscillatorA: { ...oscillatorA, [id]: value },
+        };
+      } else if (parent === 'oscillatorB') {
+        currentOscillators.forEach((oscillator) => {
+          if (id === 'detune' && oscillator.parent === parent) {
+            oscillator.node.detune.value = value * 100;
+          }
+        });
+        return {
+          ...state,
+          oscillatorB: { ...oscillatorB, [id]: value },
         };
       } else {
-        return {
-          ...state,
-          oscillatorB: {
-            ...oscillatorB,
-            [action.payload.id]: action.payload.value,
-          },
-        };
+        return { ...state };
       }
+    }
 
     case Oscillator_ActionTypes.UpdateType:
       return { ...state, type: action.payload.id };
