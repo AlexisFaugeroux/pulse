@@ -86,13 +86,17 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
   }, [indicatorRingRef, indicatorRingBgRef, indicatorDotRef, value]);
 
   useEffect(() => {
-    dispatch({
-      type:
-        label === 'level'
-          ? Gain_ActionTypes.UpdateSettings
-          : Oscillator_ActionTypes.UpdateSettings,
-      payload: { id: label, parent, value },
-    });
+    if (label === 'level') {
+      dispatch({
+        type: Gain_ActionTypes.UpdateSettings,
+        payload: { id: label, parent, value },
+      });
+    } else if (parent === 'oscillatorA' || parent === 'oscillatorB') {
+      dispatch({
+        type: Oscillator_ActionTypes.UpdateSettings,
+        payload: { id: label, parent, value },
+      });
+    }
   }, [label, parent, value, dispatch]);
 
   let indicatorRingFillColor = '';

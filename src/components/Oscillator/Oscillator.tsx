@@ -62,12 +62,12 @@ const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
           isActive={isActive}
           setIsActive={setIsActive}
         />
-        <WaveSelector waves={waves} />
+        <WaveSelector parent={id} waves={waves} />
         <div className="controls">
           <div className="knobs">
             {knobs.map(({ initialValue, label }) => (
               <Knob
-                key={`${label}`}
+                key={id + label}
                 parent={id}
                 initialValue={initialValue}
                 label={label}

@@ -49,13 +49,11 @@ export default class Oscillator {
 
     this.gateGain.gain.cancelScheduledValues(currentTime);
     this.gateGain.gain.setValueAtTime(0, currentTime + this.easing);
-
     // Attack
     this.gateGain.gain.linearRampToValueAtTime(
       1,
       currentTime + this.envelope.attack + this.easing,
     );
-
     // Decay & Sustain
     this.gateGain.gain.linearRampToValueAtTime(
       this.envelope.sustain,

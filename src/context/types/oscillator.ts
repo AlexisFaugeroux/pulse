@@ -10,27 +10,11 @@ enum Oscillator_ActionTypes {
 }
 
 type Oscillator_SettingsPayload = {
-  [Oscillator_ActionTypes.Create]: {
-    note: string;
-    frequency: number;
-  };
-  [Oscillator_ActionTypes.Kill]: {
-    note: string;
-    frequency: number;
-  };
-  [Oscillator_ActionTypes.Activate]: {
-    id: string;
-  };
-  [Oscillator_ActionTypes.Deactivate]: {
-    id: string;
-  };
-  [Oscillator_ActionTypes.UpdateSettings]: {
-    id: string;
-    parent: string;
-    value: number;
-  };
-  [Oscillator_ActionTypes.UpdateType]: {
-    id: string;
+  [key in Oscillator_ActionTypes]: {
+    id?: string;
+    frequency?: number;
+    parent?: string;
+    value?: number;
   };
 };
 

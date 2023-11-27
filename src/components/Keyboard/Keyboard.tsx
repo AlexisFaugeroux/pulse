@@ -29,7 +29,6 @@ const Keyboard: FC = () => {
         dispatch({
           type: Oscillator_ActionTypes.Create,
           payload: {
-            note,
             frequency,
           },
         });
@@ -50,7 +49,6 @@ const Keyboard: FC = () => {
         dispatch({
           type: Oscillator_ActionTypes.Kill,
           payload: {
-            note,
             frequency,
           },
         });
@@ -101,6 +99,7 @@ const Keyboard: FC = () => {
                     : ''
                 }
                 `}
+                key={index + Date.now()}
                 onMouseDown={(e) => {
                   if (
                     !pressedKeys.includes(e.currentTarget.id) &&
@@ -110,7 +109,6 @@ const Keyboard: FC = () => {
                     dispatch({
                       type: Oscillator_ActionTypes.Create,
                       payload: {
-                        note,
                         frequency,
                       },
                     });
@@ -124,7 +122,6 @@ const Keyboard: FC = () => {
                     dispatch({
                       type: Oscillator_ActionTypes.Kill,
                       payload: {
-                        note,
                         frequency,
                       },
                     });
@@ -138,7 +135,6 @@ const Keyboard: FC = () => {
                     dispatch({
                       type: Oscillator_ActionTypes.Kill,
                       payload: {
-                        note,
                         frequency,
                       },
                     });

@@ -1,10 +1,5 @@
 import { InitialSettingsState } from './types/types';
 
-// Ajouter une propriété parent à la classe Oscillator
-// pour identifier le parent de l'oscillator
-// se servir de cette info pour fitler les osc actifs
-// et ajuster le detune en temps réel
-
 export const audioContext = new AudioContext();
 export const audioContextOutput = audioContext.destination;
 

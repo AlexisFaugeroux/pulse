@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import sawtoothActive from '../../../assets/saw-wave-active.png';
 import sawtoothInactive from '../../../assets/saw-wave-inactive.png';
 import sineActive from '../../../assets/sine-wave-active.png';
@@ -7,14 +7,18 @@ import squareActive from '../../../assets/square-wave-active.png';
 import squareInactive from '../../../assets/square-wave-inactive.png';
 import triangleActive from '../../../assets/triangle-wave-active.png';
 import triangleInactive from '../../../assets/triangle-wave-inactive.png';
+import { Context } from '../../../context/context';
+import { Oscillator_ActionTypes } from '../../../context/types';
 import { Waves } from '../../../utils/constants';
 import './WaveSelector.scss';
 
 interface WaveSelectorProps {
+  parent: string;
   waves: Waves[];
 }
 
-const WaveSelector: FC<WaveSelectorProps> = ({ waves }) => {
+const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves }) => {
+  const { dispatch } = useContext(Context);
   const [activeWave, setActiveWave] = useState<Waves>(Waves.SINE);
 
   const wavesToImages = waves.map((wave) => ({
@@ -46,9 +50,18 @@ const WaveSelector: FC<WaveSelectorProps> = ({ waves }) => {
       <div className="selector-image">
         {wavesToImages.map(({ wave, activeImg, inactiveImg }) => (
           <button
-            key={wave}
+            key={wave + Date.now()}
             id={wave}
-            onClick={() => setActiveWave(wave)}
+            onClick={() => {
+              setActiveWave(wave);
+              dispatch({
+                type: Oscillator_ActionTypes.UpdateType,
+                payload: {
+                  id: wave,
+                  parent,
+                },
+              });
+            }}
             style={{
               backgroundImage: `url(${
                 activeWave === wave ? activeImg : inactiveImg

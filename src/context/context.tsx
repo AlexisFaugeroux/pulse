@@ -1,6 +1,6 @@
 import { Dispatch, PropsWithChildren, createContext, useReducer } from 'react';
 import { initialSettings } from '../nodesConfig';
-import { InitialSettingsState } from '../types/types';
+import type { InitialSettingsState } from '../types/types';
 import { mainReducer } from './reducers/mainReducer';
 import type {
   Gain_SettingsActions,

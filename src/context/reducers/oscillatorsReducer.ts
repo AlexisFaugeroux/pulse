@@ -14,8 +14,12 @@ const oscillatorsReducer = (
     oscillatorB: OscSettings;
   },
   action: Oscillator_SettingsActions,
-) => {
+): {
+  oscillatorA: OscSettings;
+  oscillatorB: OscSettings;
+} => {
   const { oscillatorA, oscillatorB } = state;
+  const { id, frequency, parent, value } = action.payload;
 
   switch (action.type) {
     case Oscillator_ActionTypes.Create:
@@ -25,7 +29,7 @@ const oscillatorsReducer = (
             audioContext,
             oscAGain,
             oscillatorA.type,
-            action.payload.frequency,
+            frequency ?? 0,
             oscillatorA.detune,
             oscillatorA.adsr,
             oscillatorA.id,
@@ -34,7 +38,7 @@ const oscillatorsReducer = (
             audioContext,
             oscBGain,
             oscillatorB.type,
-            action.payload.frequency,
+            frequency ?? 0,
             oscillatorB.detune,
             oscillatorB.adsr,
             oscillatorB.id,
@@ -45,7 +49,7 @@ const oscillatorsReducer = (
             audioContext,
             oscAGain,
             oscillatorA.type,
-            action.payload.frequency,
+            frequency ?? 0,
             oscillatorA.detune,
             oscillatorA.adsr,
             oscillatorA.id,
@@ -56,7 +60,7 @@ const oscillatorsReducer = (
             audioContext,
             oscBGain,
             oscillatorB.type,
-            action.payload.frequency,
+            frequency ?? 0,
             oscillatorB.detune,
             oscillatorB.adsr,
             oscillatorB.id,
@@ -73,7 +77,7 @@ const oscillatorsReducer = (
         currentOscillators.forEach((oscillator) => {
           if (
             Math.round(oscillator.node.frequency.value) ===
-            Math.round(action.payload.frequency)
+            Math.round(frequency ?? 0)
           ) {
             oscillator.stop();
           } else {
@@ -84,40 +88,50 @@ const oscillatorsReducer = (
       }
       return { ...state };
 
-    case Oscillator_ActionTypes.Activate: {
-      const { id } = action.payload;
+    case Oscillator_ActionTypes.Activate:
+      if (!id) {
+        console.error('Activate oscillator: no id provided');
+        return { ...state };
+      }
+
       return {
         ...state,
         [id]: { ...state[id as keyof typeof state], isActive: true },
       };
-    }
 
-    case Oscillator_ActionTypes.Deactivate: {
-      const { id } = action.payload;
+    case Oscillator_ActionTypes.Deactivate:
+      if (!id) {
+        console.error('Deactivate oscillator: no id provided');
+        return { ...state };
+      }
 
       return {
         ...state,
         [id]: { ...state[id as keyof typeof state], isActive: false },
       };
-    }
 
-    case Oscillator_ActionTypes.UpdateSettings: {
-      const { id, value, parent } = action.payload;
+    case Oscillator_ActionTypes.UpdateSettings:
+      if (!id) {
+        console.error('Update oscillator settings: no id provided');
+        return { ...state };
+      }
 
       if (parent === 'oscillatorA') {
-        currentOscillators.forEach((oscillator) => {
-          if (id === 'detune' && oscillator.parent === parent) {
-            oscillator.node.detune.value = value * 100;
+        currentOscillators.forEach(({ node, parent: currOscParent }) => {
+          if (id === 'detune' && currOscParent === parent) {
+            console.log(value);
+            node.detune.value = value ? value * 100 : 0;
           }
         });
+
         return {
           ...state,
           oscillatorA: { ...oscillatorA, [id]: value },
         };
       } else if (parent === 'oscillatorB') {
-        currentOscillators.forEach((oscillator) => {
-          if (id === 'detune' && oscillator.parent === parent) {
-            oscillator.node.detune.value = value * 100;
+        currentOscillators.forEach(({ node, parent: currOscParent }) => {
+          if (id === 'detune' && currOscParent === parent) {
+            node.detune.value = value ? value * 100 : 0;
           }
         });
         return {
@@ -127,15 +141,41 @@ const oscillatorsReducer = (
       } else {
         return { ...state };
       }
-    }
 
     case Oscillator_ActionTypes.UpdateType:
-      return { ...state, type: action.payload.id };
+      if (!id) {
+        console.error('Update oscillator type: no id provided');
+        return { ...state };
+      }
+
+      if (parent === 'oscillatorA') {
+        currentOscillators.forEach(({ node, parent: currOscParent }) => {
+          if (currOscParent === parent) {
+            node.type = id as OscillatorType;
+          }
+        });
+
+        return {
+          ...state,
+          oscillatorA: { ...oscillatorA, type: id as OscillatorType },
+        };
+      } else if (parent === 'oscillatorB') {
+        currentOscillators.forEach(({ node, parent: currOscParent }) => {
+          if (currOscParent === parent) {
+            node.type = id as OscillatorType;
+          }
+        });
+        return {
+          ...state,
+          oscillatorB: { ...oscillatorB, type: id as OscillatorType },
+        };
+      } else {
+        return { ...state };
+      }
 
     default:
       console.log('Reducer error action: ', action);
       return { ...state };
   }
 };
-
 export default oscillatorsReducer;
