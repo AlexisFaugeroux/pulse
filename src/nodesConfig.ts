@@ -17,6 +17,7 @@ export const initialSettings: InitialSettingsState = {
       id: 'oscillatorA',
       isActive: true,
       type: 'sine',
+      octaveOffset: 0,
       detune: 0,
       adsr: {
         attack: 0.005,
@@ -29,6 +30,7 @@ export const initialSettings: InitialSettingsState = {
       id: 'oscillatorB',
       isActive: false,
       type: 'sine',
+      octaveOffset: 0,
       detune: 0,
       adsr: {
         attack: 0.005,

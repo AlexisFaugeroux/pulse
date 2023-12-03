@@ -8,6 +8,8 @@ import {
 
 let currentOscillators: Oscillator[] = [];
 
+// pitchShift comme méthode de classe
+
 const oscillatorsReducer = (
   state: {
     oscillatorA: OscSettings;
@@ -19,17 +21,30 @@ const oscillatorsReducer = (
   oscillatorB: OscSettings;
 } => {
   const { oscillatorA, oscillatorB } = state;
-  const { id, frequency, parent, value } = action.payload;
+  const {
+    id,
+    note: initialNote,
+    frequency: initialFrequency,
+    parent,
+    value,
+  } = action.payload;
 
   switch (action.type) {
     case Oscillator_ActionTypes.Create:
       {
+        if (!initialNote || !initialFrequency) {
+          console.error('Create oscillator A: note or frequency not provided');
+          return { ...state };
+        }
+
         if (oscillatorA.isActive && oscillatorB.isActive) {
           const newOscillatorA = new Oscillator(
             audioContext,
             oscAGain,
             oscillatorA.type,
-            frequency ?? 0,
+            initialNote,
+            initialFrequency,
+            oscillatorA.octaveOffset,
             oscillatorA.detune,
             oscillatorA.adsr,
             oscillatorA.id,
@@ -38,7 +53,9 @@ const oscillatorsReducer = (
             audioContext,
             oscBGain,
             oscillatorB.type,
-            frequency ?? 0,
+            initialNote,
+            initialFrequency,
+            oscillatorB.octaveOffset,
             oscillatorB.detune,
             oscillatorB.adsr,
             oscillatorB.id,
@@ -49,7 +66,9 @@ const oscillatorsReducer = (
             audioContext,
             oscAGain,
             oscillatorA.type,
-            frequency ?? 0,
+            initialNote,
+            initialFrequency,
+            oscillatorA.octaveOffset,
             oscillatorA.detune,
             oscillatorA.adsr,
             oscillatorA.id,
@@ -60,7 +79,9 @@ const oscillatorsReducer = (
             audioContext,
             oscBGain,
             oscillatorB.type,
-            frequency ?? 0,
+            initialNote,
+            initialFrequency,
+            oscillatorB.octaveOffset,
             oscillatorB.detune,
             oscillatorB.adsr,
             oscillatorB.id,
@@ -75,15 +96,21 @@ const oscillatorsReducer = (
         const activeOscillators: Oscillator[] = [];
 
         currentOscillators.forEach((oscillator) => {
+          const { node, parent, octaveShift, stop } = oscillator;
+
+          const { frequency: shiftedFrequency } = octaveShift(
+            state[parent as keyof typeof state].octaveOffset,
+            initialFrequency ?? 0,
+          );
           if (
-            Math.round(oscillator.node.frequency.value) ===
-            Math.round(frequency ?? 0)
+            Math.round(node.frequency.value) === Math.round(shiftedFrequency)
           ) {
-            oscillator.stop();
+            stop();
           } else {
             activeOscillators.push(oscillator);
           }
         });
+
         currentOscillators = activeOscillators;
       }
       return { ...state };
@@ -116,27 +143,39 @@ const oscillatorsReducer = (
         return { ...state };
       }
 
-      if (parent === 'oscillatorA') {
-        currentOscillators.forEach(({ node, parent: currOscParent }) => {
-          if (id === 'detune' && currOscParent === parent) {
-            console.log(value);
-            node.detune.value = value ? value * 100 : 0;
-          }
-        });
+      if (parent) {
+        currentOscillators.forEach(
+          ({
+            node,
+            parent: currOscParent,
+            offset,
+            initialFrequency,
+            octaveShift,
+          }) => {
+            if (id === 'detune' && currOscParent === parent) {
+              node.detune.value = value ? value * 100 : 0;
+            }
+            if (id === 'octaveOffset' && currOscParent === parent) {
+              const { frequency: newFrequency } = octaveShift(
+                value ?? offset,
+                initialFrequency,
+              );
 
+              if (newFrequency !== node.frequency.value) {
+                node.frequency.setValueAtTime(
+                  newFrequency,
+                  audioContext.currentTime + 0.006,
+                );
+              }
+            }
+          },
+        );
         return {
           ...state,
-          oscillatorA: { ...oscillatorA, [id]: value },
-        };
-      } else if (parent === 'oscillatorB') {
-        currentOscillators.forEach(({ node, parent: currOscParent }) => {
-          if (id === 'detune' && currOscParent === parent) {
-            node.detune.value = value ? value * 100 : 0;
-          }
-        });
-        return {
-          ...state,
-          oscillatorB: { ...oscillatorB, [id]: value },
+          [parent]: {
+            ...state[parent as keyof typeof state],
+            [id]: value,
+          },
         };
       } else {
         return { ...state };

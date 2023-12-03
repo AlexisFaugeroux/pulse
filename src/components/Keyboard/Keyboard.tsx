@@ -4,9 +4,9 @@ import { Oscillator_ActionTypes } from '../../context/types/index';
 import { ALLOWED_KEYS, NOTES, NOTE_TO_KEYS } from '../../utils/constants';
 import './Keyboard.scss';
 import {
-  getFrequencyFromNote,
   getKeyGroupOnKeyboard,
   getNoteFromKeyPressed,
+  getNoteInfo,
   isNoteInKeyboardOctaveRange,
 } from './helpers';
 
@@ -25,11 +25,12 @@ const Keyboard: FC = () => {
 
         const keyGroup = getKeyGroupOnKeyboard(e.key);
         const note = getNoteFromKeyPressed(keyGroup, e.key, offset);
-        const frequency = getFrequencyFromNote(note);
+        const noteInfo = getNoteInfo(note);
         dispatch({
           type: Oscillator_ActionTypes.Create,
           payload: {
-            frequency,
+            note: noteInfo.note,
+            frequency: noteInfo.frequency,
           },
         });
       }
@@ -45,12 +46,10 @@ const Keyboard: FC = () => {
 
         const keyGroup = getKeyGroupOnKeyboard(e.key);
         const note = getNoteFromKeyPressed(keyGroup, e.key, offset);
-        const frequency = getFrequencyFromNote(note);
+        const payload = getNoteInfo(note) ?? {};
         dispatch({
           type: Oscillator_ActionTypes.Kill,
-          payload: {
-            frequency,
-          },
+          payload,
         });
       }
     },
@@ -109,6 +108,7 @@ const Keyboard: FC = () => {
                     dispatch({
                       type: Oscillator_ActionTypes.Create,
                       payload: {
+                        note,
                         frequency,
                       },
                     });
@@ -122,6 +122,7 @@ const Keyboard: FC = () => {
                     dispatch({
                       type: Oscillator_ActionTypes.Kill,
                       payload: {
+                        note,
                         frequency,
                       },
                     });
@@ -135,6 +136,7 @@ const Keyboard: FC = () => {
                     dispatch({
                       type: Oscillator_ActionTypes.Kill,
                       payload: {
+                        note,
                         frequency,
                       },
                     });

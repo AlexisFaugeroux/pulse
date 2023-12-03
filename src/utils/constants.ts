@@ -1,4 +1,8 @@
-export const NOTES = [
+export const NOTES: {
+  [key: string]: string | number;
+  note: string;
+  frequency: number;
+}[] = [
   { note: 'C0', frequency: 16.35 },
   { note: 'C#0', frequency: 17.32 },
   { note: 'D0', frequency: 18.35 },

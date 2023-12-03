@@ -75,7 +75,7 @@ const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
               />
             ))}
           </div>
-          <OctaveSelector size={5} />
+          <OctaveSelector size={5} parent={id} />
         </div>
       </div>
     </div>

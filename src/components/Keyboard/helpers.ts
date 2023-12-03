@@ -13,24 +13,28 @@ export const getNoteFromKeyPressed = (
   keyPressed: string,
   offset: number,
 ): string => {
-  let note = '';
+  const defaultOffset = keyGroup === 'GROUP1' ? 2 : 3;
+  const finalOffset = defaultOffset + offset;
 
-  if (keyGroup === 'GROUP1') {
-    note =
-      KEY_TO_NOTES[keyGroup][keyPressed].find((note) =>
-        note.includes(`${2 + offset}`),
-      ) ?? '';
-  } else {
-    note =
-      KEY_TO_NOTES[keyGroup][keyPressed].find((note) =>
-        note.includes(`${3 + offset}`),
-      ) ?? '';
-  }
-  return note;
+  return (
+    KEY_TO_NOTES[keyGroup][keyPressed].find((note) =>
+      note.includes(finalOffset.toString()),
+    ) ?? ''
+  );
 };
 
-export const getFrequencyFromNote = (note: string) => {
-  return NOTES.find((element) => element.note === note)?.frequency ?? 0;
+export const getNoteInfo = (
+  note: string,
+): {
+  note: string;
+  frequency: number;
+} => {
+  return (
+    NOTES.find((element) => element.note === note) ?? {
+      note: '',
+      frequency: 0,
+    }
+  );
 };
 
 export const isNoteInKeyboardOctaveRange = (index: number, offset: number) => {

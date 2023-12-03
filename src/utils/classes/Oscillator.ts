@@ -1,23 +1,34 @@
 import { EnvelopeSettings } from '../../types/types';
+import { NOTES } from '../constants';
 
 export default class Oscillator {
+  node;
+  envelope;
+  easing;
+  gateGain;
+
   constructor(
     public audioContext: AudioContext,
     public destination: GainNode,
     public type: OscillatorType,
-    public frequency: number,
+    public initialNote: string,
+    public initialFrequency: number,
+    public offset: number,
     public detune: number,
     public adsr: EnvelopeSettings | null,
     public parent: string,
   ) {
+    const { frequency: newFrequency } = this.octaveShift(offset, initialNote);
+
     this.audioContext = audioContext;
     this.node = this.audioContext.createOscillator();
     this.node.type = type;
-    this.node.frequency.value = frequency;
+    this.node.frequency.value = newFrequency;
     this.node.detune.setValueAtTime(
       detune * 100,
       this.audioContext.currentTime,
     );
+    this.offset = offset;
 
     this.parent = parent;
 
@@ -34,15 +45,13 @@ export default class Oscillator {
     this.gateGain = this.audioContext.createGain();
     this.gateGain.gain.value = 0;
 
+    this.stop = this.stop.bind(this);
+
     this.node.connect(this.gateGain);
     this.gateGain.connect(destination);
     this.node.start();
     this.start();
   }
-  node;
-  envelope;
-  easing;
-  gateGain;
 
   start() {
     const { currentTime } = this.audioContext;
@@ -76,5 +85,40 @@ export default class Oscillator {
     setTimeout(() => {
       this.node.disconnect();
     }, 1000);
+  }
+
+  octaveShift(
+    offset: number,
+    valueToShift: string | number,
+  ): {
+    note: string;
+    frequency: number;
+  } {
+    let valueParam = 'note';
+
+    if (typeof valueToShift === 'number') {
+      valueParam = 'frequency';
+      valueToShift = Math.round(valueToShift * 100 + Number.EPSILON) / 100;
+    }
+
+    const shiftedNoteIndex =
+      NOTES.findIndex((noteParams) => noteParams[valueParam] === valueToShift) +
+      offset * 12;
+
+    if (shiftedNoteIndex === -1) {
+      return (
+        NOTES.find((noteParams) => noteParams[valueParam] === valueToShift) ?? {
+          note: '',
+          frequency: 0,
+        }
+      );
+    }
+    const shiftedNote = NOTES.find((_, index) => index === shiftedNoteIndex) ??
+      NOTES.find((noteParams) => noteParams[valueParam] === valueToShift) ?? {
+        note: '',
+        frequency: 0,
+      };
+
+    return shiftedNote;
   }
 }

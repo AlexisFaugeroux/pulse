@@ -2,6 +2,7 @@ export type OscSettings = {
   id: 'oscillatorA' | 'oscillatorB';
   isActive: boolean;
   type: OscillatorType;
+  octaveOffset: number;
   detune: number;
   adsr: EnvelopeSettings;
 };

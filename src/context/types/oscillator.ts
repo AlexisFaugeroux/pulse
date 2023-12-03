@@ -12,6 +12,7 @@ enum Oscillator_ActionTypes {
 type Oscillator_SettingsPayload = {
   [key in Oscillator_ActionTypes]: {
     id?: string;
+    note?: string;
     frequency?: number;
     parent?: string;
     value?: number;
