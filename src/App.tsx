@@ -1,5 +1,5 @@
 import './App.scss';
-import Enveloppe from './components/Envelope/Enveloppe';
+import Envelope from './components/Envelope/Envelope';
 import FXRack from './components/FXRack/FXRack';
 import Filter from './components/Filter/Filter';
 import Header from './components/Header/Header';
@@ -28,7 +28,7 @@ function App() {
 
             <div className="center ">
               <div className="envelopefilter">
-                <Enveloppe />
+                <Envelope />
                 <Filter />
               </div>
               <LFO />

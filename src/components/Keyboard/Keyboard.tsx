@@ -1,6 +1,6 @@
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { Context } from '../../context/context';
-import { Oscillator_ActionTypes } from '../../context/types/index';
+import { Oscillator_TriggerActionsTypes } from '../../context/types/index';
 import { ALLOWED_KEYS, NOTES, NOTE_TO_KEYS } from '../../utils/constants';
 import './Keyboard.scss';
 import {
@@ -27,7 +27,7 @@ const Keyboard: FC = () => {
         const note = getNoteFromKeyPressed(keyGroup, e.key, offset);
         const noteInfo = getNoteInfo(note);
         dispatch({
-          type: Oscillator_ActionTypes.Create,
+          type: Oscillator_TriggerActionsTypes.Create,
           payload: {
             note: noteInfo.note,
             frequency: noteInfo.frequency,
@@ -48,7 +48,7 @@ const Keyboard: FC = () => {
         const note = getNoteFromKeyPressed(keyGroup, e.key, offset);
         const payload = getNoteInfo(note) ?? {};
         dispatch({
-          type: Oscillator_ActionTypes.Kill,
+          type: Oscillator_TriggerActionsTypes.Kill,
           payload,
         });
       }
@@ -106,7 +106,7 @@ const Keyboard: FC = () => {
                   ) {
                     setPressedKeys([...pressedKeys, e.currentTarget.id]);
                     dispatch({
-                      type: Oscillator_ActionTypes.Create,
+                      type: Oscillator_TriggerActionsTypes.Create,
                       payload: {
                         note,
                         frequency,
@@ -120,7 +120,7 @@ const Keyboard: FC = () => {
                   if (index > -1) {
                     setPressedKeys(pressedKeys.filter((_, i) => i !== index));
                     dispatch({
-                      type: Oscillator_ActionTypes.Kill,
+                      type: Oscillator_TriggerActionsTypes.Kill,
                       payload: {
                         note,
                         frequency,
@@ -134,7 +134,7 @@ const Keyboard: FC = () => {
                   if (index > -1) {
                     setPressedKeys(pressedKeys.filter((_, i) => i !== index));
                     dispatch({
-                      type: Oscillator_ActionTypes.Kill,
+                      type: Oscillator_TriggerActionsTypes.Kill,
                       payload: {
                         note,
                         frequency,

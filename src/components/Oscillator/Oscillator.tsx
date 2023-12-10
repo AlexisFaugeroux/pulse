@@ -1,6 +1,7 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { Context } from '../../context/context';
-import { Oscillator_ActionTypes } from '../../context/types/index';
+import { Oscillator_SettingsActionTypes } from '../../context/types/index';
+import { initialSettings } from '../../nodesConfig';
 import { ControlTypes, Waves } from '../../utils/constants';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
 import InactivePanel from '../utils/InactivePanel/InactivePanel';
@@ -17,7 +18,7 @@ interface OscillatorProps {
 const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
   const { state, dispatch } = useContext(Context);
   const { oscillatorA, oscillatorB } = state.oscillators;
-  const { oscAGainValue, oscBGainValue } = state.gains;
+  const { oscAGainValue, oscBGainValue } = initialSettings.gains;
 
   const [isActive, setIsActive] = useState(
     id === 'oscillatorA' ? oscillatorA.isActive : oscillatorB.isActive,
@@ -42,12 +43,12 @@ const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
   useEffect(() => {
     if (isActive) {
       dispatch({
-        type: Oscillator_ActionTypes.Activate,
+        type: Oscillator_SettingsActionTypes.Activate,
         payload: { id },
       });
     } else {
       dispatch({
-        type: Oscillator_ActionTypes.Deactivate,
+        type: Oscillator_SettingsActionTypes.Deactivate,
         payload: { id },
       });
     }

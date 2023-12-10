@@ -3,13 +3,18 @@ import { initialSettings } from '../nodesConfig';
 import type { InitialSettingsState } from '../types/types';
 import { mainReducer } from './reducers/mainReducer';
 import type {
-  Gain_SettingsActions,
+  Envelope_SettingsActions,
   Oscillator_SettingsActions,
+  Oscillator_TriggerActions,
 } from './types/index';
 
 const Context = createContext<{
-  state: InitialSettingsState;
-  dispatch: Dispatch<Oscillator_SettingsActions | Gain_SettingsActions>;
+  state: Pick<InitialSettingsState, 'envelope' | 'oscillators'>;
+  dispatch: Dispatch<
+    | Oscillator_TriggerActions
+    | Oscillator_SettingsActions
+    | Envelope_SettingsActions
+  >;
 }>({
   state: initialSettings,
   dispatch: () => null,

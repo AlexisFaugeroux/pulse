@@ -1,2 +1,2 @@
-export * from './gain';
+export * from './envelope';
 export * from './oscillator';

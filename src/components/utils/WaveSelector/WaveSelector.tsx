@@ -8,7 +8,7 @@ import squareInactive from '../../../assets/square-wave-inactive.png';
 import triangleActive from '../../../assets/triangle-wave-active.png';
 import triangleInactive from '../../../assets/triangle-wave-inactive.png';
 import { Context } from '../../../context/context';
-import { Oscillator_ActionTypes } from '../../../context/types';
+import { Oscillator_SettingsActionTypes } from '../../../context/types';
 import { Waves } from '../../../utils/constants';
 import './WaveSelector.scss';
 
@@ -55,7 +55,7 @@ const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves }) => {
             onClick={() => {
               setActiveWave(wave);
               dispatch({
-                type: Oscillator_ActionTypes.UpdateType,
+                type: Oscillator_SettingsActionTypes.UpdateType,
                 payload: {
                   id: wave,
                   parent,

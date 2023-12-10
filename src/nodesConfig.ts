@@ -19,12 +19,6 @@ export const initialSettings: InitialSettingsState = {
       type: 'sine',
       octaveOffset: 0,
       detune: 0,
-      adsr: {
-        attack: 0.005,
-        decay: 0.1,
-        sustain: 0.6,
-        release: 0.1,
-      },
     },
     oscillatorB: {
       id: 'oscillatorB',
@@ -32,13 +26,14 @@ export const initialSettings: InitialSettingsState = {
       type: 'sine',
       octaveOffset: 0,
       detune: 0,
-      adsr: {
-        attack: 0.005,
-        decay: 0.1,
-        sustain: 0.6,
-        release: 0.1,
-      },
     },
+  },
+  envelope: {
+    isActive: true,
+    attack: 0.005,
+    decay: 1,
+    sustain: 1,
+    release: 0.1,
   },
   gains: {
     oscAGainValue: 0.7,

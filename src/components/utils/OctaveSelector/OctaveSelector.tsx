@@ -2,7 +2,7 @@ import { FC, useContext, useEffect, useState } from 'react';
 import activeIcon from '../../../assets/octave-light-switch-active.png';
 import inactiveIcon from '../../../assets/octave-light-switch-inactive.png';
 import { Context } from '../../../context/context';
-import { Oscillator_ActionTypes } from '../../../context/types';
+import { Oscillator_SettingsActionTypes } from '../../../context/types';
 import './OctaveSelector.scss';
 
 interface OctaveSelectorProps {
@@ -24,7 +24,7 @@ const OctaveSelector: FC<OctaveSelectorProps> = ({ size, parent }) => {
 
   useEffect(() => {
     dispatch({
-      type: Oscillator_ActionTypes.UpdateSettings,
+      type: Oscillator_SettingsActionTypes.UpdateSettings,
       payload: {
         id: 'octaveOffset',
         parent,

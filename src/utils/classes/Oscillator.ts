@@ -3,7 +3,6 @@ import { NOTES } from '../constants';
 
 export default class Oscillator {
   node;
-  envelope;
   easing;
   gateGain;
 
@@ -11,14 +10,14 @@ export default class Oscillator {
     public audioContext: AudioContext,
     public destination: GainNode,
     public type: OscillatorType,
-    public initialNote: string,
-    public initialFrequency: number,
+    public note: string,
+    public frequency: number,
     public offset: number,
     public detune: number,
-    public adsr: EnvelopeSettings | null,
+    public envelope: EnvelopeSettings,
     public parent: string,
   ) {
-    const { frequency: newFrequency } = this.octaveShift(offset, initialNote);
+    const { frequency: newFrequency } = this.octaveShift(offset, note);
 
     this.audioContext = audioContext;
     this.node = this.audioContext.createOscillator();
@@ -32,14 +31,7 @@ export default class Oscillator {
 
     this.parent = parent;
 
-    this.envelope = adsr
-      ? adsr
-      : {
-          attack: 0.005,
-          decay: 0.1,
-          sustain: 0.6,
-          release: 0.1,
-        };
+    this.envelope = envelope;
     this.easing = 0.006;
 
     this.gateGain = this.audioContext.createGain();
@@ -84,7 +76,7 @@ export default class Oscillator {
 
     setTimeout(() => {
       this.node.disconnect();
-    }, 1000);
+    }, 10000);
   }
 
   octaveShift(

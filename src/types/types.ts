@@ -4,10 +4,10 @@ export type OscSettings = {
   type: OscillatorType;
   octaveOffset: number;
   detune: number;
-  adsr: EnvelopeSettings;
 };
 
 export type EnvelopeSettings = {
+  isActive: boolean;
   attack: number;
   decay: number;
   sustain: number;
@@ -26,6 +26,7 @@ export type InitialSettingsState = {
     oscillatorA: OscSettings;
     oscillatorB: OscSettings;
   };
+  envelope: EnvelopeSettings;
   gains: {
     oscAGainValue: number;
     oscBGainValue: number;

@@ -26,3 +26,9 @@ export function getTransformProperty() {
     'oTransform',
   ]);
 }
+
+export const roundTwoDigitsNonFinite = (n: number) => {
+  return isFinite(n) ? n : Math.round((n + Number.EPSILON) * 100) / 100;
+};
+
+export const TIME_CONSTANT = 0.01;
