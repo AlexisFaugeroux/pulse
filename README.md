@@ -1,27 +1,28 @@
-# React + TypeScript + Vite
+# Pulse - Web Synthetizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Alt text](/public/Pulse-screenshot.png)
 
-Currently, two official plugins are available:
+This React project is an attempt to build a web synthetizer based on the Web Audio API from Javascript. It is heavily inspired by virtual synthetizers used in the field of professional music production like Serum or Vital.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The goal is to achieve the developement of key features from these kind of audio softwares such as different oscillator types, ADSR enveloppe, customizable filter and some effects like distortion, delay and reverb.
 
-## Expanding the ESLint configuration
+Work in progress ! STATUS (DEC 2023):
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Keyboard is playable by clicking on it directly from the screen or by using the keys from your computer keyboard
+- Oscillator A and Oscillator B are functionnal. It is possible to select different waveforms. Detune knob it not working yet.
+- Envelope component is functionnal.
+- Next feature : filter component !
 
-- Configure the top-level `parserOptions` property like this:
+## Try it yourself !
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+1. Run the following command to install dependencies :
+
+```bash
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+2. Run the following command to install dependencies :
+
+```bash
+npm run dev
+```
