@@ -1,11 +1,15 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import './WordSelector.scss';
+import { Filter_ActionTypes } from '../../../context/types';
+import { Context } from '../../../context/context';
 
 interface WordSelectorProps {
+  parent: string;
   values: string[];
 }
 
-const WordSelector: FC<WordSelectorProps> = ({ values }) => {
+const WordSelector: FC<WordSelectorProps> = ({ parent, values }) => {
+  const { dispatch } = useContext(Context);
   const [currentWord, setCurrentWord] = useState(values[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -21,8 +25,16 @@ const WordSelector: FC<WordSelectorProps> = ({ values }) => {
 
   useEffect(() => {
     setCurrentWord(values[currentIndex]);
-    console.log(currentWord);
   }, [currentIndex, currentWord, values]);
+
+  useEffect(() => {
+    if (parent === 'filter') {
+      dispatch({
+        type: Filter_ActionTypes.UpdateType,
+        payload: { id: currentWord.toLowerCase() },
+      });
+    }
+  }, [currentWord]);
 
   return (
     <div className="word-selector">

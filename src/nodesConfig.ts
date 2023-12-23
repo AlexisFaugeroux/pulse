@@ -5,10 +5,12 @@ export const audioContextOutput = audioContext.destination;
 
 export const oscAGain = audioContext.createGain();
 export const oscBGain = audioContext.createGain();
+export const filter = audioContext.createBiquadFilter();
 export const masterGain = audioContext.createGain();
 
-oscAGain.connect(masterGain);
-oscBGain.connect(masterGain);
+oscAGain.connect(filter);
+oscBGain.connect(filter);
+filter.connect(masterGain);
 masterGain.connect(audioContextOutput);
 
 export const initialSettings: InitialSettingsState = {
@@ -38,5 +40,12 @@ export const initialSettings: InitialSettingsState = {
   gains: {
     oscAGainValue: 0.7,
     oscBGainValue: 0.7,
+  },
+  filter: {
+    isActive: false,
+    type: 'lowpass',
+    frequency: 0.5,
+    gain: 0.5,
+    Q: 0.001,
   },
 };

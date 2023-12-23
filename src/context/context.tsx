@@ -4,16 +4,23 @@ import type { InitialSettingsState } from '../types/types';
 import { mainReducer } from './reducers/mainReducer';
 import type {
   Envelope_SettingsActions,
+  Filter_SettingsActions,
   Oscillator_SettingsActions,
   Oscillator_TriggerActions,
-} from './types/index';
+  Gain_SettingsActions,
+} from './types';
 
 const Context = createContext<{
-  state: Pick<InitialSettingsState, 'envelope' | 'oscillators'>;
+  state: Pick<
+    InitialSettingsState,
+    'envelope' | 'oscillators' | 'filter' | 'gains'
+  >;
   dispatch: Dispatch<
     | Oscillator_TriggerActions
     | Oscillator_SettingsActions
+    | Gain_SettingsActions
     | Envelope_SettingsActions
+    | Filter_SettingsActions
   >;
 }>({
   state: initialSettings,

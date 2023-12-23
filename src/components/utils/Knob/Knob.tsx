@@ -2,14 +2,15 @@ import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { Context } from '../../../context/context';
 import {
   Envelope_ActionTypes,
+  Filter_ActionTypes,
   Oscillator_SettingsActionTypes,
 } from '../../../context/types/index';
-import { audioContext, oscAGain, oscBGain } from '../../../nodesConfig';
 import { theme } from '../../../styles/_variables';
 import { ControlTypes } from '../../../utils/constants';
 import './Knob.scss';
 import SvgDefs from './SvgDefs';
-import { TIME_CONSTANT, clampValue, roundTwoDigitsNonFinite } from './helpers';
+import { clampValue } from './helpers';
+import { Gain_ActionTypes } from '../../../context/types/gain';
 
 interface KnobProps {
   parent: string;
@@ -88,19 +89,10 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
 
   useEffect(() => {
     if (label === 'level') {
-      if (parent === 'oscillatorA') {
-        oscAGain.gain.setTargetAtTime(
-          roundTwoDigitsNonFinite(value),
-          audioContext.currentTime,
-          TIME_CONSTANT,
-        );
-      } else if (parent === 'oscillatorB') {
-        oscBGain.gain.setTargetAtTime(
-          roundTwoDigitsNonFinite(value),
-          audioContext.currentTime,
-          TIME_CONSTANT,
-        );
-      }
+      dispatch({
+        type: Gain_ActionTypes.UpdateSettings,
+        payload: { value, parent },
+      });
     } else if (parent === 'oscillatorA' || parent === 'oscillatorB') {
       dispatch({
         type: Oscillator_SettingsActionTypes.UpdateSettings,
@@ -109,6 +101,11 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
     } else if (parent === 'envelope') {
       dispatch({
         type: Envelope_ActionTypes.UpdateSettings,
+        payload: { id: label, value },
+      });
+    } else if (parent === 'filter') {
+      dispatch({
+        type: Filter_ActionTypes.UpdateSettings,
         payload: { id: label, value },
       });
     }

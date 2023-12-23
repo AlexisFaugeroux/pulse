@@ -6,6 +6,11 @@ export type OscSettings = {
   detune: number;
 };
 
+export type GainSettings = {
+  oscAGainValue: number;
+  oscBGainValue: number;
+};
+
 export type EnvelopeSettings = {
   isActive: boolean;
   attack: number;
@@ -15,9 +20,10 @@ export type EnvelopeSettings = {
 };
 
 export type FilterSettings = {
-  frequency: AudioParam;
-  gain: AudioParam;
-  Q: AudioParam;
+  isActive: boolean;
+  frequency: number;
+  gain: number;
+  Q: number;
   type: BiquadFilterType;
 };
 
@@ -31,4 +37,5 @@ export type InitialSettingsState = {
     oscAGainValue: number;
     oscBGainValue: number;
   };
+  filter: FilterSettings;
 };

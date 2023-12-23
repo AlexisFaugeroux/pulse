@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { ControlTypes } from '../../utils/constants';
 import { FILTER_VALUES } from '../../utils/constants';
 import InactivePanel from '../utils/InactivePanel/InactivePanel';
@@ -6,24 +6,44 @@ import BlocTitle from '../utils/BlocTitle/BlocTitle';
 import WordSelector from '../utils/WordSelector/WordSelector';
 import Knob from '../utils/Knob/Knob';
 import './Filter.scss';
+import { initialSettings } from '../../nodesConfig';
+import { Context } from '../../context/context';
+import { Filter_ActionTypes } from '../../context/types';
 
 const Filter: FC = () => {
-  const [isActive, setIsActive] = useState(false);
+  const { dispatch } = useContext(Context);
 
-  const kobs = [
+  const [isActive, setIsActive] = useState(false);
+  const { filter } = initialSettings;
+
+  const knobs = [
     {
       label: 'cutoff',
-      initialValue: 50,
+      initialValue: filter.frequency,
     },
     {
-      label: 'q',
-      initialValue: 0,
+      label: 'Q',
+      initialValue: filter.Q,
     },
     {
       label: 'mix',
-      initialValue: 100,
+      initialValue: filter.gain,
     },
   ];
+
+  useEffect(() => {
+    if (isActive) {
+      dispatch({
+        type: Filter_ActionTypes.Activate,
+        payload: {},
+      });
+    } else {
+      dispatch({
+        type: Filter_ActionTypes.Deactivate,
+        payload: {},
+      });
+    }
+  }, [isActive, dispatch]);
 
   return (
     <div className="filter">
@@ -34,11 +54,12 @@ const Filter: FC = () => {
           isActive={isActive}
           setIsActive={setIsActive}
         />
-        <WordSelector values={FILTER_VALUES} />
+        <WordSelector parent="filter" values={FILTER_VALUES} />
         <div className="knobs">
-          {kobs.map(({ initialValue, label }) => (
+          {knobs.map(({ initialValue, label }) => (
             <Knob
               key={`${label}`}
+              parent="filter"
               initialValue={initialValue}
               label={label}
               type={ControlTypes.DEFAULT}

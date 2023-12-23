@@ -3,7 +3,7 @@ import { OscSettings } from '../../types/types';
 import {
   Oscillator_SettingsActionTypes,
   type Oscillator_SettingsActions,
-} from '../types/index';
+} from '../types';
 import { currentOscillators } from './oscillatorTriggerReducer';
 
 const oscillatorsReducer = (
