@@ -6,30 +6,21 @@ import BlocTitle from '../utils/BlocTitle/BlocTitle';
 import WordSelector from '../utils/WordSelector/WordSelector';
 import Knob from '../utils/Knob/Knob';
 import './Filter.scss';
-import { initialSettings } from '../../nodesConfig';
-import { Context } from '../../context/context';
-import { Filter_ActionTypes } from '../../context/types';
+import {
+  filter,
+  initialSettings,
+  masterGain,
+  oscAGain,
+  oscBGain,
+} from '../../nodesConfig';
+import { SettingsContext } from '../../contexts/Context';
+import { Filter_ActionTypes } from '../../contexts/types';
 
 const Filter: FC = () => {
-  const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(SettingsContext);
 
   const [isActive, setIsActive] = useState(false);
-  const { filter } = initialSettings;
-
-  const knobs = [
-    {
-      label: 'cutoff',
-      initialValue: filter.frequency,
-    },
-    {
-      label: 'Q',
-      initialValue: filter.Q,
-    },
-    {
-      label: 'mix',
-      initialValue: filter.gain,
-    },
-  ];
+  const { filter: filterSettings } = initialSettings;
 
   useEffect(() => {
     if (isActive) {
@@ -37,11 +28,20 @@ const Filter: FC = () => {
         type: Filter_ActionTypes.Activate,
         payload: {},
       });
+      oscAGain.disconnect();
+      oscBGain.disconnect();
+      oscBGain.connect(filter);
+      oscAGain.connect(filter);
     } else {
       dispatch({
         type: Filter_ActionTypes.Deactivate,
         payload: {},
       });
+
+      oscAGain.disconnect();
+      oscBGain.disconnect();
+      oscAGain.connect(masterGain);
+      oscBGain.connect(masterGain);
     }
   }, [isActive, dispatch]);
 
@@ -56,15 +56,24 @@ const Filter: FC = () => {
         />
         <WordSelector parent="filter" values={FILTER_VALUES} />
         <div className="knobs">
-          {knobs.map(({ initialValue, label }) => (
-            <Knob
-              key={`${label}`}
-              parent="filter"
-              initialValue={initialValue}
-              label={label}
-              type={ControlTypes.DEFAULT}
-            />
-          ))}
+          <Knob
+            parent="filter"
+            initialValue={filterSettings.frequency}
+            label="cutoff"
+            type={ControlTypes.DEFAULT}
+          />
+          <Knob
+            parent="filter"
+            initialValue={filterSettings.Q}
+            label="Q"
+            type={ControlTypes.DEFAULT}
+          />
+          <Knob
+            parent="filter"
+            initialValue={filterSettings.gain}
+            label="mix"
+            type={ControlTypes.DEFAULT}
+          />
         </div>
       </div>
     </div>

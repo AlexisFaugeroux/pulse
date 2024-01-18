@@ -1,6 +1,6 @@
 import { FC, useCallback, useContext, useEffect, useState } from 'react';
-import { Context } from '../../context/context';
-import { Oscillator_TriggerActionsTypes } from '../../context/types/index';
+import { SettingsContext } from '../../contexts/Context';
+import { Oscillator_TriggerActionsTypes } from '../../contexts/types/index';
 import { ALLOWED_KEYS, NOTES, NOTE_TO_KEYS } from '../../utils/constants';
 import './Keyboard.scss';
 import {
@@ -11,7 +11,7 @@ import {
 } from './helpers';
 
 const Keyboard: FC = () => {
-  const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(SettingsContext);
   const [pressedKeys, setPressedKeys] = useState<string[]>([]);
   const [offset, setOffset] = useState<number>(0);
 

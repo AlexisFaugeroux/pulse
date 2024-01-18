@@ -8,18 +8,20 @@ import type {
   Oscillator_SettingsActions,
   Oscillator_TriggerActions,
   Gain_SettingsActions,
+  LFO_SettingsActions,
 } from './types';
 
-const Context = createContext<{
+const SettingsContext = createContext<{
   state: Pick<
     InitialSettingsState,
-    'envelope' | 'oscillators' | 'filter' | 'gains'
+    'envelope' | 'oscillators' | 'filter' | 'gains' | 'lfo'
   >;
   dispatch: Dispatch<
     | Oscillator_TriggerActions
     | Oscillator_SettingsActions
     | Gain_SettingsActions
     | Envelope_SettingsActions
+    | LFO_SettingsActions
     | Filter_SettingsActions
   >;
 }>({
@@ -31,8 +33,10 @@ const Provider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(mainReducer, initialSettings);
 
   return (
-    <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>
+    <SettingsContext.Provider value={{ state, dispatch }}>
+      {children}
+    </SettingsContext.Provider>
   );
 };
 
-export { Context, Provider };
+export { SettingsContext, Provider };

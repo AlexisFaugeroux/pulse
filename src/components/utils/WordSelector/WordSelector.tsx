@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import './WordSelector.scss';
-import { Filter_ActionTypes } from '../../../context/types';
-import { Context } from '../../../context/context';
+import { Filter_ActionTypes } from '../../../contexts/types';
+import { SettingsContext } from '../../../contexts/Context';
 
 interface WordSelectorProps {
   parent: string;
@@ -9,7 +9,7 @@ interface WordSelectorProps {
 }
 
 const WordSelector: FC<WordSelectorProps> = ({ parent, values }) => {
-  const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(SettingsContext);
   const [currentWord, setCurrentWord] = useState(values[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
 

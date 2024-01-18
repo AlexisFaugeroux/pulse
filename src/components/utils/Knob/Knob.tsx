@@ -1,16 +1,17 @@
 import { FC, useContext, useEffect, useRef, useState } from 'react';
-import { Context } from '../../../context/context';
+import { SettingsContext } from '../../../contexts/Context';
 import {
   Envelope_ActionTypes,
   Filter_ActionTypes,
+  LFO_SettingsActionTypes,
   Oscillator_SettingsActionTypes,
-} from '../../../context/types/index';
+} from '../../../contexts/types/index';
 import { theme } from '../../../styles/_variables';
 import { ControlTypes } from '../../../utils/constants';
 import './Knob.scss';
 import SvgDefs from './SvgDefs';
 import { clampValue } from './helpers';
-import { Gain_ActionTypes } from '../../../context/types/gain';
+import { Gain_ActionTypes } from '../../../contexts/types/gain';
 
 interface KnobProps {
   parent: string;
@@ -25,7 +26,7 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
   const dragResistance = 300 / (max - min);
   let dragStartPosition = 0;
 
-  const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(SettingsContext);
   const [value, setValue] = useState(initialValue);
   const [isActiveDrag, setIsActiveDrag] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
@@ -101,6 +102,11 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
     } else if (parent === 'envelope') {
       dispatch({
         type: Envelope_ActionTypes.UpdateSettings,
+        payload: { id: label, value },
+      });
+    } else if (parent === 'lfo') {
+      dispatch({
+        type: LFO_SettingsActionTypes.UpdateSettings,
         payload: { id: label, value },
       });
     } else if (parent === 'filter') {

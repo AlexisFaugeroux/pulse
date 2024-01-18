@@ -1,8 +1,8 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import activeIcon from '../../../assets/octave-light-switch-active.png';
 import inactiveIcon from '../../../assets/octave-light-switch-inactive.png';
-import { Context } from '../../../context/context';
-import { Oscillator_SettingsActionTypes } from '../../../context/types';
+import { SettingsContext } from '../../../contexts/Context';
+import { Oscillator_SettingsActionTypes } from '../../../contexts/types';
 import './OctaveSelector.scss';
 
 interface OctaveSelectorProps {
@@ -11,7 +11,7 @@ interface OctaveSelectorProps {
 }
 
 const OctaveSelector: FC<OctaveSelectorProps> = ({ size, parent }) => {
-  const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(SettingsContext);
   const [octaveOffset, setOctaveOffset] = useState(0);
 
   const min = (1 - size) / 2;

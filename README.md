@@ -10,7 +10,7 @@ The goal is to achieve the developement of key features from these kind of audio
 softwares such as different oscillator types, ADSR enveloppe, customizable
 filter and some effects like distortion, delay and reverb.
 
-Work in progress ! STATUS (DEC 2023):
+Work in progress ! STATUS (JAN 2023):
 
 - Keyboard is playable by clicking on it directly from the screen or by using
   the keys from your computer keyboard
@@ -18,7 +18,8 @@ Work in progress ! STATUS (DEC 2023):
   different waveforms. Detune knob it not working yet.
 - Envelope component is functionnal
 - Filter component is functionnal.
-- Next feature : lfo component !
+- LFO component is functionnal
+- Next feature: delay effect
 
 ## Try it yourself !
 

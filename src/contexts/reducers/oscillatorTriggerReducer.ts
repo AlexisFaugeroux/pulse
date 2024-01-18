@@ -1,5 +1,5 @@
 import { audioContext, oscAGain, oscBGain } from '../../nodesConfig';
-import { EnvelopeSettings, OscSettings } from '../../types/types';
+import type { EnvelopeSettings, OscSettings } from '../../types/types';
 import Oscillator from '../../utils/classes/Oscillator';
 import {
   Oscillator_TriggerActionsTypes,

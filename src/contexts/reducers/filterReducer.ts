@@ -1,11 +1,5 @@
 import { roundTwoDigitsNonFinite } from './helpers';
-import {
-  audioContext,
-  filter,
-  masterGain,
-  oscAGain,
-  oscBGain,
-} from '../../nodesConfig';
+import { audioContext, filter } from '../../nodesConfig';
 import { FilterSettings } from '../../types/types';
 import { Filter_ActionTypes, Filter_SettingsActions } from '../types';
 import {
@@ -20,24 +14,10 @@ const filterReducer = (
 ) => {
   switch (action.type) {
     case Filter_ActionTypes.Activate:
-      filter.connect(masterGain);
-
-      oscAGain.disconnect(masterGain);
-      oscBGain.disconnect(masterGain);
-
-      oscAGain.connect(filter);
-      oscBGain.connect(filter);
-      return { ...state };
+      return { ...state, isActive: true };
 
     case Filter_ActionTypes.Deactivate:
-      filter.disconnect(masterGain);
-
-      oscAGain.disconnect(filter);
-      oscBGain.disconnect(filter);
-
-      oscAGain.connect(masterGain);
-      oscBGain.connect(masterGain);
-      return { ...state };
+      return { ...state, isActive: false };
 
     case Filter_ActionTypes.UpdateSettings: {
       const { id, value } = action.payload;

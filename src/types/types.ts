@@ -9,6 +9,7 @@ export type OscSettings = {
 export type GainSettings = {
   oscAGainValue: number;
   oscBGainValue: number;
+  oscLFOGainValue: number;
 };
 
 export type EnvelopeSettings = {
@@ -33,9 +34,11 @@ export type InitialSettingsState = {
     oscillatorB: OscSettings;
   };
   envelope: EnvelopeSettings;
-  gains: {
-    oscAGainValue: number;
-    oscBGainValue: number;
+  gains: GainSettings;
+  lfo: {
+    isActive: boolean;
+    type: OscillatorType;
+    frequency: number;
   };
   filter: FilterSettings;
 };

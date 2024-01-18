@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from 'react';
-import { Context } from '../../context/context';
-import { Envelope_ActionTypes } from '../../context/types';
+import { SettingsContext } from '../../contexts/Context';
+import { Envelope_ActionTypes } from '../../contexts/types';
 import { initialSettings } from '../../nodesConfig';
 import { ControlTypes } from '../../utils/constants';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
@@ -9,29 +9,10 @@ import Knob from '../utils/Knob/Knob';
 import './Envelope.scss';
 
 const Envelope: FC = () => {
-  const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(SettingsContext);
 
   const { envelope } = initialSettings;
   const [isActive, setIsActive] = useState(envelope.isActive);
-
-  const knobs = [
-    {
-      label: 'attack',
-      initialValue: envelope.attack,
-    },
-    {
-      label: 'decay',
-      initialValue: envelope.decay,
-    },
-    {
-      label: 'sustain',
-      initialValue: envelope.sustain,
-    },
-    {
-      label: 'release',
-      initialValue: envelope.release,
-    },
-  ];
 
   useEffect(() => {
     if (isActive) {
@@ -57,15 +38,30 @@ const Envelope: FC = () => {
           setIsActive={setIsActive}
         />
         <div className="knobs">
-          {knobs.map(({ initialValue, label }) => (
-            <Knob
-              key={`${label}`}
-              initialValue={initialValue}
-              label={label}
-              type={ControlTypes.DEFAULT}
-              parent="envelope"
-            />
-          ))}
+          <Knob
+            initialValue={envelope.attack}
+            label="attack"
+            type={ControlTypes.DEFAULT}
+            parent="envelope"
+          />
+          <Knob
+            initialValue={envelope.decay}
+            label="decay"
+            type={ControlTypes.DEFAULT}
+            parent="envelope"
+          />
+          <Knob
+            initialValue={envelope.sustain}
+            label="sustain"
+            type={ControlTypes.DEFAULT}
+            parent="envelope"
+          />
+          <Knob
+            initialValue={envelope.release}
+            label="release"
+            type={ControlTypes.DEFAULT}
+            parent="envelope"
+          />
         </div>
       </div>
     </div>

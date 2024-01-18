@@ -7,8 +7,11 @@ import squareActive from '../../../assets/square-wave-active.png';
 import squareInactive from '../../../assets/square-wave-inactive.png';
 import triangleActive from '../../../assets/triangle-wave-active.png';
 import triangleInactive from '../../../assets/triangle-wave-inactive.png';
-import { Context } from '../../../context/context';
-import { Oscillator_SettingsActionTypes } from '../../../context/types';
+import { SettingsContext } from '../../../contexts/Context';
+import {
+  LFO_SettingsActionTypes,
+  Oscillator_SettingsActionTypes,
+} from '../../../contexts/types';
 import { Waves } from '../../../utils/constants';
 import './WaveSelector.scss';
 
@@ -18,7 +21,7 @@ interface WaveSelectorProps {
 }
 
 const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves }) => {
-  const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(SettingsContext);
   const [activeWave, setActiveWave] = useState<Waves>(Waves.SINE);
 
   const wavesToImages = waves.map((wave) => ({
@@ -54,13 +57,21 @@ const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves }) => {
             id={wave}
             onClick={() => {
               setActiveWave(wave);
-              dispatch({
-                type: Oscillator_SettingsActionTypes.UpdateType,
-                payload: {
-                  id: wave,
-                  parent,
-                },
-              });
+              if (parent === 'oscillatorA' || parent === 'oscillatorB')
+                dispatch({
+                  type: Oscillator_SettingsActionTypes.UpdateType,
+                  payload: {
+                    id: wave,
+                    parent,
+                  },
+                });
+              if (parent === 'lfo')
+                dispatch({
+                  type: LFO_SettingsActionTypes.UpdateType,
+                  payload: {
+                    id: wave,
+                  },
+                });
             }}
             style={{
               backgroundImage: `url(${

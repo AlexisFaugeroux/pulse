@@ -76,7 +76,7 @@ export default class Oscillator {
 
     setTimeout(() => {
       this.node.disconnect();
-    }, 10000);
+    }, 5000);
   }
 
   octaveShift(

@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from 'react';
-import { Context } from '../../context/context';
-import { Oscillator_SettingsActionTypes } from '../../context/types/index';
+import { SettingsContext } from '../../contexts/Context';
+import { Oscillator_SettingsActionTypes } from '../../contexts/types/index';
 import { initialSettings } from '../../nodesConfig';
 import { ControlTypes, Waves } from '../../utils/constants';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
@@ -16,7 +16,7 @@ interface OscillatorProps {
 }
 
 const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
-  const { state, dispatch } = useContext(Context);
+  const { state, dispatch } = useContext(SettingsContext);
   const { oscillatorA, oscillatorB } = state.oscillators;
   const { oscAGainValue, oscBGainValue } = initialSettings.gains;
 
@@ -25,20 +25,6 @@ const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
   );
 
   const waves = [Waves.SINE, Waves.TRIANGLE, Waves.SAWTOOTH, Waves.SQUARE];
-  const knobs = [
-    {
-      label: 'level',
-      initialValue: id === 'oscillatorA' ? oscAGainValue : oscBGainValue,
-    },
-    {
-      label: 'unisson',
-      initialValue: 0,
-    },
-    {
-      label: 'detune',
-      initialValue: 0,
-    },
-  ];
 
   useEffect(() => {
     if (isActive) {
@@ -66,15 +52,26 @@ const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
         <WaveSelector parent={id} waves={waves} />
         <div className="controls">
           <div className="knobs">
-            {knobs.map(({ initialValue, label }) => (
-              <Knob
-                key={id + label}
-                parent={id}
-                initialValue={initialValue}
-                label={label}
-                type={ControlTypes.DEFAULT}
-              />
-            ))}
+            <Knob
+              parent={id}
+              initialValue={
+                id === 'oscillatorA' ? oscAGainValue : oscBGainValue
+              }
+              label="level"
+              type={ControlTypes.DEFAULT}
+            />
+            <Knob
+              parent={id}
+              initialValue={0}
+              label="unisson"
+              type={ControlTypes.DEFAULT}
+            />
+            <Knob
+              parent={id}
+              initialValue={0}
+              label="detune"
+              type={ControlTypes.DEFAULT}
+            />
           </div>
           <OctaveSelector size={5} parent={id} />
         </div>
