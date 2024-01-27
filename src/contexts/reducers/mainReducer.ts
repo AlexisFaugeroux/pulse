@@ -2,24 +2,24 @@ import { InitialSettingsState } from '../../types/types';
 import oscillatorsReducer from './oscillatorsReducer';
 
 import {
+  Envelope_ActionTypes,
+  Filter_ActionTypes,
+  Gain_ActionTypes,
+  LFO_SettingsActionTypes,
+  Oscillator_SettingsActionTypes,
+  Oscillator_TriggerActionsTypes,
   type Envelope_SettingsActions,
   type Filter_SettingsActions,
-  type Oscillator_TriggerActions,
   type Gain_SettingsActions,
-  type Oscillator_SettingsActions,
   type LFO_SettingsActions,
-  Gain_ActionTypes,
-  Oscillator_SettingsActionTypes,
-  Envelope_ActionTypes,
-  LFO_SettingsActionTypes,
-  Filter_ActionTypes,
-  Oscillator_TriggerActionsTypes,
+  type Oscillator_SettingsActions,
+  type Oscillator_TriggerActions,
 } from '../types';
 import envelopeReducer from './envelopeReducer';
-import oscillatorTriggerReducer from './oscillatorTriggerReducer';
 import filterReducer from './filterReducer';
 import gainReducer from './gainReducer';
 import LFOReducer from './lfoReducer';
+import oscillatorTriggerReducer from './oscillatorTriggerReducer';
 
 export const mainReducer = (
   {

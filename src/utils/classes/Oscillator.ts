@@ -67,6 +67,20 @@ export default class Oscillator {
 
     this.gateGain.gain.cancelScheduledValues(currentTime);
 
+    // In case the key pressed is released before the gain value reaches 1 (as defined by the attack param)
+    // the time changing event is cancelled and the gain value reverts to 0 immediately which causes an ugly click sound
+    // This eases the transition if such case occurs :
+    if (this.gateGain.gain.value !== 1) {
+      // Need to schedule a value becasue exponentialRampToValueAtTime starts at the time specified for the previous event
+      // https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/exponentialRampToValueAtTime
+      this.gateGain.gain.setValueAtTime(this.gateGain.gain.value, currentTime);
+      this.gateGain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        currentTime + 0.03,
+      );
+      return;
+    }
+    this.gateGain.gain.cancelScheduledValues(currentTime);
     // Release
     this.gateGain.gain.setTargetAtTime(
       0,
@@ -76,7 +90,7 @@ export default class Oscillator {
 
     setTimeout(() => {
       this.node.disconnect();
-    }, 5000);
+    }, 10000);
   }
 
   octaveShift(
