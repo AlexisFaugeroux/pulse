@@ -1,18 +1,6 @@
 import { InitialSettingsState } from './types/types';
 
-// Composant wrapper pour les connections
-
 export const audioContext = new AudioContext();
-
-// export default {
-//   audioContextOutput: audioContext.destination,
-//   oscAGain: audioContext.createGain(),
-//   oscBGain: audioContext.createGain(),
-//   oscLFO: audioContext.createOscillator(),
-//   oscLFOGain: audioContext.createGain(),
-//   filter: audioContext.createBiquadFilter(),
-//   masterGain: audioContext.createGain(),
-// };
 
 export const audioContextOutput = audioContext.destination;
 export const oscAGain = audioContext.createGain();
@@ -20,16 +8,6 @@ export const oscBGain = audioContext.createGain();
 export const oscLFOGain = audioContext.createGain();
 export const filter = audioContext.createBiquadFilter();
 export const masterGain = audioContext.createGain();
-
-// oscAGain.connect(filter);
-// oscBGain.connect(filter);
-
-// oscLFO.connect(oscLFOGain);
-// oscLFOGain.connect(oscAGain.gain);
-// oscLFOGain.connect(oscBGain.gain);
-
-// filter.connect(masterGain);
-// masterGain.connect(audioContextOutput);
 
 export const initialSettings: InitialSettingsState = {
   oscillators: {
@@ -53,7 +31,7 @@ export const initialSettings: InitialSettingsState = {
     attack: 0.005,
     decay: 1,
     sustain: 1,
-    release: 0.1,
+    release: 0.015,
   },
   gains: {
     oscAGainValue: 0.7,

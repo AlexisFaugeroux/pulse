@@ -1,5 +1,6 @@
 import { EnvelopeSettings } from '../../types/types';
 import { Envelope_ActionTypes, Envelope_SettingsActions } from '../types';
+import { linearToLinearRange } from './helpers';
 
 const envelopeReducer = (
   state: EnvelopeSettings,
@@ -14,9 +15,14 @@ const envelopeReducer = (
 
     case Envelope_ActionTypes.UpdateSettings: {
       const { id, value } = action.payload;
-      if (!id) return { ...state };
+      if (!id || !value) return { ...state };
 
-      return { ...state, [id]: value };
+      if (id === 'sustain') {
+        return { ...state, [id]: value };
+      }
+
+      const convertedValue = linearToLinearRange(value, [0, 8]);
+      return { ...state, [id]: convertedValue };
     }
     default:
       console.log('Reducer error action', action);

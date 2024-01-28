@@ -76,7 +76,7 @@ export default class Oscillator {
       this.gateGain.gain.setValueAtTime(this.gateGain.gain.value, currentTime);
       this.gateGain.gain.exponentialRampToValueAtTime(
         0.0001,
-        currentTime + 0.03,
+        currentTime + this.envelope.release,
       );
       return;
     }
