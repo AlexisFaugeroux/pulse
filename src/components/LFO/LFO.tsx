@@ -1,18 +1,13 @@
 import { FC, useContext, useEffect, useState } from 'react';
-import { ControlTypes, Waves } from '../../utils/constants';
-import InactivePanel from '../utils/InactivePanel/InactivePanel';
-import BlocTitle from '../utils/BlocTitle/BlocTitle';
-import WaveSelector from '../utils/WaveSelector/WaveSelector';
-import './LFO.scss';
-import Knob from '../utils/Knob/Knob';
 import { SettingsContext } from '../../contexts/Context';
 import { LFO_SettingsActionTypes } from '../../contexts/types';
-import {
-  initialSettings,
-  oscAGain,
-  oscBGain,
-  oscLFOGain,
-} from '../../nodesConfig';
+import { initialSettings } from '../../nodesConfig';
+import { ControlTypes, Waves } from '../../utils/constants';
+import BlocTitle from '../utils/BlocTitle/BlocTitle';
+import InactivePanel from '../utils/InactivePanel/InactivePanel';
+import Knob from '../utils/Knob/Knob';
+import WaveSelector from '../utils/WaveSelector/WaveSelector';
+import './LFO.scss';
 
 const LFO: FC = () => {
   const { dispatch } = useContext(SettingsContext);
@@ -27,15 +22,11 @@ const LFO: FC = () => {
         type: LFO_SettingsActionTypes.Activate,
         payload: {},
       });
-      oscLFOGain.connect(oscAGain.gain);
-      oscLFOGain.connect(oscBGain.gain);
     } else {
       dispatch({
         type: LFO_SettingsActionTypes.Deactivate,
         payload: {},
       });
-      oscLFOGain.disconnect();
-      oscLFOGain.disconnect();
     }
   }, [isActive, dispatch]);
 

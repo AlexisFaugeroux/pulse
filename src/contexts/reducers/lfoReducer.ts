@@ -1,4 +1,9 @@
-import { audioContext, oscLFOGain } from '../../nodesConfig';
+import {
+  audioContext,
+  oscAGain,
+  oscBGain,
+  oscLFOGain,
+} from '../../nodesConfig';
 import LFO from '../../utils/classes/LFO';
 import { LFO_SettingsActionTypes, type LFO_SettingsActions } from '../types';
 import { TIME_CONSTANT, linearToLogarithmRange } from './helpers';
@@ -24,6 +29,9 @@ const LFOReducer = (
         state.frequency,
       );
 
+      oscLFOGain.connect(oscAGain.gain);
+      oscLFOGain.connect(oscBGain.gain);
+
       return { ...state, isActive: true };
 
     case LFO_SettingsActionTypes.Deactivate:
@@ -32,6 +40,9 @@ const LFOReducer = (
         currentLFO.node.stop();
         currentLFO = null;
       }
+
+      oscLFOGain.disconnect();
+      oscLFOGain.disconnect();
 
       return { ...state, isActive: false };
 

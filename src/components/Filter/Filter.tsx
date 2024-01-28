@@ -1,20 +1,13 @@
 import { FC, useContext, useEffect, useState } from 'react';
-import { ControlTypes } from '../../utils/constants';
-import { FILTER_VALUES } from '../../utils/constants';
-import InactivePanel from '../utils/InactivePanel/InactivePanel';
-import BlocTitle from '../utils/BlocTitle/BlocTitle';
-import WordSelector from '../utils/WordSelector/WordSelector';
-import Knob from '../utils/Knob/Knob';
-import './Filter.scss';
-import {
-  filter,
-  initialSettings,
-  masterGain,
-  oscAGain,
-  oscBGain,
-} from '../../nodesConfig';
 import { SettingsContext } from '../../contexts/Context';
 import { Filter_ActionTypes } from '../../contexts/types';
+import { initialSettings } from '../../nodesConfig';
+import { ControlTypes, FILTER_VALUES } from '../../utils/constants';
+import BlocTitle from '../utils/BlocTitle/BlocTitle';
+import InactivePanel from '../utils/InactivePanel/InactivePanel';
+import Knob from '../utils/Knob/Knob';
+import WordSelector from '../utils/WordSelector/WordSelector';
+import './Filter.scss';
 
 const Filter: FC = () => {
   const { dispatch } = useContext(SettingsContext);
@@ -28,20 +21,11 @@ const Filter: FC = () => {
         type: Filter_ActionTypes.Activate,
         payload: {},
       });
-      oscAGain.disconnect();
-      oscBGain.disconnect();
-      oscBGain.connect(filter);
-      oscAGain.connect(filter);
     } else {
       dispatch({
         type: Filter_ActionTypes.Deactivate,
         payload: {},
       });
-
-      oscAGain.disconnect();
-      oscBGain.disconnect();
-      oscAGain.connect(masterGain);
-      oscBGain.connect(masterGain);
     }
   }, [isActive, dispatch]);
 
