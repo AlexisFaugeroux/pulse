@@ -55,7 +55,7 @@ const Filter: FC = () => {
           <Knob
             parent="filter"
             initialValue={filterSettings.gain}
-            label="mix"
+            label="gain"
             type={ControlTypes.DEFAULT}
           />
         </div>

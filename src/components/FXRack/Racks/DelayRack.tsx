@@ -12,7 +12,7 @@ const DelayRack: FC = () => {
   const [isActive, setIsActive] = useState(false);
 
   const {
-    delay: { time, feedback, delayWetGain },
+    delay: { time, feedback, wetGain },
   } = initialSettings;
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const DelayRack: FC = () => {
         parent={FXs.DELAY}
       />
       <Knob
-        initialValue={delayWetGain}
+        initialValue={wetGain}
         label="mix"
         type={ControlTypes.DELAY}
         parent={FXs.DELAY}

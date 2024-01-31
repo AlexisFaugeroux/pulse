@@ -1,10 +1,9 @@
 import {
   audioContext,
-  delayDryGain,
   filter,
-  masterGain,
-  oscAGain,
-  oscBGain,
+  filterDryGain,
+  filterMixGain,
+  filterWetGain,
 } from '../../nodesConfig';
 import { FilterSettings } from '../../types/types';
 import { Filter_ActionTypes, Filter_SettingsActions } from '../types';
@@ -19,29 +18,20 @@ const filterReducer = (
   state: FilterSettings,
   action: Filter_SettingsActions,
 ) => {
+  const { currentTime } = audioContext;
+
   switch (action.type) {
     case Filter_ActionTypes.Activate:
-      oscAGain.disconnect();
-      oscBGain.disconnect();
-      oscBGain.connect(filter);
-      oscAGain.connect(filter);
+      filterWetGain.connect(filterMixGain);
+      filterDryGain.gain.setTargetAtTime(0, currentTime, TIME_CONSTANT);
 
-      filter.connect(masterGain);
-      filter.connect(delayDryGain);
-
-      return { ...state, isActive: true };
+      return { ...state, dryGain: 0, isActive: true };
 
     case Filter_ActionTypes.Deactivate:
-      // TODO: use gain nodes to handle activation/deactivation of filter
-      // oscAGain.disconnect();
-      // oscBGain.disconnect();
+      filterWetGain.disconnect();
+      filterDryGain.gain.setTargetAtTime(1, currentTime, TIME_CONSTANT);
 
-      // oscAGain.connect(masterGain);
-      // oscBGain.connect(masterGain);
-
-      filter.disconnect();
-
-      return { ...state, isActive: false };
+      return { ...state, dryGain: 1, isActive: false };
 
     case Filter_ActionTypes.UpdateSettings: {
       const { id, value } = action.payload;
@@ -57,16 +47,16 @@ const filterReducer = (
 
         filter.frequency.setTargetAtTime(
           roundTwoDigitsNonFinite(convertedValue),
-          audioContext.currentTime,
+          currentTime,
           TIME_CONSTANT,
         );
       } else if (id === 'Q') {
         filter.Q.setTargetAtTime(
           value * 1000, // Q nominal range is 0.0001 to 1000
-          audioContext.currentTime,
+          currentTime,
           TIME_CONSTANT,
         );
-      } else if (id === 'mix') {
+      } else if (id === 'gain') {
         const convertedValue = linearToLinearRange(value, [-40, 40]);
 
         filter.gain.setTargetAtTime(

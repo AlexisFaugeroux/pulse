@@ -26,15 +26,18 @@ export type FilterSettings = {
   gain: number;
   Q: number;
   type: BiquadFilterType;
+  dryGain: number;
+  wetGain: number;
+  mixGain: number;
 };
 
 export type DelaySettings = {
   isActive: boolean;
   time: number;
   feedback: number;
-  delayDryGain: number;
-  delayWetGain: number;
-  delayMixGain: number;
+  dryGain: number;
+  wetGain: number;
+  mixGain: number;
 };
 
 export type InitialSettingsState = {

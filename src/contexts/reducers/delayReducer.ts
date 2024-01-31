@@ -22,14 +22,14 @@ const delayReducer = (
 
       return {
         ...state,
-        delayDryGain: 1 - state.delayWetGain,
+        dryGain: 1 - state.wetGain,
         isActive: true,
       };
 
     case Delay_ActionTypes.Deactivate:
       delayWetGain.disconnect();
 
-      return { ...state, delayDryGain: 1, isActive: false };
+      return { ...state, dryGain: 1, isActive: false };
 
     case Delay_ActionTypes.UpdateSettings: {
       const { id, value } = action.payload;
@@ -63,8 +63,8 @@ const delayReducer = (
 
         return {
           ...state,
-          delayDryGain: newDryValue,
-          delayWetGain: value,
+          dryGain: newDryValue,
+          wetGain: value,
         };
       }
       return { ...state };

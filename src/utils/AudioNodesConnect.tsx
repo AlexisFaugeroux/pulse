@@ -6,6 +6,10 @@ import {
   delayMixGain,
   delayWetGain,
   feedback,
+  filter,
+  filterDryGain,
+  filterMixGain,
+  filterWetGain,
   masterGain,
   oscAGain,
   oscBGain,
@@ -15,10 +19,17 @@ import {
 const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     // Oscillators
-    oscAGain.connect(delayDryGain);
-    oscBGain.connect(delayDryGain);
-    oscAGain.connect(delay);
-    oscBGain.connect(delay);
+    oscAGain.connect(filterDryGain);
+    oscBGain.connect(filterDryGain);
+    oscAGain.connect(filter);
+    oscBGain.connect(filter);
+
+    // Filter
+    filter.connect(filterWetGain);
+    filterDryGain.connect(filterMixGain);
+    filterWetGain.connect(filterMixGain);
+    filterMixGain.connect(delayDryGain);
+    filterMixGain.connect(delay);
 
     // LFO
     oscLFOGain.connect(oscAGain.gain);
