@@ -1,17 +1,18 @@
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
+import { Gain_ActionTypes } from '../../../contexts/types/gain';
 import {
+  Delay_ActionTypes,
   Envelope_ActionTypes,
   Filter_ActionTypes,
   LFO_SettingsActionTypes,
   Oscillator_SettingsActionTypes,
 } from '../../../contexts/types/index';
 import { theme } from '../../../styles/_variables';
-import { ControlTypes } from '../../../utils/constants';
+import { ControlTypes, FXs } from '../../../utils/constants';
 import './Knob.scss';
 import SvgDefs from './SvgDefs';
 import { clampValue } from './helpers';
-import { Gain_ActionTypes } from '../../../contexts/types/gain';
 
 interface KnobProps {
   parent: string;
@@ -112,6 +113,11 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
     } else if (parent === 'filter') {
       dispatch({
         type: Filter_ActionTypes.UpdateSettings,
+        payload: { id: label, value },
+      });
+    } else if (parent === FXs.DELAY) {
+      dispatch({
+        type: Delay_ActionTypes.UpdateSettings,
         payload: { id: label, value },
       });
     }

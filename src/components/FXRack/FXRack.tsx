@@ -1,7 +1,6 @@
 import { FC } from 'react';
-import { FXs } from '../../utils/constants';
-import Rack from './Rack/Rack';
 import './FXRack.scss';
+import DelayRack from './Racks/DelayRack';
 
 const FXRack: FC = () => {
   return (
@@ -10,9 +9,7 @@ const FXRack: FC = () => {
         <span>FX</span>
         <div className="line" />
       </div>
-      {FXs.map((fx) => (
-        <Rack type={fx} />
-      ))}
+      <DelayRack />
     </div>
   );
 };

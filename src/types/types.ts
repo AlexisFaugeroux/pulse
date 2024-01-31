@@ -28,6 +28,15 @@ export type FilterSettings = {
   type: BiquadFilterType;
 };
 
+export type DelaySettings = {
+  isActive: boolean;
+  time: number;
+  feedback: number;
+  delayDryGain: number;
+  delayWetGain: number;
+  delayMixGain: number;
+};
+
 export type InitialSettingsState = {
   oscillators: {
     oscillatorA: OscSettings;
@@ -41,4 +50,5 @@ export type InitialSettingsState = {
     frequency: number;
   };
   filter: FilterSettings;
+  delay: DelaySettings;
 };

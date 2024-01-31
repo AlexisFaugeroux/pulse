@@ -19,7 +19,8 @@ Work in progress ! STATUS (JAN 2023):
 - Envelope component is functionnal
 - Filter component is functionnal.
 - LFO component is functionnal
-- Next feature: delay effect
+- Delay FX is functionnal
+- Next feature: reverb effect
 
 ## Try it yourself !
 

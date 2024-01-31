@@ -1,53 +1,44 @@
-import { FC, useState } from 'react';
-import { ControlTypes } from '../../../utils/constants';
-import Knob from '../../utils/Knob/Knob';
+import { FC, PropsWithChildren } from 'react';
 import { theme } from '../../../styles/_variables';
-import './Rack.scss';
+import { FXs } from '../../../utils/constants';
+import './Racks.scss';
 
-interface RackProps {
-  type: string;
+interface RackProps extends PropsWithChildren {
+  type: FXs;
+  isActive: boolean;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Rack: FC<RackProps> = ({ type }) => {
-  let rackType: ControlTypes = ControlTypes.DEFAULT;
-  let knobs: string[] = [];
+const Rack: FC<RackProps> = ({ type, isActive, setIsActive, children }) => {
+  let rackType: FXs = FXs.DISTORTION;
   let backgroundColor = theme.darkGrey;
 
-  const [isActive, setIsActive] = useState(false);
-
   switch (type) {
-    case ControlTypes.DISTORTION:
-      rackType = ControlTypes.DISTORTION;
-      knobs = ['level', 'drive', 'mix', 'size'];
+    case FXs.DISTORTION:
+      rackType = FXs.DISTORTION;
       backgroundColor = theme.distortionColor;
       break;
-    case ControlTypes.FLANGER:
-      rackType = ControlTypes.FLANGER;
-      knobs = ['level', 'drive', 'mix', 'size'];
+    case FXs.FLANGER:
+      rackType = FXs.FLANGER;
       backgroundColor = theme.flangerColor;
       break;
-    case ControlTypes.DELAY:
-      rackType = ControlTypes.DELAY;
-      knobs = ['level', 'drive', 'mix', 'size'];
+    case FXs.DELAY:
+      rackType = FXs.DELAY;
       backgroundColor = theme.delayColor;
       break;
-    case ControlTypes.CHORUS:
-      rackType = ControlTypes.CHORUS;
-      knobs = ['level', 'drive', 'mix', 'size'];
+    case FXs.CHORUS:
+      rackType = FXs.CHORUS;
       backgroundColor = theme.chorusColor;
       break;
-    case ControlTypes.REVERB:
-      rackType = ControlTypes.REVERB;
-      knobs = ['level', 'drive', 'mix', 'size'];
+    case FXs.REVERB:
+      rackType = FXs.REVERB;
       backgroundColor = theme.reverbColor;
       break;
-    case ControlTypes.COMPRESSOR:
-      rackType = ControlTypes.COMPRESSOR;
-      knobs = ['level', 'drive', 'mix', 'size'];
+    case FXs.COMPRESSOR:
+      rackType = FXs.COMPRESSOR;
       backgroundColor = theme.compressorColor;
       break;
     default:
-      knobs = ['level', 'drive', 'mix', 'size'];
   }
 
   return (
@@ -88,11 +79,7 @@ const Rack: FC<RackProps> = ({ type }) => {
         >
           {type}
         </button>
-        <div className="rack-knobs">
-          {knobs.map((label) => (
-            <Knob initialValue={50} label={label} type={rackType} />
-          ))}
-        </div>
+        <div className="rack-knobs">{children}</div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import {
   audioContext,
+  delayDryGain,
   filter,
   masterGain,
   oscAGain,
@@ -25,13 +26,20 @@ const filterReducer = (
       oscBGain.connect(filter);
       oscAGain.connect(filter);
 
+      filter.connect(masterGain);
+      filter.connect(delayDryGain);
+
       return { ...state, isActive: true };
 
     case Filter_ActionTypes.Deactivate:
-      oscAGain.disconnect();
-      oscBGain.disconnect();
-      oscAGain.connect(masterGain);
-      oscBGain.connect(masterGain);
+      // TODO: use gain nodes to handle activation/deactivation of filter
+      // oscAGain.disconnect();
+      // oscBGain.disconnect();
+
+      // oscAGain.connect(masterGain);
+      // oscBGain.connect(masterGain);
+
+      filter.disconnect();
 
       return { ...state, isActive: false };
 

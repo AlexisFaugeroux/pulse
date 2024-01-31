@@ -4,6 +4,10 @@ export const roundTwoDigitsNonFinite = (n: number) => {
   return isFinite(n) ? n : Math.round((n + Number.EPSILON) * 100) / 100;
 };
 
+export const roundTwoDigits = (n: number) => {
+  return Math.round((n + Number.EPSILON) * 100) / 100;
+};
+
 export function linearToLinearRange(value: number, newRange: [number, number]) {
   if (newRange[0] < -40 || newRange[1] > 40) return value;
 

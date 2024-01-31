@@ -2,6 +2,8 @@ import { InitialSettingsState } from '../../types/types';
 import oscillatorsReducer from './oscillatorsReducer';
 
 import {
+  Delay_ActionTypes,
+  Delay_SettingsActions,
   Envelope_ActionTypes,
   Filter_ActionTypes,
   Gain_ActionTypes,
@@ -15,6 +17,7 @@ import {
   type Oscillator_SettingsActions,
   type Oscillator_TriggerActions,
 } from '../types';
+import delayReducer from './delayReducer';
 import envelopeReducer from './envelopeReducer';
 import filterReducer from './filterReducer';
 import gainReducer from './gainReducer';
@@ -28,9 +31,10 @@ export const mainReducer = (
     envelope,
     lfo,
     filter,
+    delay,
   }: Pick<
     InitialSettingsState,
-    'envelope' | 'oscillators' | 'filter' | 'gains' | 'lfo'
+    'envelope' | 'oscillators' | 'filter' | 'gains' | 'lfo' | 'delay'
   >,
   action:
     | Oscillator_TriggerActions
@@ -38,10 +42,11 @@ export const mainReducer = (
     | Gain_SettingsActions
     | Envelope_SettingsActions
     | LFO_SettingsActions
-    | Filter_SettingsActions,
+    | Filter_SettingsActions
+    | Delay_SettingsActions,
 ): Pick<
   InitialSettingsState,
-  'envelope' | 'oscillators' | 'filter' | 'gains' | 'lfo'
+  'envelope' | 'oscillators' | 'filter' | 'gains' | 'lfo' | 'delay'
 > => {
   if (
     Object.values(Oscillator_SettingsActionTypes).includes(
@@ -57,6 +62,7 @@ export const mainReducer = (
       envelope,
       lfo,
       filter,
+      delay,
     };
   } else if (
     Object.values(Gain_ActionTypes).includes(action.type as Gain_ActionTypes)
@@ -67,6 +73,7 @@ export const mainReducer = (
       envelope,
       lfo,
       filter,
+      delay,
     };
   } else if (
     Object.values(Envelope_ActionTypes).includes(
@@ -79,6 +86,7 @@ export const mainReducer = (
       envelope: envelopeReducer(envelope, action as Envelope_SettingsActions),
       lfo,
       filter,
+      delay,
     };
   } else if (
     Object.values(LFO_SettingsActionTypes).includes(
@@ -91,6 +99,7 @@ export const mainReducer = (
       envelope,
       lfo: LFOReducer(lfo, action as LFO_SettingsActions),
       filter,
+      delay,
     };
   } else if (
     Object.values(Filter_ActionTypes).includes(
@@ -103,6 +112,18 @@ export const mainReducer = (
       envelope,
       lfo,
       filter: filterReducer(filter, action as Filter_SettingsActions),
+      delay,
+    };
+  } else if (
+    Object.values(Delay_ActionTypes).includes(action.type as Delay_ActionTypes)
+  ) {
+    return {
+      oscillators,
+      gains,
+      envelope,
+      lfo,
+      filter,
+      delay: delayReducer(delay, action as Delay_SettingsActions),
     };
   } else if (
     Object.values(Oscillator_TriggerActionsTypes).includes(
@@ -121,5 +142,6 @@ export const mainReducer = (
     envelope,
     lfo,
     filter,
+    delay,
   };
 };

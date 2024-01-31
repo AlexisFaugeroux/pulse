@@ -1,14 +1,5 @@
 import { InitialSettingsState } from './types/types';
 
-export const audioContext = new AudioContext();
-
-export const audioContextOutput = audioContext.destination;
-export const oscAGain = audioContext.createGain();
-export const oscBGain = audioContext.createGain();
-export const oscLFOGain = audioContext.createGain();
-export const filter = audioContext.createBiquadFilter();
-export const masterGain = audioContext.createGain();
-
 export const initialSettings: InitialSettingsState = {
   oscillators: {
     oscillatorA: {
@@ -50,4 +41,42 @@ export const initialSettings: InitialSettingsState = {
     gain: 0.5,
     Q: 0.001,
   },
+  delay: {
+    isActive: false,
+    time: 0.4,
+    feedback: 0.3,
+    delayDryGain: 1,
+    delayWetGain: 0,
+    delayMixGain: 1,
+  },
 };
+
+// AudioContext
+export const audioContext = new AudioContext();
+
+// Output
+export const audioContextOutput = audioContext.destination;
+
+// Oscillator
+export const oscAGain = audioContext.createGain();
+export const oscBGain = audioContext.createGain();
+
+// LFO
+export const oscLFOGain = audioContext.createGain();
+
+// Filter
+export const filter = audioContext.createBiquadFilter();
+
+// Delay
+export const delay = audioContext.createDelay(10); // 10 = maximum delay time allowed
+export const feedback = audioContext.createGain();
+export const delayDryGain = audioContext.createGain();
+export const delayWetGain = audioContext.createGain();
+export const delayMixGain = audioContext.createGain();
+
+feedback.gain.value = initialSettings.delay.feedback;
+delayDryGain.gain.value = initialSettings.delay.delayDryGain;
+delayWetGain.gain.value = initialSettings.delay.delayWetGain;
+
+// Master
+export const masterGain = audioContext.createGain();
