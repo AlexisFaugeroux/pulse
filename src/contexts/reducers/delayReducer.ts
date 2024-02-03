@@ -48,7 +48,7 @@ const delayReducer = (
         feedback.gain.setTargetAtTime(value, currentTime, TIME_CONSTANT);
 
         return { ...state };
-      } else if (id === 'mix') {
+      } else if (id === 'mix' && state.isActive) {
         const newDryValue = roundTwoDigits(1 - value);
 
         delayDryGain.gain.setValueAtTime(
