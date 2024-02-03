@@ -1,6 +1,6 @@
 import { EnvelopeSettings } from '../../types/types';
 import { Envelope_ActionTypes, Envelope_SettingsActions } from '../types';
-import { linearToLinearRange } from './helpers';
+import { linearToLinearRange, updateEnvelopeActiveOsc } from './helpers';
 
 const envelopeReducer = (
   state: EnvelopeSettings,
@@ -17,12 +17,22 @@ const envelopeReducer = (
       const { id, value } = action.payload;
       if (!id || !value) return { ...state };
 
-      if (id === 'sustain') {
-        return { ...state, [id]: value };
+      if (id === 'attack' || id === 'release') {
+        const convertedValue = linearToLinearRange(value, [0, 8]);
+        updateEnvelopeActiveOsc(id, convertedValue);
+        return { ...state, [id]: convertedValue };
+      }
+      if (id === 'decay') {
+        const convertedValue = linearToLinearRange(value, [0, 5]);
+        updateEnvelopeActiveOsc(id, convertedValue);
+        return { ...state, [id]: convertedValue };
       }
 
-      const convertedValue = linearToLinearRange(value, [0, 8]);
-      return { ...state, [id]: convertedValue };
+      if (id === 'sustain') {
+        updateEnvelopeActiveOsc(id, value);
+        return { ...state, [id]: value };
+      }
+      return { ...state };
     }
     default:
       console.log('Reducer error action', action);

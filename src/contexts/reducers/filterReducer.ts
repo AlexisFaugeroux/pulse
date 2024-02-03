@@ -17,7 +17,7 @@ import {
 const filterReducer = (
   state: FilterSettings,
   action: Filter_SettingsActions,
-) => {
+): FilterSettings => {
   const { currentTime } = audioContext;
 
   switch (action.type) {

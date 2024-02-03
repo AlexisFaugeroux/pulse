@@ -14,7 +14,7 @@ const LFO: FC = () => {
   const [isActive, setIsActive] = useState(false);
 
   const waves = [Waves.SINE, Waves.TRIANGLE, Waves.SAWTOOTH, Waves.SQUARE];
-  const { lfo, gains } = initialSettings;
+  const { lfo } = initialSettings;
 
   useEffect(() => {
     if (isActive) {
@@ -44,7 +44,7 @@ const LFO: FC = () => {
             type={ControlTypes.DEFAULT}
           />
           <Knob
-            initialValue={gains.oscLFOGainValue}
+            initialValue={lfo.gain}
             label="level"
             parent="lfo"
             type={ControlTypes.DEFAULT}

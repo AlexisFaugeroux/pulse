@@ -1,3 +1,5 @@
+import { currentOscillators } from './oscillatorTriggerReducer';
+
 export const TIME_CONSTANT = 0.01;
 
 export const roundTwoDigitsNonFinite = (n: number) => {
@@ -35,3 +37,14 @@ export function linearToLogarithmRange({
 
   return Math.pow(20, exponent);
 }
+
+export const updateEnvelopeActiveOsc = (param: string, value: number) => {
+  if (currentOscillators.length > 0) {
+    currentOscillators.forEach(({ envelope }) => {
+      envelope[param] = value;
+    });
+    return { param, value };
+  }
+
+  return null;
+};

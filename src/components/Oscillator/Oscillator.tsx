@@ -16,9 +16,10 @@ interface OscillatorProps {
 }
 
 const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
-  const { state, dispatch } = useContext(SettingsContext);
-  const { oscillatorA, oscillatorB } = state.oscillators;
-  const { oscAGainValue, oscBGainValue } = initialSettings.gains;
+  const { dispatch } = useContext(SettingsContext);
+  const {
+    oscillators: { oscillatorA, oscillatorB },
+  } = initialSettings;
 
   const [isActive, setIsActive] = useState(
     id === 'oscillatorA' ? oscillatorA.isActive : oscillatorB.isActive,
@@ -55,7 +56,7 @@ const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
             <Knob
               parent={id}
               initialValue={
-                id === 'oscillatorA' ? oscAGainValue : oscBGainValue
+                id === 'oscillatorA' ? oscillatorA.gain : oscillatorB.gain
               }
               label="level"
               type={ControlTypes.DEFAULT}
@@ -68,7 +69,9 @@ const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
             />
             <Knob
               parent={id}
-              initialValue={0}
+              initialValue={
+                id === 'oscillatorA' ? oscillatorA.detune : oscillatorB.detune
+              }
               label="detune"
               type={ControlTypes.DEFAULT}
             />

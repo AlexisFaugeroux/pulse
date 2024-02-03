@@ -4,15 +4,11 @@ export type OscSettings = {
   type: OscillatorType;
   octaveOffset: number;
   detune: number;
-};
-
-export type GainSettings = {
-  oscAGainValue: number;
-  oscBGainValue: number;
-  oscLFOGainValue: number;
+  gain: number;
 };
 
 export type EnvelopeSettings = {
+  [key: string]: boolean | number;
   isActive: boolean;
   attack: number;
   decay: number;
@@ -46,11 +42,11 @@ export type InitialSettingsState = {
     oscillatorB: OscSettings;
   };
   envelope: EnvelopeSettings;
-  gains: GainSettings;
   lfo: {
     isActive: boolean;
     type: OscillatorType;
     frequency: number;
+    gain: number;
   };
   filter: FilterSettings;
   delay: DelaySettings;

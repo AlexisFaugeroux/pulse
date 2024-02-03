@@ -6,7 +6,6 @@ import type {
   Delay_SettingsActions,
   Envelope_SettingsActions,
   Filter_SettingsActions,
-  Gain_SettingsActions,
   LFO_SettingsActions,
   Oscillator_SettingsActions,
   Oscillator_TriggerActions,
@@ -15,12 +14,11 @@ import type {
 const SettingsContext = createContext<{
   state: Pick<
     InitialSettingsState,
-    'envelope' | 'oscillators' | 'filter' | 'gains' | 'lfo' | 'delay'
+    'envelope' | 'oscillators' | 'filter' | 'lfo' | 'delay'
   >;
   dispatch: Dispatch<
     | Oscillator_TriggerActions
     | Oscillator_SettingsActions
-    | Gain_SettingsActions
     | Envelope_SettingsActions
     | LFO_SettingsActions
     | Filter_SettingsActions

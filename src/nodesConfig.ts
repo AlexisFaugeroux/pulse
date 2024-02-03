@@ -8,6 +8,7 @@ export const initialSettings: InitialSettingsState = {
       type: 'sine',
       octaveOffset: 0,
       detune: 0,
+      gain: 0.7,
     },
     oscillatorB: {
       id: 'oscillatorB',
@@ -15,24 +16,21 @@ export const initialSettings: InitialSettingsState = {
       type: 'sine',
       octaveOffset: 0,
       detune: 0,
+      gain: 0.7,
     },
   },
   envelope: {
     isActive: true,
     attack: 0.005,
-    decay: 1,
+    decay: 0.2,
     sustain: 1,
     release: 0.015,
-  },
-  gains: {
-    oscAGainValue: 0.7,
-    oscBGainValue: 0.7,
-    oscLFOGainValue: 0.3,
   },
   lfo: {
     isActive: false,
     type: 'sine',
     frequency: 0,
+    gain: 0.3,
   },
   filter: {
     isActive: false,

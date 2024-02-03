@@ -1,6 +1,5 @@
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
-import { Gain_ActionTypes } from '../../../contexts/types/gain';
 import {
   Delay_ActionTypes,
   Envelope_ActionTypes,
@@ -90,12 +89,7 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
   }, [indicatorRingRef, indicatorRingBgRef, indicatorDotRef, value]);
 
   useEffect(() => {
-    if (label === 'level') {
-      dispatch({
-        type: Gain_ActionTypes.UpdateSettings,
-        payload: { value, parent },
-      });
-    } else if (parent === 'oscillatorA' || parent === 'oscillatorB') {
+    if (parent === 'oscillatorA' || parent === 'oscillatorB') {
       dispatch({
         type: Oscillator_SettingsActionTypes.UpdateSettings,
         payload: { id: label, parent, value },

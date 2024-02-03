@@ -1,9 +1,10 @@
-import { audioContext } from '../../nodesConfig';
+import { audioContext, oscAGain, oscBGain } from '../../nodesConfig';
 import { OscSettings } from '../../types/types';
 import {
   Oscillator_SettingsActionTypes,
   type Oscillator_SettingsActions,
 } from '../types';
+import { TIME_CONSTANT, roundTwoDigitsNonFinite } from './helpers';
 import { currentOscillators } from './oscillatorTriggerReducer';
 
 const oscillatorsReducer = (
@@ -12,10 +13,7 @@ const oscillatorsReducer = (
     oscillatorB: OscSettings;
   },
   action: Oscillator_SettingsActions,
-): {
-  oscillatorA: OscSettings;
-  oscillatorB: OscSettings;
-} => {
+): typeof state => {
   const { oscillatorA, oscillatorB } = state;
   const { id, parent, value: newValue } = action.payload;
 
@@ -43,20 +41,52 @@ const oscillatorsReducer = (
       };
 
     case Oscillator_SettingsActionTypes.UpdateSettings:
-      if (!id) {
-        console.error('Update oscillator settings: no id provided');
+      if (!id || !newValue || !parent) {
+        console.error(
+          'Update oscillator settings: no id, value or parent component provided',
+        );
         return { ...state };
       }
 
-      if (parent) {
+      if (id === 'level') {
+        if (parent === 'oscillatorA') {
+          oscAGain.gain.setTargetAtTime(
+            roundTwoDigitsNonFinite(newValue),
+            audioContext.currentTime,
+            TIME_CONSTANT,
+          );
+          return {
+            ...state,
+            [parent]: {
+              ...state[parent],
+              gain: newValue,
+            },
+          };
+        } else if (parent === 'oscillatorB') {
+          oscBGain.gain.setTargetAtTime(
+            roundTwoDigitsNonFinite(newValue),
+            audioContext.currentTime,
+            TIME_CONSTANT,
+          );
+          return {
+            ...state,
+            [parent]: {
+              ...state[parent],
+              gain: newValue,
+            },
+          };
+        }
+      }
+
+      if (currentOscillators.length > 0) {
         currentOscillators.forEach(
-          ({ node, parent: currOscParent, offset, frequency, octaveShift }) => {
+          ({ node, parent: currOscParent, frequency, octaveShift }) => {
             if (id === 'detune' && currOscParent === parent) {
-              node.detune.value = newValue ? newValue * 100 : 0;
+              node.detune.value = newValue * 100;
             }
             if (id === 'octaveOffset' && currOscParent === parent) {
               const { frequency: newFrequency } = octaveShift(
-                newValue ?? offset,
+                newValue,
                 frequency,
               );
 
@@ -69,16 +99,15 @@ const oscillatorsReducer = (
             }
           },
         );
-        return {
-          ...state,
-          [parent]: {
-            ...state[parent as keyof typeof state],
-            [id]: newValue,
-          },
-        };
-      } else {
-        return { ...state };
       }
+
+      return {
+        ...state,
+        [parent]: {
+          ...state[parent as keyof typeof state],
+          [id]: newValue,
+        },
+      };
 
     case Oscillator_SettingsActionTypes.UpdateType:
       if (!id) {

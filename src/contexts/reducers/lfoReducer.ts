@@ -6,7 +6,11 @@ import {
 } from '../../nodesConfig';
 import LFO from '../../utils/classes/LFO';
 import { LFO_SettingsActionTypes, type LFO_SettingsActions } from '../types';
-import { TIME_CONSTANT, linearToLogarithmRange } from './helpers';
+import {
+  TIME_CONSTANT,
+  linearToLogarithmRange,
+  roundTwoDigitsNonFinite,
+} from './helpers';
 
 let currentLFO: LFO | null;
 
@@ -15,9 +19,10 @@ const LFOReducer = (
     isActive: boolean;
     type: OscillatorType;
     frequency: number;
+    gain: number;
   },
   action: LFO_SettingsActions,
-) => {
+): typeof state => {
   const { id, value } = action.payload;
 
   switch (action.type) {
@@ -67,7 +72,14 @@ const LFOReducer = (
           return { ...state, frequency: newRate.value };
         }
       }
-
+      if (id === 'level') {
+        oscLFOGain.gain.setTargetAtTime(
+          roundTwoDigitsNonFinite(value),
+          audioContext.currentTime,
+          TIME_CONSTANT,
+        );
+        return { ...state, gain: value };
+      }
       return { ...state };
 
     case LFO_SettingsActionTypes.UpdateType:
