@@ -7,6 +7,7 @@ import {
   LFO_SettingsActionTypes,
   Oscillator_SettingsActionTypes,
 } from '../../../contexts/types/index';
+import { Master_ActionTypes } from '../../../contexts/types/master';
 import { theme } from '../../../styles/_variables';
 import { ControlTypes, FXs } from '../../../utils/constants';
 import './Knob.scss';
@@ -89,7 +90,12 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
   }, [indicatorRingRef, indicatorRingBgRef, indicatorDotRef, value]);
 
   useEffect(() => {
-    if (parent === 'oscillatorA' || parent === 'oscillatorB') {
+    if (parent === 'master') {
+      dispatch({
+        type: Master_ActionTypes.UpdateValue,
+        payload: { value },
+      });
+    } else if (parent === 'oscillatorA' || parent === 'oscillatorB') {
       dispatch({
         type: Oscillator_SettingsActionTypes.UpdateSettings,
         payload: { id: label, parent, value },

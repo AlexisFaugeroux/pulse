@@ -50,6 +50,9 @@ export const initialSettings: InitialSettingsState = {
     wetGain: 0,
     mixGain: 1,
   },
+  master: {
+    gain: 0.6,
+  },
 };
 
 // AudioContext

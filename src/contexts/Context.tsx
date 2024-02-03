@@ -10,13 +10,13 @@ import type {
   Oscillator_SettingsActions,
   Oscillator_TriggerActions,
 } from './types';
+import { Master_Actions } from './types/master';
 
 const SettingsContext = createContext<{
-  state: Pick<
-    InitialSettingsState,
-    'envelope' | 'oscillators' | 'filter' | 'lfo' | 'delay'
-  >;
+  state: InitialSettingsState;
+
   dispatch: Dispatch<
+    | Master_Actions
     | Oscillator_TriggerActions
     | Oscillator_SettingsActions
     | Envelope_SettingsActions

@@ -50,4 +50,7 @@ export type InitialSettingsState = {
   };
   filter: FilterSettings;
   delay: DelaySettings;
+  master: {
+    gain: number;
+  };
 };

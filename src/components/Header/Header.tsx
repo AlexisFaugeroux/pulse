@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { initialSettings } from '../../nodesConfig';
 import { ControlTypes } from '../../utils/constants';
 import Knob from '../utils/Knob/Knob';
 import './Header.scss';
@@ -20,7 +21,12 @@ const Header: FC = () => {
 
       <div className="master-control">
         <span className="master-control-label">MASTER</span>
-        <Knob initialValue={33} label="master" type={ControlTypes.MASTER} />
+        <Knob
+          initialValue={initialSettings.master.gain}
+          label="master"
+          type={ControlTypes.MASTER}
+          parent="master"
+        />
       </div>
     </div>
   );

@@ -1,6 +1,4 @@
 import { InitialSettingsState } from '../../types/types';
-import oscillatorsReducer from './oscillatorsReducer';
-
 import {
   Delay_ActionTypes,
   Delay_SettingsActions,
@@ -15,40 +13,47 @@ import {
   type Oscillator_SettingsActions,
   type Oscillator_TriggerActions,
 } from '../types';
+import { Master_ActionTypes, Master_Actions } from '../types/master';
 import delayReducer from './delayReducer';
 import envelopeReducer from './envelopeReducer';
 import filterReducer from './filterReducer';
 import LFOReducer from './lfoReducer';
+import masterReducer from './masterReducer';
 import oscillatorTriggerReducer from './oscillatorTriggerReducer';
+import oscillatorsReducer from './oscillatorsReducer';
 
 export const mainReducer = (
-  {
-    oscillators,
-    envelope,
-    lfo,
-    filter,
-    delay,
-  }: Pick<
-    InitialSettingsState,
-    'envelope' | 'oscillators' | 'filter' | 'lfo' | 'delay'
-  >,
+  { master, oscillators, envelope, lfo, filter, delay }: InitialSettingsState,
+
   action:
+    | Master_Actions
     | Oscillator_TriggerActions
     | Oscillator_SettingsActions
     | Envelope_SettingsActions
     | LFO_SettingsActions
     | Filter_SettingsActions
     | Delay_SettingsActions,
-): Pick<
-  InitialSettingsState,
-  'envelope' | 'oscillators' | 'filter' | 'lfo' | 'delay'
-> => {
+): InitialSettingsState => {
   if (
+    Object.values(Master_ActionTypes).includes(
+      action.type as Master_ActionTypes,
+    )
+  ) {
+    return {
+      master: masterReducer(master, action as Master_Actions),
+      oscillators,
+      envelope,
+      lfo,
+      filter,
+      delay,
+    };
+  } else if (
     Object.values(Oscillator_SettingsActionTypes).includes(
       action.type as Oscillator_SettingsActionTypes,
     )
   ) {
     return {
+      master,
       oscillators: oscillatorsReducer(
         oscillators,
         action as Oscillator_SettingsActions,
@@ -64,6 +69,7 @@ export const mainReducer = (
     )
   ) {
     return {
+      master,
       oscillators,
       envelope: envelopeReducer(envelope, action as Envelope_SettingsActions),
       lfo,
@@ -76,6 +82,7 @@ export const mainReducer = (
     )
   ) {
     return {
+      master,
       oscillators,
       envelope,
       lfo: LFOReducer(lfo, action as LFO_SettingsActions),
@@ -88,6 +95,7 @@ export const mainReducer = (
     )
   ) {
     return {
+      master,
       oscillators,
       envelope,
       lfo,
@@ -98,6 +106,7 @@ export const mainReducer = (
     Object.values(Delay_ActionTypes).includes(action.type as Delay_ActionTypes)
   ) {
     return {
+      master,
       oscillators,
       envelope,
       lfo,
@@ -116,6 +125,7 @@ export const mainReducer = (
   }
 
   return {
+    master,
     oscillators,
     envelope,
     lfo,
