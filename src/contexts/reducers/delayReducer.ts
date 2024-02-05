@@ -1,11 +1,4 @@
-import {
-  audioContext,
-  delay,
-  delayDryGain,
-  delayMixGain,
-  delayWetGain,
-  feedback,
-} from '../../nodesConfig';
+import { audioContext, delay } from '../../nodesConfig';
 import { DelaySettings } from '../../types/types';
 import { Delay_ActionTypes, Delay_SettingsActions } from '../types';
 import { TIME_CONSTANT, linearToLinearRange, roundTwoDigits } from './helpers';
@@ -15,11 +8,13 @@ const delayReducer = (
   action: Delay_SettingsActions,
 ): DelaySettings => {
   const { currentTime } = audioContext;
+  const { node, feedback, dryGain, wetGain, mixGain } = delay;
+
+  if (!node) throw new Error('Delay reducer: node is null');
 
   switch (action.type) {
     case Delay_ActionTypes.Activate:
-      delayWetGain.connect(delayMixGain);
-
+      wetGain.connect(mixGain);
       return {
         ...state,
         dryGain: 1 - state.wetGain,
@@ -27,8 +22,7 @@ const delayReducer = (
       };
 
     case Delay_ActionTypes.Deactivate:
-      delayWetGain.disconnect();
-
+      wetGain.disconnect();
       return { ...state, dryGain: 1, isActive: false };
 
     case Delay_ActionTypes.UpdateSettings: {
@@ -37,30 +31,28 @@ const delayReducer = (
 
       if (id === 'time') {
         const convertedValue = linearToLinearRange(value, [0, 2]);
-        delay.delayTime.setTargetAtTime(
+        node.delayTime.setTargetAtTime(
           convertedValue,
           currentTime,
           TIME_CONSTANT,
         );
 
-        return { ...state, [id]: convertedValue };
-      } else if (id === 'feedback') {
+        return { ...state, time: convertedValue };
+      }
+
+      if (id === 'feedback') {
         feedback.gain.setTargetAtTime(value, currentTime, TIME_CONSTANT);
+        return { ...state, feedback: value };
+      }
 
-        return { ...state };
-      } else if (id === 'mix' && state.isActive) {
+      if (id === 'mix' && state.isActive) {
         const newDryValue = roundTwoDigits(1 - value);
-
-        delayDryGain.gain.setValueAtTime(
-          newDryValue,
-          currentTime + TIME_CONSTANT,
-        );
-        delayWetGain.gain.setValueAtTime(
+        dryGain.gain.setValueAtTime(newDryValue, currentTime + TIME_CONSTANT);
+        wetGain.gain.setValueAtTime(
           // Input value based on mouse drag has precision issue, value is often not 0 when input visually is
           value < 0.03 ? 0 : roundTwoDigits(value),
           currentTime + TIME_CONSTANT,
         );
-
         return {
           ...state,
           dryGain: newDryValue,

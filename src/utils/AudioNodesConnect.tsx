@@ -2,14 +2,7 @@ import { FC, PropsWithChildren, useEffect } from 'react';
 import {
   audioContextOutput,
   delay,
-  delayDryGain,
-  delayMixGain,
-  delayWetGain,
-  feedback,
   filter,
-  filterDryGain,
-  filterMixGain,
-  filterWetGain,
   masterGain,
   oscAGain,
   oscBGain,
@@ -19,29 +12,21 @@ import {
 const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     // Oscillators
-    oscAGain.connect(filterDryGain);
-    oscBGain.connect(filterDryGain);
-    oscAGain.connect(filter);
-    oscBGain.connect(filter);
+    oscAGain.connect(filter.dryGain);
+    oscBGain.connect(filter.dryGain);
+    oscAGain.connect(filter.node);
+    oscBGain.connect(filter.node);
 
     // Filter
-    filter.connect(filterWetGain);
-    filterDryGain.connect(filterMixGain);
-    filterWetGain.connect(filterMixGain);
-    filterMixGain.connect(delayDryGain);
-    filterMixGain.connect(delay);
+    filter.connect(delay.dryGain);
+    filter.connect(delay.node);
 
     // LFO
     oscLFOGain.connect(oscAGain.gain);
     oscLFOGain.connect(oscBGain.gain);
 
     // Delay
-    delay.connect(feedback);
-    feedback.connect(delay);
-    delay.connect(delayWetGain);
-    delayDryGain.connect(delayMixGain);
-    delayWetGain.connect(delayMixGain);
-    delayMixGain.connect(masterGain);
+    delay.connect(masterGain);
 
     // Output
     masterGain.connect(audioContextOutput);

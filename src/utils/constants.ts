@@ -327,9 +327,10 @@ export const FILTER_VALUES = [
 export const NOISE_VALUES = ['White', 'Pink', 'Brown'];
 
 export enum FXs {
-  DISTORTION = 'distortion',
-  FLANGER = 'flanger',
   DELAY = 'delay',
+  DISTORTION = 'distortion',
+  FILTER = 'filter',
+  FLANGER = 'flanger',
   REVERB = 'reverb',
   CHORUS = 'chorus',
   COMPRESSOR = 'compressor',

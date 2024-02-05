@@ -2,10 +2,6 @@ import { EnvelopeSettings } from '../../types/types';
 import { NOTES } from '../constants';
 
 export default class Oscillator {
-  node;
-  easing;
-  gateGain;
-
   constructor(
     public audioContext: AudioContext,
     public destination: GainNode,
@@ -44,6 +40,10 @@ export default class Oscillator {
     this.node.start();
     this.start();
   }
+
+  node;
+  easing;
+  gateGain;
 
   start() {
     const { currentTime } = this.audioContext;

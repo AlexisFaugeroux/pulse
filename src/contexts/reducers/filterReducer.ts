@@ -1,10 +1,4 @@
-import {
-  audioContext,
-  filter,
-  filterDryGain,
-  filterMixGain,
-  filterWetGain,
-} from '../../nodesConfig';
+import { audioContext, filter } from '../../nodesConfig';
 import { FilterSettings } from '../../types/types';
 import { Filter_ActionTypes, Filter_SettingsActions } from '../types';
 import {
@@ -19,17 +13,18 @@ const filterReducer = (
   action: Filter_SettingsActions,
 ): FilterSettings => {
   const { currentTime } = audioContext;
+  const { node, dryGain, wetGain, mixGain } = filter;
 
   switch (action.type) {
     case Filter_ActionTypes.Activate:
-      filterWetGain.connect(filterMixGain);
-      filterDryGain.gain.setTargetAtTime(0, currentTime, TIME_CONSTANT);
+      wetGain.connect(mixGain);
+      dryGain.gain.setTargetAtTime(0, currentTime, TIME_CONSTANT);
 
       return { ...state, dryGain: 0, isActive: true };
 
     case Filter_ActionTypes.Deactivate:
-      filterWetGain.disconnect();
-      filterDryGain.gain.setTargetAtTime(1, currentTime, TIME_CONSTANT);
+      wetGain.disconnect();
+      dryGain.gain.setTargetAtTime(1, currentTime, TIME_CONSTANT);
 
       return { ...state, dryGain: 1, isActive: false };
 
@@ -45,13 +40,13 @@ const filterReducer = (
           logarithmicRange: [20, 20000],
         });
 
-        filter.frequency.setTargetAtTime(
+        node.frequency.setTargetAtTime(
           roundTwoDigitsNonFinite(convertedValue),
           currentTime,
           TIME_CONSTANT,
         );
       } else if (id === 'Q') {
-        filter.Q.setTargetAtTime(
+        node.Q.setTargetAtTime(
           value * 1000, // Q nominal range is 0.0001 to 1000
           currentTime,
           TIME_CONSTANT,
@@ -59,7 +54,7 @@ const filterReducer = (
       } else if (id === 'gain') {
         const convertedValue = linearToLinearRange(value, [-40, 40]);
 
-        filter.gain.setTargetAtTime(
+        node.gain.setTargetAtTime(
           convertedValue,
           audioContext.currentTime,
           TIME_CONSTANT,
@@ -71,7 +66,7 @@ const filterReducer = (
       const { id } = action.payload;
       if (!id) throw new Error('Update filter: no property id provided');
 
-      filter.type = id as BiquadFilterType;
+      node.type = id as BiquadFilterType;
       return { ...state };
     }
 
