@@ -7,6 +7,7 @@ import {
   oscAGain,
   oscBGain,
   oscLFOGain,
+  reverb,
 } from '../nodesConfig';
 
 const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
@@ -26,7 +27,11 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     oscLFOGain.connect(oscBGain.gain);
 
     // Delay
-    delay.connect(masterGain);
+    delay.connect(reverb.dryGain);
+    delay.connect(reverb.node);
+
+    // Reverb
+    reverb.connect(masterGain);
 
     // Output
     masterGain.connect(audioContextOutput);

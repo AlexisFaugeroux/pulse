@@ -1,6 +1,7 @@
 import { EnvelopeSettings } from '../../types/types';
+import { linearToLinearRange } from '../../utils/helpers';
 import { Envelope_ActionTypes, Envelope_SettingsActions } from '../types';
-import { linearToLinearRange, updateEnvelopeActiveOsc } from './helpers';
+import { updateEnvelopeActiveOsc } from './helpers';
 
 const envelopeReducer = (
   state: EnvelopeSettings,

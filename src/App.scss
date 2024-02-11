@@ -24,6 +24,10 @@ body {
   font-family: 'Kanit', sans-serif;
 }
 
+*:focus {
+  outline: 0 !important;
+}
+
 .background {
   height: $backgroundHeight;
   width: $backgroundWidth;

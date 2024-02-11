@@ -335,3 +335,5 @@ export enum FXs {
   CHORUS = 'chorus',
   COMPRESSOR = 'compressor',
 }
+
+export const TIME_CONSTANT = 0.01;

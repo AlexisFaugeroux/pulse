@@ -11,6 +11,7 @@ import type {
   Oscillator_TriggerActions,
 } from './types';
 import { Master_Actions } from './types/master';
+import { Reverb_SettingsActions } from './types/reverb';
 
 const SettingsContext = createContext<{
   state: InitialSettingsState;
@@ -23,6 +24,7 @@ const SettingsContext = createContext<{
     | LFO_SettingsActions
     | Filter_SettingsActions
     | Delay_SettingsActions
+    | Reverb_SettingsActions
   >;
 }>({
   state: initialSettings,

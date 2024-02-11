@@ -1,6 +1,6 @@
 import { audioContext, masterGain } from '../../nodesConfig';
+import { TIME_CONSTANT } from '../../utils/constants';
 import { Master_Actions } from '../types/master';
-import { TIME_CONSTANT } from './helpers';
 
 const masterReducer = (
   state: {

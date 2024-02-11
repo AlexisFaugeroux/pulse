@@ -6,6 +6,7 @@ import {
   Filter_ActionTypes,
   LFO_SettingsActionTypes,
   Oscillator_SettingsActionTypes,
+  Reverb_ActionTypes,
 } from '../../../contexts/types/index';
 import { Master_ActionTypes } from '../../../contexts/types/master';
 import { theme } from '../../../styles/_variables';
@@ -118,6 +119,11 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
     } else if (parent === FXs.DELAY) {
       dispatch({
         type: Delay_ActionTypes.UpdateSettings,
+        payload: { id: label, value },
+      });
+    } else if (parent === FXs.REVERB) {
+      dispatch({
+        type: Reverb_ActionTypes.UpdateSettings,
         payload: { id: label, value },
       });
     }

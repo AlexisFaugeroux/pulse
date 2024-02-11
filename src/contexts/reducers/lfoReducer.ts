@@ -5,12 +5,12 @@ import {
   oscLFOGain,
 } from '../../nodesConfig';
 import LFO from '../../utils/classes/LFO';
-import { LFO_SettingsActionTypes, type LFO_SettingsActions } from '../types';
+import { TIME_CONSTANT } from '../../utils/constants';
 import {
-  TIME_CONSTANT,
   linearToLogarithmRange,
   roundTwoDigitsNonFinite,
-} from './helpers';
+} from '../../utils/helpers';
+import { LFO_SettingsActionTypes, type LFO_SettingsActions } from '../types';
 
 let currentLFO: LFO | null;
 

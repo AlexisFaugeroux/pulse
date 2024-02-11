@@ -1,6 +1,7 @@
 import { InitialSettingsState } from './types/types';
 import Delay from './utils/classes/Delay';
 import Filter from './utils/classes/Filter';
+import Reverb from './utils/classes/Reverb';
 
 export const initialSettings: InitialSettingsState = {
   oscillators: {
@@ -52,6 +53,14 @@ export const initialSettings: InitialSettingsState = {
     wetGain: 0,
     mixGain: 1,
   },
+  reverb: {
+    isActive: false,
+    time: 0.4,
+    decay: 0.3,
+    dryGain: 1,
+    wetGain: 0,
+    mixGain: 1,
+  },
   master: {
     gain: 0.6,
   },
@@ -78,3 +87,6 @@ export const filter = new Filter(audioContext);
 
 // Delay
 export const delay = new Delay(audioContext);
+
+// Reverb
+export const reverb = new Reverb(audioContext);

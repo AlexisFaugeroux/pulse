@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import './FXRack.scss';
 import DelayRack from './Racks/DelayRack';
+import ReverbRack from './Racks/ReverbRack';
 
 const FXRack: FC = () => {
   return (
@@ -10,6 +11,7 @@ const FXRack: FC = () => {
         <div className="line" />
       </div>
       <DelayRack />
+      <ReverbRack />
     </div>
   );
 };

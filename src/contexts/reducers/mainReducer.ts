@@ -1,17 +1,19 @@
 import { InitialSettingsState } from '../../types/types';
 import {
   Delay_ActionTypes,
-  Delay_SettingsActions,
   Envelope_ActionTypes,
   Filter_ActionTypes,
   LFO_SettingsActionTypes,
   Oscillator_SettingsActionTypes,
   Oscillator_TriggerActionsTypes,
+  Reverb_ActionTypes,
+  type Delay_SettingsActions,
   type Envelope_SettingsActions,
   type Filter_SettingsActions,
   type LFO_SettingsActions,
   type Oscillator_SettingsActions,
   type Oscillator_TriggerActions,
+  type Reverb_SettingsActions,
 } from '../types';
 import { Master_ActionTypes, Master_Actions } from '../types/master';
 import delayReducer from './delayReducer';
@@ -21,9 +23,18 @@ import LFOReducer from './lfoReducer';
 import masterReducer from './masterReducer';
 import oscillatorTriggerReducer from './oscillatorTriggerReducer';
 import oscillatorsReducer from './oscillatorsReducer';
+import reverbReducer from './reverbReducer';
 
 export const mainReducer = (
-  { master, oscillators, envelope, lfo, filter, delay }: InitialSettingsState,
+  {
+    master,
+    oscillators,
+    envelope,
+    lfo,
+    filter,
+    delay,
+    reverb,
+  }: InitialSettingsState,
 
   action:
     | Master_Actions
@@ -32,7 +43,8 @@ export const mainReducer = (
     | Envelope_SettingsActions
     | LFO_SettingsActions
     | Filter_SettingsActions
-    | Delay_SettingsActions,
+    | Delay_SettingsActions
+    | Reverb_SettingsActions,
 ): InitialSettingsState => {
   if (
     Object.values(Master_ActionTypes).includes(
@@ -46,6 +58,7 @@ export const mainReducer = (
       lfo,
       filter,
       delay,
+      reverb,
     };
   } else if (
     Object.values(Oscillator_SettingsActionTypes).includes(
@@ -62,6 +75,7 @@ export const mainReducer = (
       lfo,
       filter,
       delay,
+      reverb,
     };
   } else if (
     Object.values(Envelope_ActionTypes).includes(
@@ -75,6 +89,7 @@ export const mainReducer = (
       lfo,
       filter,
       delay,
+      reverb,
     };
   } else if (
     Object.values(LFO_SettingsActionTypes).includes(
@@ -88,6 +103,7 @@ export const mainReducer = (
       lfo: LFOReducer(lfo, action as LFO_SettingsActions),
       filter,
       delay,
+      reverb,
     };
   } else if (
     Object.values(Filter_ActionTypes).includes(
@@ -101,6 +117,7 @@ export const mainReducer = (
       lfo,
       filter: filterReducer(filter, action as Filter_SettingsActions),
       delay,
+      reverb,
     };
   } else if (
     Object.values(Delay_ActionTypes).includes(action.type as Delay_ActionTypes)
@@ -112,6 +129,21 @@ export const mainReducer = (
       lfo,
       filter,
       delay: delayReducer(delay, action as Delay_SettingsActions),
+      reverb,
+    };
+  } else if (
+    Object.values(Reverb_ActionTypes).includes(
+      action.type as Reverb_ActionTypes,
+    )
+  ) {
+    return {
+      master,
+      oscillators,
+      envelope,
+      lfo,
+      filter,
+      delay,
+      reverb: reverbReducer(reverb, action as Reverb_SettingsActions),
     };
   } else if (
     Object.values(Oscillator_TriggerActionsTypes).includes(
@@ -131,5 +163,6 @@ export const mainReducer = (
     lfo,
     filter,
     delay,
+    reverb,
   };
 };

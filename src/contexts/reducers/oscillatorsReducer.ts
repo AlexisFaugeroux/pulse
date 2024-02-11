@@ -1,10 +1,11 @@
 import { audioContext, oscAGain, oscBGain } from '../../nodesConfig';
 import { OscSettings } from '../../types/types';
+import { TIME_CONSTANT } from '../../utils/constants';
+import { roundTwoDigitsNonFinite } from '../../utils/helpers';
 import {
   Oscillator_SettingsActionTypes,
   type Oscillator_SettingsActions,
 } from '../types';
-import { TIME_CONSTANT, roundTwoDigitsNonFinite } from './helpers';
 import { currentOscillators } from './oscillatorTriggerReducer';
 
 const oscillatorsReducer = (

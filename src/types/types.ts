@@ -36,6 +36,15 @@ export type DelaySettings = {
   mixGain: number;
 };
 
+export type ReverbSettings = {
+  isActive: boolean;
+  time: number;
+  decay: number;
+  dryGain: number;
+  wetGain: number;
+  mixGain: number;
+};
+
 export type InitialSettingsState = {
   oscillators: {
     oscillatorA: OscSettings;
@@ -50,6 +59,7 @@ export type InitialSettingsState = {
   };
   filter: FilterSettings;
   delay: DelaySettings;
+  reverb: ReverbSettings;
   master: {
     gain: number;
   };
