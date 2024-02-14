@@ -18,13 +18,13 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     oscAGain.connect(filter.node);
     oscBGain.connect(filter.node);
 
-    // Filter
-    filter.connect(delay.dryGain);
-    filter.connect(delay.node);
-
     // LFO
     lfo.connect(oscAGain.gain);
     lfo.connect(oscBGain.gain);
+
+    // Filter
+    filter.connect(delay.dryGain);
+    filter.connect(delay.node);
 
     // Delay
     delay.connect(reverb.dryGain);

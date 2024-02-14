@@ -80,15 +80,11 @@ export const masterGain = audioContext.createGain();
 export const oscAGain = audioContext.createGain();
 export const oscBGain = audioContext.createGain();
 
-// LFO
-export const lfo = new LFO(
-  audioContext,
-  initialSettings.lfo.type,
-  initialSettings.lfo.frequency,
-);
-
 // Filter
 export const filter = new Filter(audioContext);
+
+// LFO
+export const lfo = new LFO(audioContext);
 
 // Delay
 export const delay = new Delay(audioContext);

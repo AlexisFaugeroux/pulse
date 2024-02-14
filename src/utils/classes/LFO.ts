@@ -1,29 +1,27 @@
+import { initialSettings, oscAGain, oscBGain } from '../../nodesConfig';
 import { TIME_CONSTANT } from '../constants';
-import { linearToLogarithmRange, roundTwoDigits } from '../helpers';
+import { linearToLinearRange, roundTwoDigits } from '../helpers';
 
 export default class LFO {
   node;
   easing;
   mixGain;
 
-  constructor(
-    public audioContext: AudioContext,
-    public type: OscillatorType,
-    public frequency: number,
-  ) {
+  constructor(public audioContext: AudioContext) {
     this.audioContext = audioContext;
     this.node = this.audioContext.createOscillator();
-    this.node.type = type;
-    this.node.frequency.value = frequency;
+    this.node.type = initialSettings.lfo.type;
+    this.node.frequency.value = initialSettings.lfo.frequency;
     this.easing = 0.006;
 
     this.mixGain = this.audioContext.createGain();
+    this.mixGain.gain.value = initialSettings.lfo.gain;
 
     this.wireUp();
     this.node.start();
   }
 
-  connect(destination: AudioNode) {
+  connect(destination: AudioParam) {
     this.mixGain.connect(destination);
   }
 
@@ -36,6 +34,9 @@ export default class LFO {
       gain,
       this.audioContext.currentTime + TIME_CONSTANT,
     );
+
+    this.mixGain.connect(oscAGain.gain);
+    this.mixGain.connect(oscBGain.gain);
   }
 
   deactivate() {
@@ -43,21 +44,16 @@ export default class LFO {
       0,
       this.audioContext.currentTime + TIME_CONSTANT,
     );
+
     this.mixGain.disconnect();
   }
 
   setRate(value: number) {
-    const convertedValue = linearToLogarithmRange({
-      base: 10,
-      value: value,
-      linearRange: [0, 1],
-      logarithmicRange: [0.1, 20],
-    });
+    const convertedValue = linearToLinearRange(value, [0.1, 12]);
 
-    this.node.frequency.setTargetAtTime(
+    this.node.frequency.setValueAtTime(
       convertedValue,
-      this.audioContext.currentTime,
-      TIME_CONSTANT,
+      this.audioContext.currentTime + TIME_CONSTANT,
     );
   }
 
