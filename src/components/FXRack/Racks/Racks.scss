@@ -17,6 +17,14 @@
     background-color: v.$transparentBackground;
     overflow: hidden;
     transition: 0.5s;
+
+    .push-buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      margin-right: 12px;
+    }
+
     .line {
       position: absolute;
       display: block;
@@ -169,6 +177,7 @@
       letter-spacing: -0.7px;
       cursor: grab;
     }
+
     .rack-button:hover {
       border: 2px solid v.$lightGrey;
     }
@@ -258,7 +267,7 @@
     .rack-knobs {
       display: flex;
       gap: 15px;
-      margin-left: 30px;
+      margin-left: 25px;
     }
   }
 }

@@ -7,8 +7,6 @@ export const roundTwoDigitsNonFinite = (n: number) => {
 };
 
 export function linearToLinearRange(value: number, newRange: [number, number]) {
-  if (newRange[0] < -40 || newRange[1] > 40) return value;
-
   const newRangeDistance = newRange[1] - newRange[0];
   return value * newRangeDistance + newRange[0];
 }

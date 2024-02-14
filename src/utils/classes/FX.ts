@@ -44,6 +44,7 @@ export default class FX {
 
   activate({ dryValue, wetValue }: { dryValue: number; wetValue: number }) {
     const { currentTime } = this.audioContext;
+
     this.dryGain.gain.setValueAtTime(dryValue, currentTime + TIME_CONSTANT);
     this.wetGain.gain.setValueAtTime(wetValue, currentTime + TIME_CONSTANT);
     this.wetGain.connect(this.mixGain);

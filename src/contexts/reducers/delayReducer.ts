@@ -8,7 +8,7 @@ const delayReducer = (
 ): DelaySettings => {
   switch (action.type) {
     case Delay_ActionTypes.Activate:
-      delay.activate({ dryValue: state.dryGain, wetValue: state.wetGain });
+      delay.activate({ dryValue: 1 - state.wetGain, wetValue: state.wetGain });
 
       return {
         ...state,

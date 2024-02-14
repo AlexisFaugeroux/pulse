@@ -1,8 +1,10 @@
 import { InitialSettingsState } from './types/types';
 import Delay from './utils/classes/Delay';
+import Distortion from './utils/classes/Distortion';
 import Filter from './utils/classes/Filter';
 import LFO from './utils/classes/LFO';
 import Reverb from './utils/classes/Reverb';
+import { DistortionType } from './utils/constants';
 
 export const initialSettings: InitialSettingsState = {
   oscillators: {
@@ -46,6 +48,14 @@ export const initialSettings: InitialSettingsState = {
     wetGain: 1,
     mixGain: 1,
   },
+  distortion: {
+    isActive: false,
+    type: DistortionType.SOFT,
+    drive: 0.25,
+    dryGain: 1,
+    wetGain: 0,
+    mixGain: 1,
+  },
   delay: {
     isActive: false,
     time: 0.4,
@@ -85,6 +95,9 @@ export const filter = new Filter(audioContext);
 
 // LFO
 export const lfo = new LFO(audioContext);
+
+// Distortion
+export const distortion = new Distortion(audioContext);
 
 // Delay
 export const delay = new Delay(audioContext);

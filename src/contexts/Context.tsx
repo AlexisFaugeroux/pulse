@@ -10,6 +10,7 @@ import type {
   Oscillator_SettingsActions,
   Oscillator_TriggerActions,
 } from './types';
+import { Distortion_SettingsActions } from './types/distortion';
 import { Master_Actions } from './types/master';
 import { Reverb_SettingsActions } from './types/reverb';
 
@@ -23,6 +24,7 @@ const SettingsContext = createContext<{
     | Envelope_SettingsActions
     | LFO_SettingsActions
     | Filter_SettingsActions
+    | Distortion_SettingsActions
     | Delay_SettingsActions
     | Reverb_SettingsActions
   >;

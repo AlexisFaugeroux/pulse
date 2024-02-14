@@ -336,4 +336,10 @@ export enum FXs {
   COMPRESSOR = 'compressor',
 }
 
+export enum DistortionType {
+  SOFT = 'soft clip',
+  HARD = 'hard clip',
+  BITCRUSHER = 'bitcrusher',
+}
+
 export const TIME_CONSTANT = 0.01;

@@ -1,5 +1,6 @@
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
+import { Distortion_ActionTypes } from '../../../contexts/types/distortion';
 import {
   Delay_ActionTypes,
   Envelope_ActionTypes,
@@ -114,6 +115,11 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
     } else if (parent === 'filter') {
       dispatch({
         type: Filter_ActionTypes.UpdateSettings,
+        payload: { id: label, value },
+      });
+    } else if (parent === FXs.DISTORTION) {
+      dispatch({
+        type: Distortion_ActionTypes.UpdateSettings,
         payload: { id: label, value },
       });
     } else if (parent === FXs.DELAY) {

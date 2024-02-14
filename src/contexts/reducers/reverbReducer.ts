@@ -10,7 +10,7 @@ const reverbReducer = (
 
   switch (action.type) {
     case Reverb_ActionTypes.Activate:
-      reverb.activate({ dryValue: state.dryGain, wetValue: state.wetGain });
+      reverb.activate({ dryValue: 1 - state.wetGain, wetValue: state.wetGain });
 
       return {
         ...state,

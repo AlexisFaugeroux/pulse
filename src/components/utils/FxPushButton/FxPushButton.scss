@@ -1,0 +1,51 @@
+@use '../../../styles/variables' as v;
+
+.fx-push-button {
+  display: flex;
+  align-items: center;
+  height: 21px;
+
+  .fx-button-wrapper {
+    display: flex;
+    border: 1px solid v.$mainBlue;
+    border-bottom: 4px solid v.$mainBlue;
+    border-radius: 0.4rem;
+    background-color: v.$darkGrey;
+
+    .fx-button-light {
+      background-image: url('src/assets/octave-light-switch-inactive.png');
+      background-size: cover;
+      border-radius: 5px;
+      cursor: grab;
+      border: none;
+      width: 12px;
+      height: 12px;
+      margin: 2px;
+    }
+
+    .fx-button-light__distortion__active {
+      background-image: url('src/assets/distortion-light-active.png');
+    }
+  }
+
+  .fx-button-wrapper:hover {
+    border: 1px solid v.$mainBlue;
+    border-bottom: 2px solid v.$mainBlue;
+  }
+
+  .fx-button-wrapper__distortion__active {
+    border: 1px solid v.$distortionColor;
+    border-bottom: 4px solid v.$distortionColor;
+  }
+}
+
+h2 {
+  color: v.$lowerTextColor;
+  font-size: x-small;
+  letter-spacing: 1px;
+  margin-left: 7px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}

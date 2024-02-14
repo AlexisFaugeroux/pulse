@@ -15,8 +15,13 @@ import {
   type Oscillator_TriggerActions,
   type Reverb_SettingsActions,
 } from '../types';
+import {
+  Distortion_ActionTypes,
+  Distortion_SettingsActions,
+} from '../types/distortion';
 import { Master_ActionTypes, Master_Actions } from '../types/master';
 import delayReducer from './delayReducer';
+import distortionReducer from './distortionReducer';
 import envelopeReducer from './envelopeReducer';
 import filterReducer from './filterReducer';
 import LFOReducer from './lfoReducer';
@@ -32,6 +37,7 @@ export const mainReducer = (
     envelope,
     lfo,
     filter,
+    distortion,
     delay,
     reverb,
   }: InitialSettingsState,
@@ -43,6 +49,7 @@ export const mainReducer = (
     | Envelope_SettingsActions
     | LFO_SettingsActions
     | Filter_SettingsActions
+    | Distortion_SettingsActions
     | Delay_SettingsActions
     | Reverb_SettingsActions,
 ): InitialSettingsState => {
@@ -57,6 +64,7 @@ export const mainReducer = (
       envelope,
       lfo,
       filter,
+      distortion,
       delay,
       reverb,
     };
@@ -74,6 +82,7 @@ export const mainReducer = (
       envelope,
       lfo,
       filter,
+      distortion,
       delay,
       reverb,
     };
@@ -88,6 +97,7 @@ export const mainReducer = (
       envelope: envelopeReducer(envelope, action as Envelope_SettingsActions),
       lfo,
       filter,
+      distortion,
       delay,
       reverb,
     };
@@ -102,6 +112,7 @@ export const mainReducer = (
       envelope,
       lfo: LFOReducer(lfo, action as LFO_SettingsActions),
       filter,
+      distortion,
       delay,
       reverb,
     };
@@ -116,6 +127,25 @@ export const mainReducer = (
       envelope,
       lfo,
       filter: filterReducer(filter, action as Filter_SettingsActions),
+      distortion,
+      delay,
+      reverb,
+    };
+  } else if (
+    Object.values(Distortion_ActionTypes).includes(
+      action.type as Distortion_ActionTypes,
+    )
+  ) {
+    return {
+      master,
+      oscillators,
+      envelope,
+      lfo,
+      filter,
+      distortion: distortionReducer(
+        distortion,
+        action as Distortion_SettingsActions,
+      ),
       delay,
       reverb,
     };
@@ -128,6 +158,7 @@ export const mainReducer = (
       envelope,
       lfo,
       filter,
+      distortion,
       delay: delayReducer(delay, action as Delay_SettingsActions),
       reverb,
     };
@@ -142,6 +173,7 @@ export const mainReducer = (
       envelope,
       lfo,
       filter,
+      distortion,
       delay,
       reverb: reverbReducer(reverb, action as Reverb_SettingsActions),
     };
@@ -162,6 +194,7 @@ export const mainReducer = (
     envelope,
     lfo,
     filter,
+    distortion,
     delay,
     reverb,
   };

@@ -1,3 +1,5 @@
+import { DistortionType } from '../utils/constants';
+
 export type OscSettings = {
   id: 'oscillatorA' | 'oscillatorB';
   isActive: boolean;
@@ -22,6 +24,15 @@ export type FilterSettings = {
   gain: number;
   Q: number;
   type: BiquadFilterType;
+  dryGain: number;
+  wetGain: number;
+  mixGain: number;
+};
+
+export type DistortionSettings = {
+  isActive: boolean;
+  type: DistortionType;
+  drive: number;
   dryGain: number;
   wetGain: number;
   mixGain: number;
@@ -58,6 +69,7 @@ export type InitialSettingsState = {
     gain: number;
   };
   filter: FilterSettings;
+  distortion: DistortionSettings;
   delay: DelaySettings;
   reverb: ReverbSettings;
   master: {

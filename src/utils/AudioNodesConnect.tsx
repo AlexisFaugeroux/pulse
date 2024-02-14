@@ -2,6 +2,7 @@ import { FC, PropsWithChildren, useEffect } from 'react';
 import {
   audioContextOutput,
   delay,
+  distortion,
   filter,
   lfo,
   masterGain,
@@ -23,8 +24,12 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     lfo.connect(oscBGain.gain);
 
     // Filter
-    filter.connect(delay.dryGain);
-    filter.connect(delay.node);
+    filter.connect(distortion.dryGain);
+    filter.connect(distortion.node);
+
+    // Distortion
+    distortion.connect(delay.dryGain);
+    distortion.connect(delay.node);
 
     // Delay
     delay.connect(reverb.dryGain);
