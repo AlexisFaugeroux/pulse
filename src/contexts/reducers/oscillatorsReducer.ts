@@ -42,7 +42,7 @@ const oscillatorsReducer = (
       };
 
     case Oscillator_SettingsActionTypes.UpdateSettings:
-      if (!id || !newValue || !parent) {
+      if (!id || newValue === undefined || !parent) {
         console.error(
           'Update oscillator settings: no id, value or parent component provided',
         );

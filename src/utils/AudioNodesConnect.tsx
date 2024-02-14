@@ -3,10 +3,10 @@ import {
   audioContextOutput,
   delay,
   filter,
+  lfo,
   masterGain,
   oscAGain,
   oscBGain,
-  oscLFOGain,
   reverb,
 } from '../nodesConfig';
 
@@ -23,8 +23,8 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     filter.connect(delay.node);
 
     // LFO
-    oscLFOGain.connect(oscAGain.gain);
-    oscLFOGain.connect(oscBGain.gain);
+    lfo.connect(oscAGain.gain);
+    lfo.connect(oscBGain.gain);
 
     // Delay
     delay.connect(reverb.dryGain);

@@ -1,7 +1,6 @@
 import { EnvelopeSettings } from '../../types/types';
-import { linearToLinearRange } from '../../utils/helpers';
 import { Envelope_ActionTypes, Envelope_SettingsActions } from '../types';
-import { updateEnvelopeActiveOsc } from './helpers';
+import { currentOscillators } from './oscillatorTriggerReducer';
 
 const envelopeReducer = (
   state: EnvelopeSettings,
@@ -18,19 +17,26 @@ const envelopeReducer = (
       const { id, value } = action.payload;
       if (!id || !value) return { ...state };
 
-      if (id === 'attack' || id === 'release') {
-        const convertedValue = linearToLinearRange(value, [0, 8]);
-        updateEnvelopeActiveOsc(id, convertedValue);
-        return { ...state, [id]: convertedValue };
+      if (id === 'attack') {
+        currentOscillators.forEach((oscillator) => oscillator.setAttack(value));
+        return { ...state, attack: value };
       }
       if (id === 'decay') {
-        const convertedValue = linearToLinearRange(value, [0, 5]);
-        updateEnvelopeActiveOsc(id, convertedValue);
-        return { ...state, [id]: convertedValue };
+        currentOscillators.forEach((oscillator) => oscillator.setDecay(value));
+        return { ...state, [id]: value };
       }
 
       if (id === 'sustain') {
-        updateEnvelopeActiveOsc(id, value);
+        currentOscillators.forEach((oscillator) =>
+          oscillator.setSustain(value),
+        );
+        return { ...state, [id]: value };
+      }
+
+      if (id === 'release') {
+        currentOscillators.forEach((oscillator) =>
+          oscillator.setRelease(value),
+        );
         return { ...state, [id]: value };
       }
       return { ...state };

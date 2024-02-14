@@ -1,6 +1,7 @@
 import { InitialSettingsState } from './types/types';
 import Delay from './utils/classes/Delay';
 import Filter from './utils/classes/Filter';
+import LFO from './utils/classes/LFO';
 import Reverb from './utils/classes/Reverb';
 
 export const initialSettings: InitialSettingsState = {
@@ -62,7 +63,7 @@ export const initialSettings: InitialSettingsState = {
     mixGain: 1,
   },
   master: {
-    gain: 0.6,
+    gain: 0.3,
   },
 };
 
@@ -75,12 +76,16 @@ export const audioContextOutput = audioContext.destination;
 // Master
 export const masterGain = audioContext.createGain();
 
-// Oscillator
+// Oscillators
 export const oscAGain = audioContext.createGain();
 export const oscBGain = audioContext.createGain();
 
 // LFO
-export const oscLFOGain = audioContext.createGain();
+export const lfo = new LFO(
+  audioContext,
+  initialSettings.lfo.type,
+  initialSettings.lfo.frequency,
+);
 
 // Filter
 export const filter = new Filter(audioContext);

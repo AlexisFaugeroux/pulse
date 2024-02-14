@@ -1,5 +1,6 @@
 import { EnvelopeSettings } from '../../types/types';
 import { NOTES } from '../constants';
+import { linearToLinearRange } from '../helpers';
 
 export default class Oscillator {
   constructor(
@@ -91,6 +92,25 @@ export default class Oscillator {
     setTimeout(() => {
       this.node.disconnect();
     }, 12000);
+  }
+
+  setAttack(value: number) {
+    const convertedValue = linearToLinearRange(value, [0, 8]);
+    this.envelope.attack = convertedValue;
+  }
+
+  setDecay(value: number) {
+    const convertedValue = linearToLinearRange(value, [0, 5]);
+    this.envelope.decay = convertedValue;
+  }
+
+  setSustain(value: number) {
+    this.envelope.sustain = value;
+  }
+
+  setRelease(value: number) {
+    const convertedValue = linearToLinearRange(value, [0, 8]);
+    this.envelope.release = convertedValue;
   }
 
   octaveShift(
