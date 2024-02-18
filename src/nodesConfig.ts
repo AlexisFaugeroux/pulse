@@ -3,6 +3,7 @@ import Delay from './utils/classes/Delay';
 import Distortion from './utils/classes/Distortion';
 import Filter from './utils/classes/Filter';
 import LFO from './utils/classes/LFO';
+import Limiter from './utils/classes/Limiter';
 import Reverb from './utils/classes/Reverb';
 import { DistortionType } from './utils/constants';
 
@@ -73,7 +74,7 @@ export const initialSettings: InitialSettingsState = {
     mixGain: 1,
   },
   master: {
-    gain: 0.3,
+    gain: 0.6,
   },
 };
 
@@ -104,3 +105,6 @@ export const delay = new Delay(audioContext);
 
 // Reverb
 export const reverb = new Reverb(audioContext);
+
+// Limiter
+export const limiter = new Limiter(audioContext);

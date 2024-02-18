@@ -35,7 +35,7 @@ const FxPushButton: FC<FxPushButtonProps> = ({
           onClick={() => setActivePush(label)}
         />
       </div>
-      <h2>{label.toUpperCase()}</h2>
+      <h2 className="fx-push-button-label">{label.toUpperCase()}</h2>
     </div>
   );
 };

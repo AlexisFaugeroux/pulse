@@ -5,6 +5,7 @@ import {
   distortion,
   filter,
   lfo,
+  limiter,
   masterGain,
   oscAGain,
   oscBGain,
@@ -36,7 +37,11 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     delay.connect(reverb.node);
 
     // Reverb
-    reverb.connect(masterGain);
+    reverb.connect(limiter.node);
+    // reverb.connect(masterGain);
+
+    // Limiter
+    limiter.connect(masterGain);
 
     // Output
     masterGain.connect(audioContextOutput);
