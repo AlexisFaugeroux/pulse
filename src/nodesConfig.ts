@@ -1,4 +1,5 @@
 import { InitialSettingsState } from './types/types';
+import Analyser from './utils/classes/Analyser';
 import Delay from './utils/classes/Delay';
 import Distortion from './utils/classes/Distortion';
 import Filter from './utils/classes/Filter';
@@ -15,7 +16,7 @@ export const initialSettings: InitialSettingsState = {
       type: 'sine',
       octaveOffset: 0,
       detune: 0,
-      gain: 0.7,
+      gain: 0.3,
     },
     oscillatorB: {
       id: 'oscillatorB',
@@ -23,7 +24,7 @@ export const initialSettings: InitialSettingsState = {
       type: 'sine',
       octaveOffset: 0,
       detune: 0,
-      gain: 0.7,
+      gain: 0.3,
     },
   },
   envelope: {
@@ -74,7 +75,7 @@ export const initialSettings: InitialSettingsState = {
     mixGain: 1,
   },
   master: {
-    gain: 0.6,
+    gain: 0.3,
   },
 };
 
@@ -108,3 +109,6 @@ export const reverb = new Reverb(audioContext);
 
 // Limiter
 export const limiter = new Limiter(audioContext);
+
+// Analyzer
+export const analyser = new Analyser(audioContext);

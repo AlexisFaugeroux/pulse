@@ -5,8 +5,8 @@ export default class Limiter {
     const { currentTime } = audioContext;
 
     this.node = audioContext.createDynamicsCompressor();
-    this.node.threshold.setValueAtTime(-40, currentTime);
-    this.node.knee.setValueAtTime(0, currentTime);
+    this.node.threshold.setValueAtTime(-12, currentTime);
+    this.node.knee.setValueAtTime(30, currentTime);
     this.node.ratio.setValueAtTime(20, currentTime);
     this.node.attack.setValueAtTime(0, currentTime);
     this.node.release.setValueAtTime(0.1, currentTime);

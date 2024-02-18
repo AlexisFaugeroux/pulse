@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, useEffect } from 'react';
 import {
+  analyser,
   audioContextOutput,
   delay,
   distortion,
@@ -43,8 +44,11 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     // Limiter
     limiter.connect(masterGain);
 
-    // Output
-    masterGain.connect(audioContextOutput);
+    // Master
+    masterGain.connect(analyser.node);
+
+    // Analyser
+    analyser.connect(audioContextOutput);
   }, []);
 
   return <>{children}</>;

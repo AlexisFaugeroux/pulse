@@ -49,7 +49,7 @@ export default class LFO {
   }
 
   setRate(value: number) {
-    const convertedValue = linearToLinearRange(value, [0.1, 12]);
+    const convertedValue = linearToLinearRange(value, [0.1, 15]);
 
     this.node.frequency.setValueAtTime(
       convertedValue,

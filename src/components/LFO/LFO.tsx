@@ -13,7 +13,7 @@ const LFO: FC = () => {
   const { dispatch } = useContext(SettingsContext);
   const [isActive, setIsActive] = useState(false);
 
-  const waves = [Waves.SINE, Waves.TRIANGLE, Waves.SAWTOOTH, Waves.SQUARE];
+  const waves = [Waves.SINE, Waves.SQUARE];
   const { lfo } = initialSettings;
 
   useEffect(() => {
