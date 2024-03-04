@@ -13,6 +13,7 @@ import type {
 import { Distortion_SettingsActions } from './types/distortion';
 import { Master_Actions } from './types/master';
 import { Reverb_SettingsActions } from './types/reverb';
+import { Compressor_SettingsActions } from './types/compressor';
 
 const SettingsContext = createContext<{
   state: InitialSettingsState;
@@ -27,6 +28,7 @@ const SettingsContext = createContext<{
     | Distortion_SettingsActions
     | Delay_SettingsActions
     | Reverb_SettingsActions
+    | Compressor_SettingsActions
   >;
 }>({
   state: initialSettings,

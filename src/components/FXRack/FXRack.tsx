@@ -3,6 +3,7 @@ import './FXRack.scss';
 import DelayRack from './Racks/DelayRack';
 import DistortionRack from './Racks/DistortionRack';
 import ReverbRack from './Racks/ReverbRack';
+import CompressorRack from './Racks/CompressorRack';
 
 const FXRack: FC = () => {
   return (
@@ -14,6 +15,7 @@ const FXRack: FC = () => {
       <DistortionRack />
       <DelayRack />
       <ReverbRack />
+      <CompressorRack />
     </div>
   );
 };

@@ -14,12 +14,15 @@ import {
   type Oscillator_SettingsActions,
   type Oscillator_TriggerActions,
   type Reverb_SettingsActions,
+  type Compressor_SettingsActions,
+  Compressor_ActionTypes,
 } from '../types';
 import {
   Distortion_ActionTypes,
   Distortion_SettingsActions,
 } from '../types/distortion';
 import { Master_ActionTypes, Master_Actions } from '../types/master';
+import compressorReducer from './compressorReducer';
 import delayReducer from './delayReducer';
 import distortionReducer from './distortionReducer';
 import envelopeReducer from './envelopeReducer';
@@ -40,6 +43,7 @@ export const mainReducer = (
     distortion,
     delay,
     reverb,
+    compressor,
   }: InitialSettingsState,
 
   action:
@@ -51,7 +55,8 @@ export const mainReducer = (
     | Filter_SettingsActions
     | Distortion_SettingsActions
     | Delay_SettingsActions
-    | Reverb_SettingsActions,
+    | Reverb_SettingsActions
+    | Compressor_SettingsActions,
 ): InitialSettingsState => {
   if (
     Object.values(Master_ActionTypes).includes(
@@ -67,6 +72,7 @@ export const mainReducer = (
       distortion,
       delay,
       reverb,
+      compressor,
     };
   } else if (
     Object.values(Oscillator_SettingsActionTypes).includes(
@@ -85,6 +91,7 @@ export const mainReducer = (
       distortion,
       delay,
       reverb,
+      compressor,
     };
   } else if (
     Object.values(Envelope_ActionTypes).includes(
@@ -100,6 +107,7 @@ export const mainReducer = (
       distortion,
       delay,
       reverb,
+      compressor,
     };
   } else if (
     Object.values(LFO_SettingsActionTypes).includes(
@@ -115,6 +123,7 @@ export const mainReducer = (
       distortion,
       delay,
       reverb,
+      compressor,
     };
   } else if (
     Object.values(Filter_ActionTypes).includes(
@@ -130,6 +139,7 @@ export const mainReducer = (
       distortion,
       delay,
       reverb,
+      compressor,
     };
   } else if (
     Object.values(Distortion_ActionTypes).includes(
@@ -148,6 +158,7 @@ export const mainReducer = (
       ),
       delay,
       reverb,
+      compressor,
     };
   } else if (
     Object.values(Delay_ActionTypes).includes(action.type as Delay_ActionTypes)
@@ -161,6 +172,7 @@ export const mainReducer = (
       distortion,
       delay: delayReducer(delay, action as Delay_SettingsActions),
       reverb,
+      compressor,
     };
   } else if (
     Object.values(Reverb_ActionTypes).includes(
@@ -176,6 +188,26 @@ export const mainReducer = (
       distortion,
       delay,
       reverb: reverbReducer(reverb, action as Reverb_SettingsActions),
+      compressor,
+    };
+  } else if (
+    Object.values(Compressor_ActionTypes).includes(
+      action.type as Compressor_ActionTypes,
+    )
+  ) {
+    return {
+      master,
+      oscillators,
+      envelope,
+      lfo,
+      filter,
+      distortion,
+      delay,
+      reverb,
+      compressor: compressorReducer(
+        compressor,
+        action as Compressor_SettingsActions,
+      ),
     };
   } else if (
     Object.values(Oscillator_TriggerActionsTypes).includes(
@@ -197,5 +229,6 @@ export const mainReducer = (
     distortion,
     delay,
     reverb,
+    compressor,
   };
 };

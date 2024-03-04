@@ -1,9 +1,9 @@
 import { ActionMap } from './helpers';
 
 enum Delay_ActionTypes {
-  Activate = 'Delay_ACTIVATE',
-  Deactivate = 'Delay_DEACTIVATE',
-  UpdateSettings = 'Delay_UPDATE_SETTINGS',
+  Activate = 'DELAY_ACTIVATE',
+  Deactivate = 'DELAY_DEACTIVATE',
+  UpdateSettings = 'DELAY_UPDATE_SETTINGS',
 }
 
 type Delay_SettingsPayload = {

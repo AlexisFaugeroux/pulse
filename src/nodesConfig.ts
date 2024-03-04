@@ -1,5 +1,6 @@
 import { InitialSettingsState } from './types/types';
 import Analyser from './utils/classes/Analyser';
+import Compressor from './utils/classes/Compressor';
 import Delay from './utils/classes/Delay';
 import Distortion from './utils/classes/Distortion';
 import Filter from './utils/classes/Filter';
@@ -74,6 +75,17 @@ export const initialSettings: InitialSettingsState = {
     wetGain: 0,
     mixGain: 1,
   },
+  compressor: {
+    isActive: false,
+    threshold: 0.76,
+    knee: 0.3,
+    ratio: 0.58,
+    attack: 0.1,
+    release: 0.25,
+    dryGain: 1,
+    wetGain: 0,
+    mixGain: 1,
+  },
   master: {
     gain: 0.3,
   },
@@ -106,6 +118,9 @@ export const delay = new Delay(audioContext);
 
 // Reverb
 export const reverb = new Reverb(audioContext);
+
+// Compressor
+export const compressor = new Compressor(audioContext);
 
 // Limiter
 export const limiter = new Limiter(audioContext);

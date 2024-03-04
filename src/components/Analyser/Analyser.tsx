@@ -1,6 +1,6 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import activeIcon from '../../assets/main-light-switch-on.png';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import inactiveIcon from '../../assets/main-light-switch-off.png';
+import activeIcon from '../../assets/main-light-switch-on.png';
 import { analyser } from '../../nodesConfig';
 import AnalyserClass from '../../utils/classes/Analyser';
 import './Analyser.scss';
@@ -9,48 +9,51 @@ const Analyser: FC = () => {
   const [analyserMode, setAnalyserMode] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const render = (analyser: AnalyserClass) => {
-    const canvas = canvasRef.current;
-    if (!canvas) throw new Error('Analyser canvas is null');
+  const render = useCallback(
+    (analyser: AnalyserClass) => {
+      const canvas = canvasRef.current;
+      if (!canvas) throw new Error('Analyser canvas is null');
 
-    const canvasCtx = canvas.getContext('2d');
+      const canvasCtx = canvas.getContext('2d');
 
-    if (!canvasCtx) throw new Error('Analyser canvas context is null');
+      if (!canvasCtx) throw new Error('Analyser canvas context is null');
 
-    const animate = () => {
-      const backgroundRadialGradient = canvasCtx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height / 2,
-        10,
-        canvas.width / 2,
-        canvas.height / 2,
-        200,
-      );
-      backgroundRadialGradient.addColorStop(0, 'rgb(26,26,26)');
-      backgroundRadialGradient.addColorStop(1, '#000000');
+      const animate = () => {
+        const backgroundRadialGradient = canvasCtx.createRadialGradient(
+          canvas.width / 2,
+          canvas.height / 2,
+          10,
+          canvas.width / 2,
+          canvas.height / 2,
+          200,
+        );
+        backgroundRadialGradient.addColorStop(0, 'rgb(26,26,26)');
+        backgroundRadialGradient.addColorStop(1, '#000000');
 
-      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-      canvasCtx.fillStyle = backgroundRadialGradient;
-      canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+        canvasCtx.fillStyle = backgroundRadialGradient;
+        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
-      requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
 
-      if (analyserMode === 0) return;
+        if (analyserMode === 0) return;
 
-      if (analyserMode === -1) {
-        analyser.drawFrequencyVisualiser(canvas, canvasCtx);
-      }
-      if (analyserMode === 1) {
-        analyser.drawWaveformVisualiser(canvas, canvasCtx);
-      }
-    };
+        if (analyserMode === -1) {
+          analyser.drawFrequencyVisualiser(canvas, canvasCtx);
+        }
+        if (analyserMode === 1) {
+          analyser.drawWaveformVisualiser(canvas, canvasCtx);
+        }
+      };
 
-    animate();
-  };
+      animate();
+    },
+    [analyserMode],
+  );
 
   useEffect(() => {
     render(analyser);
-  }, [analyserMode]);
+  }, [analyserMode, render]);
 
   return (
     <div className="analyser">

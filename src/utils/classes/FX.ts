@@ -5,7 +5,7 @@ import { roundTwoDigits } from '../helpers';
 
 type InitialSettingsStateFXs = Pick<
   InitialSettingsState,
-  'delay' | 'filter' | 'reverb'
+  'delay' | 'filter' | 'reverb' | 'compressor'
 >;
 
 export default class FX {
@@ -21,6 +21,7 @@ export default class FX {
       delay: initialSettings.delay,
       filter: initialSettings.filter,
       reverb: initialSettings.reverb,
+      compressor: initialSettings.compressor,
     };
 
     this.audioContext = audioContext;

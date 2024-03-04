@@ -2,6 +2,7 @@ import { FC, PropsWithChildren, useEffect } from 'react';
 import {
   analyser,
   audioContextOutput,
+  compressor,
   delay,
   distortion,
   filter,
@@ -38,8 +39,11 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     delay.connect(reverb.node);
 
     // Reverb
-    reverb.connect(limiter.node);
-    // reverb.connect(masterGain);
+    reverb.connect(compressor.dryGain);
+    reverb.connect(compressor.node);
+
+    // Compressor
+    compressor.connect(limiter.node);
 
     // Limiter
     limiter.connect(masterGain);

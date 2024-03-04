@@ -56,6 +56,18 @@ export type ReverbSettings = {
   mixGain: number;
 };
 
+export type CompressorSettings = {
+  isActive: boolean;
+  threshold: number;
+  knee: number;
+  ratio: number;
+  attack: number;
+  release: number;
+  dryGain: number;
+  wetGain: number;
+  mixGain: number;
+};
+
 export type InitialSettingsState = {
   oscillators: {
     oscillatorA: OscSettings;
@@ -72,6 +84,7 @@ export type InitialSettingsState = {
   distortion: DistortionSettings;
   delay: DelaySettings;
   reverb: ReverbSettings;
+  compressor: CompressorSettings;
   master: {
     gain: number;
   };
