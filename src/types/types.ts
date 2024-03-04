@@ -18,54 +18,55 @@ export type EnvelopeSettings = {
   release: number;
 };
 
-export type FilterSettings = {
+type BaseFxSettings = {
   isActive: boolean;
+  dryGain: number;
+  wetGain: number;
+  mixGain: number;
+};
+
+export type FilterSettings = BaseFxSettings & {
   frequency: number;
   gain: number;
   Q: number;
   type: BiquadFilterType;
-  dryGain: number;
-  wetGain: number;
-  mixGain: number;
 };
 
-export type DistortionSettings = {
-  isActive: boolean;
+export type DistortionSettings = BaseFxSettings & {
   type: DistortionType;
   drive: number;
-  dryGain: number;
-  wetGain: number;
-  mixGain: number;
 };
 
-export type DelaySettings = {
-  isActive: boolean;
+export type FlangerSettings = BaseFxSettings & {
+  delay: number;
+  feedback: number;
+  depth: number;
+  speed: number;
+};
+
+export type ChorusSettings = BaseFxSettings & {
+  delay: number;
+  feedback: number;
+  depth: number;
+  speed: number;
+};
+
+export type DelaySettings = BaseFxSettings & {
   time: number;
   feedback: number;
-  dryGain: number;
-  wetGain: number;
-  mixGain: number;
 };
 
-export type ReverbSettings = {
-  isActive: boolean;
+export type ReverbSettings = BaseFxSettings & {
   time: number;
   decay: number;
-  dryGain: number;
-  wetGain: number;
-  mixGain: number;
 };
 
-export type CompressorSettings = {
-  isActive: boolean;
+export type CompressorSettings = BaseFxSettings & {
   threshold: number;
   knee: number;
   ratio: number;
   attack: number;
   release: number;
-  dryGain: number;
-  wetGain: number;
-  mixGain: number;
 };
 
 export type InitialSettingsState = {
@@ -82,6 +83,8 @@ export type InitialSettingsState = {
   };
   filter: FilterSettings;
   distortion: DistortionSettings;
+  flanger: FlangerSettings;
+  chorus: ChorusSettings;
   delay: DelaySettings;
   reverb: ReverbSettings;
   compressor: CompressorSettings;

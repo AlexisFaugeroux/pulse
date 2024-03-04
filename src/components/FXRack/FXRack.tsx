@@ -1,9 +1,11 @@
 import { FC } from 'react';
 import './FXRack.scss';
+import ChorusRack from './Racks/ChorusRack';
+import CompressorRack from './Racks/CompressorRack';
 import DelayRack from './Racks/DelayRack';
 import DistortionRack from './Racks/DistortionRack';
+import FlangerRack from './Racks/FlangerRack';
 import ReverbRack from './Racks/ReverbRack';
-import CompressorRack from './Racks/CompressorRack';
 
 const FXRack: FC = () => {
   return (
@@ -13,6 +15,8 @@ const FXRack: FC = () => {
         <div className="line" />
       </div>
       <DistortionRack />
+      <FlangerRack />
+      <ChorusRack />
       <DelayRack />
       <ReverbRack />
       <CompressorRack />

@@ -1,12 +1,18 @@
 import { InitialSettingsState } from '../../types/types';
 import {
+  Chorus_ActionTypes,
+  Chorus_SettingsActions,
+  Compressor_ActionTypes,
   Delay_ActionTypes,
   Envelope_ActionTypes,
   Filter_ActionTypes,
+  Flanger_ActionTypes,
+  Flanger_SettingsActions,
   LFO_SettingsActionTypes,
   Oscillator_SettingsActionTypes,
   Oscillator_TriggerActionsTypes,
   Reverb_ActionTypes,
+  type Compressor_SettingsActions,
   type Delay_SettingsActions,
   type Envelope_SettingsActions,
   type Filter_SettingsActions,
@@ -14,19 +20,19 @@ import {
   type Oscillator_SettingsActions,
   type Oscillator_TriggerActions,
   type Reverb_SettingsActions,
-  type Compressor_SettingsActions,
-  Compressor_ActionTypes,
 } from '../types';
 import {
   Distortion_ActionTypes,
   Distortion_SettingsActions,
 } from '../types/distortion';
 import { Master_ActionTypes, Master_Actions } from '../types/master';
+import chorusReducer from './chorusReducer';
 import compressorReducer from './compressorReducer';
 import delayReducer from './delayReducer';
 import distortionReducer from './distortionReducer';
 import envelopeReducer from './envelopeReducer';
 import filterReducer from './filterReducer';
+import flangerReducer from './flangerReducer';
 import LFOReducer from './lfoReducer';
 import masterReducer from './masterReducer';
 import oscillatorTriggerReducer from './oscillatorTriggerReducer';
@@ -40,6 +46,8 @@ export const mainReducer = (
     envelope,
     lfo,
     filter,
+    flanger,
+    chorus,
     distortion,
     delay,
     reverb,
@@ -54,6 +62,8 @@ export const mainReducer = (
     | LFO_SettingsActions
     | Filter_SettingsActions
     | Distortion_SettingsActions
+    | Flanger_SettingsActions
+    | Chorus_SettingsActions
     | Delay_SettingsActions
     | Reverb_SettingsActions
     | Compressor_SettingsActions,
@@ -70,6 +80,8 @@ export const mainReducer = (
       lfo,
       filter,
       distortion,
+      flanger,
+      chorus,
       delay,
       reverb,
       compressor,
@@ -89,6 +101,8 @@ export const mainReducer = (
       lfo,
       filter,
       distortion,
+      flanger,
+      chorus,
       delay,
       reverb,
       compressor,
@@ -105,6 +119,8 @@ export const mainReducer = (
       lfo,
       filter,
       distortion,
+      flanger,
+      chorus,
       delay,
       reverb,
       compressor,
@@ -121,6 +137,8 @@ export const mainReducer = (
       lfo: LFOReducer(lfo, action as LFO_SettingsActions),
       filter,
       distortion,
+      flanger,
+      chorus,
       delay,
       reverb,
       compressor,
@@ -137,6 +155,8 @@ export const mainReducer = (
       lfo,
       filter: filterReducer(filter, action as Filter_SettingsActions),
       distortion,
+      flanger,
+      chorus,
       delay,
       reverb,
       compressor,
@@ -156,6 +176,44 @@ export const mainReducer = (
         distortion,
         action as Distortion_SettingsActions,
       ),
+      flanger,
+      chorus,
+      delay,
+      reverb,
+      compressor,
+    };
+  } else if (
+    Object.values(Flanger_ActionTypes).includes(
+      action.type as Flanger_ActionTypes,
+    )
+  ) {
+    return {
+      master,
+      oscillators,
+      envelope,
+      lfo,
+      filter,
+      distortion,
+      flanger: flangerReducer(flanger, action as Flanger_SettingsActions),
+      chorus,
+      delay,
+      reverb,
+      compressor,
+    };
+  } else if (
+    Object.values(Chorus_ActionTypes).includes(
+      action.type as Chorus_ActionTypes,
+    )
+  ) {
+    return {
+      master,
+      oscillators,
+      envelope,
+      lfo,
+      filter,
+      distortion,
+      flanger,
+      chorus: chorusReducer(chorus, action as Chorus_SettingsActions),
       delay,
       reverb,
       compressor,
@@ -170,6 +228,8 @@ export const mainReducer = (
       lfo,
       filter,
       distortion,
+      flanger,
+      chorus,
       delay: delayReducer(delay, action as Delay_SettingsActions),
       reverb,
       compressor,
@@ -186,6 +246,8 @@ export const mainReducer = (
       lfo,
       filter,
       distortion,
+      flanger,
+      chorus,
       delay,
       reverb: reverbReducer(reverb, action as Reverb_SettingsActions),
       compressor,
@@ -202,6 +264,8 @@ export const mainReducer = (
       lfo,
       filter,
       distortion,
+      flanger,
+      chorus,
       delay,
       reverb,
       compressor: compressorReducer(
@@ -227,6 +291,8 @@ export const mainReducer = (
     lfo,
     filter,
     distortion,
+    flanger,
+    chorus,
     delay,
     reverb,
     compressor,
