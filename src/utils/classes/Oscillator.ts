@@ -96,8 +96,6 @@ export default class Oscillator {
 
   setAttack(value: number) {
     const convertedValue = linearToLinearRange(value, [0, 8]);
-
-    console.log(convertedValue);
     this.envelope.attack = convertedValue;
   }
 

@@ -30,7 +30,7 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
   const dragResistance = 300 / (max - min);
   let dragStartPosition = 0;
 
-  const { dispatch } = useContext(SettingsContext);
+  const { state, dispatch } = useContext(SettingsContext);
   const [value, setValue] = useState(initialValue);
   const [isActiveDrag, setIsActiveDrag] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
@@ -119,10 +119,17 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
         payload: { id: label, value },
       });
     } else if (parent === FXs.DISTORTION) {
-      dispatch({
-        type: Distortion_ActionTypes.UpdateSettings,
-        payload: { id: label, value },
-      });
+      if (state.distortion.clipping.isActive) {
+        dispatch({
+          type: Distortion_ActionTypes.UpdateSettingsClipping,
+          payload: { id: label, value },
+        });
+      } else if (state.distortion.bitcrusher.isActive) {
+        dispatch({
+          type: Distortion_ActionTypes.UpdateSettingsBitcrusher,
+          payload: { id: label, value },
+        });
+      }
     } else if (parent === FXs.DELAY) {
       dispatch({
         type: Delay_ActionTypes.UpdateSettings,
@@ -139,7 +146,14 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
         payload: { id: label, value },
       });
     }
-  }, [label, parent, value, dispatch]);
+  }, [
+    label,
+    parent,
+    value,
+    dispatch,
+    state.distortion.clipping.isActive,
+    state.distortion.bitcrusher.isActive,
+  ]);
 
   let indicatorRingFillColor = '';
   let indicatorDotFillColor = '';

@@ -327,6 +327,7 @@ export const FILTER_VALUES = [
 export const NOISE_VALUES = ['White', 'Pink', 'Brown'];
 
 export enum FXs {
+  BITCRUSHER = 'bitcrusher',
   DELAY = 'delay',
   DISTORTION = 'distortion',
   FILTER = 'filter',

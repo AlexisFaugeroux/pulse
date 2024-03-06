@@ -1,9 +1,12 @@
 import { ActionMap } from './helpers';
 
 enum Distortion_ActionTypes {
-  Activate = 'DISTORTION_ACTIVATE',
-  Deactivate = 'DISTORTION_DEACTIVATE',
-  UpdateSettings = 'DISTORTION_UPDATE_SETTINGS',
+  ActivateClipping = 'CLIPPING_ACTIVATE',
+  DeactivateClipping = 'CLIPPING_DEACTIVATE',
+  UpdateSettingsClipping = 'CLIPPING_UPDATE_SETTINGS',
+  ActivateBitcrusher = 'BITCRUSHER_ACTIVATE',
+  DeactivateBitcrusher = 'BITCRUSHER_DEACTIVATE',
+  UpdateSettingsBitcrusher = 'BITCRUSHER_UPDATE_SETTINGS',
   UpdateType = 'DISTORTION_UPDATE_TYPE',
 }
 

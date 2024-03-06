@@ -2,9 +2,10 @@ import { FC, PropsWithChildren, useEffect } from 'react';
 import {
   analyser,
   audioContextOutput,
+  bitcrusherDistortion,
+  clippingDistortion,
   compressor,
   delay,
-  distortion,
   filter,
   lfo,
   limiter,
@@ -27,12 +28,19 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     lfo.connect(oscBGain.gain);
 
     // Filter
-    filter.connect(distortion.dryGain);
-    filter.connect(distortion.node);
+    filter.connect(clippingDistortion.dryGain);
+    filter.connect(clippingDistortion.node);
 
     // Distortion
-    distortion.connect(delay.dryGain);
-    distortion.connect(delay.node);
+    clippingDistortion.connect(bitcrusherDistortion.dryGain);
+    if (bitcrusherDistortion.node) {
+      clippingDistortion.connect(bitcrusherDistortion.node);
+    } else {
+      console.log('Bitcrusher node is null');
+    }
+
+    bitcrusherDistortion.connect(delay.dryGain);
+    bitcrusherDistortion.connect(delay.node);
 
     // Delay
     delay.connect(reverb.dryGain);

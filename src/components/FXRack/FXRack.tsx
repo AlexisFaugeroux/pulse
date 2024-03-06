@@ -3,9 +3,9 @@ import './FXRack.scss';
 import ChorusRack from './Racks/ChorusRack';
 import CompressorRack from './Racks/CompressorRack';
 import DelayRack from './Racks/DelayRack';
-import DistortionRack from './Racks/DistortionRack';
 import FlangerRack from './Racks/FlangerRack';
 import ReverbRack from './Racks/ReverbRack';
+import DistortionRack from './Racks/distortion/DistortionRack';
 
 const FXRack: FC = () => {
   return (

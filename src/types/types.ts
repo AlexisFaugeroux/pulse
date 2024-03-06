@@ -32,9 +32,17 @@ export type FilterSettings = BaseFxSettings & {
   type: BiquadFilterType;
 };
 
-export type DistortionSettings = BaseFxSettings & {
-  type: DistortionType;
-  drive: number;
+export type DistortionSettings = {
+  isActive: boolean;
+  clipping: BaseFxSettings & {
+    type: DistortionType;
+    drive: number;
+  };
+  bitcrusher: BaseFxSettings & {
+    type: DistortionType.BITCRUSHER;
+    bitDepth: number;
+    downsampling: number;
+  };
 };
 
 export type FlangerSettings = BaseFxSettings & {

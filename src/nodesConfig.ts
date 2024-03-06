@@ -2,7 +2,8 @@ import { InitialSettingsState } from './types/types';
 import Analyser from './utils/classes/Analyser';
 import Compressor from './utils/classes/Compressor';
 import Delay from './utils/classes/Delay';
-import Distortion from './utils/classes/Distortion';
+import BitcrusherDistortion from './utils/classes/distortion/Bitcrusher';
+import ClippingDistortion from './utils/classes/distortion/Clipping';
 import Filter from './utils/classes/Filter';
 import LFO from './utils/classes/LFO';
 import Limiter from './utils/classes/Limiter';
@@ -53,11 +54,23 @@ export const initialSettings: InitialSettingsState = {
   },
   distortion: {
     isActive: false,
-    type: DistortionType.SOFT,
-    drive: 0.25,
-    dryGain: 1,
-    wetGain: 0,
-    mixGain: 1,
+    clipping: {
+      isActive: false,
+      type: DistortionType.SOFT,
+      drive: 0.25,
+      dryGain: 1,
+      wetGain: 0,
+      mixGain: 1,
+    },
+    bitcrusher: {
+      isActive: false,
+      type: DistortionType.BITCRUSHER,
+      bitDepth: 0,
+      downsampling: 0.5,
+      dryGain: 1,
+      wetGain: 0,
+      mixGain: 1,
+    },
   },
   flanger: {
     isActive: false,
@@ -131,7 +144,9 @@ export const filter = new Filter(audioContext);
 export const lfo = new LFO(audioContext);
 
 // Distortion
-export const distortion = new Distortion(audioContext);
+export const clippingDistortion = new ClippingDistortion(audioContext);
+export const bitcrusherDistortion = new BitcrusherDistortion(audioContext);
+await bitcrusherDistortion.init();
 
 // Delay
 export const delay = new Delay(audioContext);
