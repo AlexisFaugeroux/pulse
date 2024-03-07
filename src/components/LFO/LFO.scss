@@ -20,17 +20,18 @@
     .lfo-selector {
       display: flex;
       flex-direction: column;
+      gap: 5px;
       width: 120px;
       margin-bottom: 5px;
       background-color: v.$darkBlue;
       border: 1px solid v.$lowerTextColor;
       border-radius: 5px;
+      padding: 7px 9px;
 
       .selector-option {
         display: flex;
         align-items: center;
         gap: 7px;
-        padding: 7px 9px;
 
         .selector-option-light {
           background-size: cover;
