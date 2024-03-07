@@ -75,7 +75,7 @@ const Keyboard: FC = () => {
             type="number"
             value={offset}
             min={-2}
-            max={7}
+            max={5}
             onChange={(e) => {
               setOffset(parseInt(e.currentTarget.value, 10));
             }}

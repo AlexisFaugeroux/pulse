@@ -124,7 +124,6 @@ export default class Oscillator {
 
     if (typeof valueToShift === 'number') {
       valueParam = 'frequency';
-      valueToShift = Math.round(valueToShift * 100 + Number.EPSILON) / 100;
     }
 
     const shiftedNoteIndex =

@@ -2,6 +2,7 @@ import { audioContext, lfo, oscAGain, oscBGain } from '../../nodesConfig';
 import type { EnvelopeSettings, OscSettings } from '../../types/types';
 import Oscillator from '../../utils/classes/Oscillator';
 import { LFOMode } from '../../utils/constants';
+import { roundTwoDigits } from '../../utils/helpers';
 import {
   Oscillator_TriggerActionsTypes,
   type Oscillator_TriggerActions,
@@ -124,7 +125,8 @@ const oscillatorTriggerReducer = (
             frequency ?? 0,
           );
           if (
-            Math.round(node.frequency.value) === Math.round(shiftedFrequency)
+            roundTwoDigits(node.frequency.value) ===
+            roundTwoDigits(shiftedFrequency)
           ) {
             stop();
           } else {
