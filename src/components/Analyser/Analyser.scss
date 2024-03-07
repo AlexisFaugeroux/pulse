@@ -1,0 +1,193 @@
+@use '../../styles/variables' as v;
+
+$thumb-w: 1.2rem;
+$thumb-h: 1.2rem;
+$thumb-pad: 15px;
+$ot-w: 75px;
+$ot-h: ($thumb-h * 0.4);
+$it-w: ($ot-w - ($thumb-pad * 2));
+$it-h: 0.2rem;
+
+$clr-list: hsl(250, 81%, 69%);
+
+$fb50: fade(black, 50);
+$fb35: fade(black, 35);
+$fb25: fade(black, 25);
+$fb15: fade(black, 15);
+$fw25: fade(white, 25);
+$fw15: fade(white, 15);
+
+.analyser {
+  background-color: v.$transparentBackground;
+  border-radius: 2px;
+  padding: 5px;
+  position: relative;
+  width: 100%;
+  height: 37.5%;
+
+  .analyser-background {
+    background-color: v.$mainBlue;
+    border-radius: 2px;
+    height: 100%;
+    padding: 7px 9px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .analyser-selector {
+      background-color: v.$darkBlue;
+      border-radius: 2px;
+      padding: 4px 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+
+      .selector-option {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+
+        .selector-option-label {
+          color: v.$textColor;
+          font-size: 0.7rem;
+          letter-spacing: 1px;
+          font-weight: 500;
+          margin-bottom: 2px;
+        }
+
+        .selector-option-light {
+          background-size: cover;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      input[type='range'] {
+        display: flex;
+        width: 100%;
+        max-width: $ot-w;
+        height: $ot-h;
+        -webkit-appearance: none;
+        background: linear-gradient(
+          180deg,
+          v.$lowerTextColor,
+          v.$lowerTextColor,
+          v.$lowerTextColor
+        );
+        border-radius: $ot-h;
+        box-shadow:
+          0 3px 2px -1px $fw25 inset,
+          0 0 10px 0 $fb50,
+          0 0 10px 2px $fb25,
+          0 8px 4px -3px $fb15;
+
+        &::-webkit-slider-runnable-track,
+        &::-moz-range-track {
+          background: v.$darkGrey;
+          width: $it-w;
+          height: $it-h;
+          border-radius: $thumb-h;
+          cursor: pointer;
+          box-shadow:
+            0 1px 1px 0 $fw25,
+            0 2px 2px 0 $fw15;
+          border: 1px solid $fb25;
+        }
+
+        // Add padding to ends to shrink down the inner track
+        // along x so it matches the moz track
+        &::-webkit-slider-runnable-track {
+          background: v.$darkGrey;
+          width: $it-w;
+          height: $it-h;
+          margin: 0 0.2rem;
+          transform: translateY(-220%);
+        }
+
+        // Shape, bg, shading
+        &::-webkit-slider-thumb,
+        &::-moz-range-thumb {
+          width: $thumb-w;
+          height: $thumb-h;
+          background: radial-gradient(
+              #444 45%,
+              #555 50%,
+              #222 55%,
+              #8c7853 57.5%,
+              #8c7853 100%
+            ),
+            conic-gradient(
+              #4b4b4b 10deg,
+              #777 45deg,
+              #5b5b6b 70deg,
+              #9f9f9f 105deg,
+              #444 140deg,
+              #aaa 185deg,
+              #666 210deg,
+              #999 245deg,
+              #777 285deg,
+              #9f9f9f 320deg,
+              #4b4b4b
+            );
+          background-blend-mode: overlay;
+          box-shadow:
+            0 0 1px 1px fade(white, 35%) inset,
+            0 1px 1px 1px $fw25 inset,
+            0 0 2px 2px $fb15 inset,
+            0 1px 1px 1px $fb35,
+            0 3px 2px 1px $fb25,
+            0 6px 4px 3px $fb15;
+          border-radius: calc($thumb-h/2);
+          cursor: grab;
+        }
+
+        // Thumb needs to be centered vertically using either a negative margin,
+        // or translateY
+        &::-webkit-slider-thumb {
+          transform: translatey((-$ot-h) + 0rem);
+          width: $thumb-w;
+          height: $thumb-h;
+          background: radial-gradient(
+            #444 45%,
+            #555 50%,
+            #222 55%,
+            v.$lowerTextColor 57.5%,
+            v.$lowerTextColor 100%
+          );
+          background-blend-mode: overlay;
+          box-shadow:
+            0 0 1px 1px fade(white, 35%) inset,
+            0 1px 1px 1px $fw25 inset,
+            0 0 2px 2px $fb15 inset,
+            0 1px 1px 1px $fb35,
+            0 3px 2px 1px $fb25,
+            0 6px 4px 3px $fb15;
+          border-radius: calc($thumb-h/2);
+          cursor: grab;
+          -webkit-appearance: none;
+        }
+      }
+    }
+
+    .canvas-background {
+      background-color: black;
+      width: 100%;
+      height: 85%;
+      border: 3px solid v.$darkBlue;
+      border-bottom: 5px solid v.$darkBlue;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .analyser-canvas {
+        border-radius: 2px;
+        width: 90%;
+        height: 90%;
+      }
+    }
+  }
+}

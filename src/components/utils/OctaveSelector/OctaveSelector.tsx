@@ -56,7 +56,6 @@ const OctaveSelector: FC<OctaveSelectorProps> = ({ size, parent }) => {
                   backgroundColor: 'transparent',
                   border: 'none',
                   objectFit: 'cover',
-                  cursor: 'pointer',
                   width: '12px',
                   height: '12px',
                 }}

@@ -1,7 +1,7 @@
 @use './styles/variables' as v;
 
 $backgroundHeight: calc(100vh - 3%);
-$backgroundWidth: calc(100vw - 5%);
+$backgroundWidth: calc(100vw - 10%);
 
 $mainHeight: calc($backgroundHeight - v.$headerHeight);
 
@@ -62,17 +62,17 @@ body {
       }
     }
     .center {
-      width: 360px;
+      width: 530px;
       padding: 5px;
       flex-direction: column;
       .envelopefilter {
-        height: 62.85%;
+        height: 63%;
         display: flex;
         gap: 3px;
       }
     }
     .right {
-      width: 40%;
+      width: 44%;
     }
   }
 }

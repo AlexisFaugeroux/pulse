@@ -1,16 +1,18 @@
 import { lfo } from '../../nodesConfig';
+import { LFOMode } from '../../utils/constants';
 import { LFO_SettingsActionTypes, type LFO_SettingsActions } from '../types';
 
 const LFOReducer = (
   state: {
     isActive: boolean;
+    mode: LFOMode;
     type: OscillatorType;
     frequency: number;
     gain: number;
   },
   action: LFO_SettingsActions,
 ): typeof state => {
-  const { id, value } = action.payload;
+  const { id, value, mode } = action.payload;
 
   switch (action.type) {
     case LFO_SettingsActionTypes.Activate:
@@ -21,6 +23,19 @@ const LFOReducer = (
       lfo.deactivate();
       return { ...state, isActive: false };
 
+    case LFO_SettingsActionTypes.UpdateMode:
+      if (state.isActive && mode) {
+        if (mode === LFOMode.TREMOLO) {
+          lfo.setTremoloGain(state.gain);
+          lfo.setMode(mode);
+        } else {
+          lfo.setVibratoGain(state.gain);
+          lfo.setMode(mode);
+        }
+        return { ...state, mode };
+      }
+      return { ...state };
+
     case LFO_SettingsActionTypes.UpdateSettings:
       if (!value) return { ...state };
 
@@ -30,7 +45,10 @@ const LFOReducer = (
       }
 
       if (id === 'level') {
-        lfo.setGain(value);
+        state.mode === LFOMode.TREMOLO
+          ? lfo.setTremoloGain(value)
+          : lfo.setVibratoGain(value);
+
         return { ...state, gain: value };
       }
       return { ...state };

@@ -1,6 +1,8 @@
-import { audioContext, oscAGain, oscBGain } from '../../nodesConfig';
+import { audioContext, lfo, oscAGain, oscBGain } from '../../nodesConfig';
 import type { EnvelopeSettings, OscSettings } from '../../types/types';
 import Oscillator from '../../utils/classes/Oscillator';
+import { LFOMode } from '../../utils/constants';
+import { roundTwoDigits } from '../../utils/helpers';
 import {
   Oscillator_TriggerActionsTypes,
   type Oscillator_TriggerActions,
@@ -18,8 +20,10 @@ const oscillatorTriggerReducer = (
   },
   action: Oscillator_TriggerActions,
 ): void => {
-  const { oscillatorA, oscillatorB } = state.oscillators;
-  const { envelope } = state;
+  const {
+    oscillators: { oscillatorA, oscillatorB },
+    envelope,
+  } = state;
   const { note, frequency } = action.payload;
 
   const defaultEnvelopeSettings = {
@@ -64,6 +68,10 @@ const oscillatorTriggerReducer = (
               : { isActive: false, ...defaultEnvelopeSettings },
             oscillatorB.id,
           );
+          if (lfo.mode === LFOMode.VIBRATO) {
+            lfo.connect(newOscillatorA.node.frequency);
+            lfo.connect(newOscillatorB.node.frequency);
+          }
           currentOscillators.push(newOscillatorA, newOscillatorB);
         } else if (oscillatorA.isActive) {
           const newOscillator = new Oscillator(
@@ -79,6 +87,9 @@ const oscillatorTriggerReducer = (
               : { isActive: false, ...defaultEnvelopeSettings },
             oscillatorA.id,
           );
+          if (lfo.mode === LFOMode.VIBRATO) {
+            lfo.connect(newOscillator.node.frequency);
+          }
           currentOscillators.push(newOscillator);
         } else if (oscillatorB.isActive) {
           const newOscillator = new Oscillator(
@@ -94,6 +105,9 @@ const oscillatorTriggerReducer = (
               : { isActive: false, ...defaultEnvelopeSettings },
             oscillatorB.id,
           );
+          if (lfo.mode === LFOMode.VIBRATO) {
+            lfo.connect(newOscillator.node.frequency);
+          }
           currentOscillators.push(newOscillator);
         }
       }
@@ -111,14 +125,14 @@ const oscillatorTriggerReducer = (
             frequency ?? 0,
           );
           if (
-            Math.round(node.frequency.value) === Math.round(shiftedFrequency)
+            roundTwoDigits(node.frequency.value) ===
+            roundTwoDigits(shiftedFrequency)
           ) {
             stop();
           } else {
             activeOscillators.push(oscillator);
           }
         });
-
         currentOscillators = activeOscillators;
       }
       return;

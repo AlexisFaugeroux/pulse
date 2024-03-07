@@ -3,13 +3,16 @@ import { initialSettings } from '../nodesConfig';
 import type { InitialSettingsState } from '../types/types';
 import { mainReducer } from './reducers/mainReducer';
 import type {
+  Chorus_SettingsActions,
   Delay_SettingsActions,
   Envelope_SettingsActions,
   Filter_SettingsActions,
+  Flanger_SettingsActions,
   LFO_SettingsActions,
   Oscillator_SettingsActions,
   Oscillator_TriggerActions,
 } from './types';
+import { Compressor_SettingsActions } from './types/compressor';
 import { Distortion_SettingsActions } from './types/distortion';
 import { Master_Actions } from './types/master';
 import { Reverb_SettingsActions } from './types/reverb';
@@ -25,8 +28,11 @@ const SettingsContext = createContext<{
     | LFO_SettingsActions
     | Filter_SettingsActions
     | Distortion_SettingsActions
+    | Flanger_SettingsActions
+    | Chorus_SettingsActions
     | Delay_SettingsActions
     | Reverb_SettingsActions
+    | Compressor_SettingsActions
   >;
 }>({
   state: initialSettings,

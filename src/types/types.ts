@@ -1,4 +1,4 @@
-import { DistortionType } from '../utils/constants';
+import { DistortionType, LFOMode } from '../utils/constants';
 
 export type OscSettings = {
   id: 'oscillatorA' | 'oscillatorB';
@@ -18,42 +18,63 @@ export type EnvelopeSettings = {
   release: number;
 };
 
-export type FilterSettings = {
+type BaseFxSettings = {
   isActive: boolean;
+  dryGain: number;
+  wetGain: number;
+  mixGain: number;
+};
+
+export type FilterSettings = BaseFxSettings & {
   frequency: number;
   gain: number;
   Q: number;
   type: BiquadFilterType;
-  dryGain: number;
-  wetGain: number;
-  mixGain: number;
 };
 
 export type DistortionSettings = {
   isActive: boolean;
-  type: DistortionType;
-  drive: number;
-  dryGain: number;
-  wetGain: number;
-  mixGain: number;
+  clipping: BaseFxSettings & {
+    type: DistortionType;
+    drive: number;
+  };
+  bitcrusher: BaseFxSettings & {
+    type: DistortionType.BITCRUSHER;
+    bitDepth: number;
+    downsampling: number;
+  };
 };
 
-export type DelaySettings = {
-  isActive: boolean;
+export type FlangerSettings = BaseFxSettings & {
+  delay: number;
+  feedback: number;
+  depth: number;
+  speed: number;
+};
+
+export type ChorusSettings = BaseFxSettings & {
+  delay: number;
+  feedback: number;
+  depth: number;
+  speed: number;
+};
+
+export type DelaySettings = BaseFxSettings & {
   time: number;
   feedback: number;
-  dryGain: number;
-  wetGain: number;
-  mixGain: number;
 };
 
-export type ReverbSettings = {
-  isActive: boolean;
+export type ReverbSettings = BaseFxSettings & {
   time: number;
   decay: number;
-  dryGain: number;
-  wetGain: number;
-  mixGain: number;
+};
+
+export type CompressorSettings = BaseFxSettings & {
+  threshold: number;
+  knee: number;
+  ratio: number;
+  attack: number;
+  release: number;
 };
 
 export type InitialSettingsState = {
@@ -64,14 +85,18 @@ export type InitialSettingsState = {
   envelope: EnvelopeSettings;
   lfo: {
     isActive: boolean;
+    mode: LFOMode;
     type: OscillatorType;
     frequency: number;
     gain: number;
   };
   filter: FilterSettings;
   distortion: DistortionSettings;
+  flanger: FlangerSettings;
+  chorus: ChorusSettings;
   delay: DelaySettings;
   reverb: ReverbSettings;
+  compressor: CompressorSettings;
   master: {
     gain: number;
   };

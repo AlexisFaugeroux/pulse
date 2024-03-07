@@ -8,6 +8,7 @@ export const theme = {
   lightGreen: 'rgba(42, 113, 136, 1)',
   mainGreen: 'rgb(128, 240, 80)',
   mainPink: 'rgba(249, 102, 172, 1)',
+  darkPink: 'rgba(255, 0, 119, 1)',
   textColor: 'rgba(217, 251, 255, 1)',
   lowerTextColor: '#c1c5c5',
   distortionColor: 'rgba(247, 163, 73, 1)',

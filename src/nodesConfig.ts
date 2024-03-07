@@ -1,10 +1,14 @@
 import { InitialSettingsState } from './types/types';
+import Analyser from './utils/classes/Analyser';
+import Compressor from './utils/classes/Compressor';
 import Delay from './utils/classes/Delay';
-import Distortion from './utils/classes/Distortion';
+import BitcrusherDistortion from './utils/classes/distortion/Bitcrusher';
+import ClippingDistortion from './utils/classes/distortion/Clipping';
 import Filter from './utils/classes/Filter';
 import LFO from './utils/classes/LFO';
+import Limiter from './utils/classes/Limiter';
 import Reverb from './utils/classes/Reverb';
-import { DistortionType } from './utils/constants';
+import { DistortionType, LFOMode } from './utils/constants';
 
 export const initialSettings: InitialSettingsState = {
   oscillators: {
@@ -14,7 +18,7 @@ export const initialSettings: InitialSettingsState = {
       type: 'sine',
       octaveOffset: 0,
       detune: 0,
-      gain: 0.7,
+      gain: 0.3,
     },
     oscillatorB: {
       id: 'oscillatorB',
@@ -22,7 +26,7 @@ export const initialSettings: InitialSettingsState = {
       type: 'sine',
       octaveOffset: 0,
       detune: 0,
-      gain: 0.7,
+      gain: 0.3,
     },
   },
   envelope: {
@@ -34,6 +38,7 @@ export const initialSettings: InitialSettingsState = {
   },
   lfo: {
     isActive: false,
+    mode: LFOMode.TREMOLO,
     type: 'sine',
     frequency: 0,
     gain: 0.3,
@@ -50,8 +55,40 @@ export const initialSettings: InitialSettingsState = {
   },
   distortion: {
     isActive: false,
-    type: DistortionType.SOFT,
-    drive: 0.25,
+    clipping: {
+      isActive: false,
+      type: DistortionType.SOFT,
+      drive: 0.25,
+      dryGain: 1,
+      wetGain: 0,
+      mixGain: 1,
+    },
+    bitcrusher: {
+      isActive: false,
+      type: DistortionType.BITCRUSHER,
+      bitDepth: 0,
+      downsampling: 0.5,
+      dryGain: 1,
+      wetGain: 0,
+      mixGain: 1,
+    },
+  },
+  flanger: {
+    isActive: false,
+    delay: 0.5,
+    feedback: 0.5,
+    depth: 0.5,
+    speed: 0.5,
+    dryGain: 1,
+    wetGain: 0,
+    mixGain: 1,
+  },
+  chorus: {
+    isActive: false,
+    delay: 0.5,
+    feedback: 0.5,
+    depth: 0.5,
+    speed: 0.5,
     dryGain: 1,
     wetGain: 0,
     mixGain: 1,
@@ -68,6 +105,17 @@ export const initialSettings: InitialSettingsState = {
     isActive: false,
     time: 0.4,
     decay: 0.3,
+    dryGain: 1,
+    wetGain: 0,
+    mixGain: 1,
+  },
+  compressor: {
+    isActive: false,
+    threshold: 0.76,
+    knee: 0.3,
+    ratio: 0.58,
+    attack: 0.1,
+    release: 0.25,
     dryGain: 1,
     wetGain: 0,
     mixGain: 1,
@@ -97,10 +145,21 @@ export const filter = new Filter(audioContext);
 export const lfo = new LFO(audioContext);
 
 // Distortion
-export const distortion = new Distortion(audioContext);
+export const clippingDistortion = new ClippingDistortion(audioContext);
+export const bitcrusherDistortion = new BitcrusherDistortion(audioContext);
+await bitcrusherDistortion.init();
 
 // Delay
 export const delay = new Delay(audioContext);
 
 // Reverb
 export const reverb = new Reverb(audioContext);
+
+// Compressor
+export const compressor = new Compressor(audioContext);
+
+// Limiter
+export const limiter = new Limiter(audioContext);
+
+// Analyzer
+export const analyser = new Analyser(audioContext);

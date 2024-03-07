@@ -1,12 +1,6 @@
 import { initialSettings } from '../../nodesConfig';
-import { InitialSettingsState } from '../../types/types';
 import { FXs, TIME_CONSTANT } from '../constants';
 import { roundTwoDigits } from '../helpers';
-
-type InitialSettingsStateFXs = Pick<
-  InitialSettingsState,
-  'delay' | 'filter' | 'reverb'
->;
 
 export default class FX {
   dryGain;
@@ -17,10 +11,21 @@ export default class FX {
     public audioContext: AudioContext,
     fxName: FXs,
   ) {
-    const fxInitialSettings: InitialSettingsStateFXs = {
-      delay: initialSettings.delay,
-      filter: initialSettings.filter,
-      reverb: initialSettings.reverb,
+    const { compressor, delay, distortion, filter, reverb } = initialSettings;
+
+    const fxInitialSettings = {
+      delay: { dryGain: delay.dryGain, wetGain: delay.wetGain },
+      filter: { dryGain: filter.dryGain, wetGain: filter.wetGain },
+      reverb: { dryGain: reverb.dryGain, wetGain: reverb.wetGain },
+      clipping: {
+        dryGain: distortion.clipping.dryGain,
+        wetGain: distortion.clipping.wetGain,
+      },
+      bitcrusher: {
+        dryGain: distortion.bitcrusher.dryGain,
+        wetGain: distortion.bitcrusher.wetGain,
+      },
+      compressor: { dryGain: compressor.dryGain, wetGain: compressor.wetGain },
     };
 
     this.audioContext = audioContext;
@@ -29,9 +34,9 @@ export default class FX {
     this.mixGain = audioContext.createGain();
 
     this.dryGain.gain.value =
-      fxInitialSettings[fxName as keyof InitialSettingsStateFXs].dryGain;
+      fxInitialSettings[fxName as keyof typeof fxInitialSettings].dryGain;
     this.wetGain.gain.value =
-      fxInitialSettings[fxName as keyof InitialSettingsStateFXs].wetGain;
+      fxInitialSettings[fxName as keyof typeof fxInitialSettings].wetGain;
   }
 
   connect(destination: AudioNode) {
