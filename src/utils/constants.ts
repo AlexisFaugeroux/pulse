@@ -295,6 +295,13 @@ export const NOTE_TO_KEYS: Record<string, string[]> = {
   B8: ['u', 'b'],
 };
 
+export const NOISE_VALUES = ['White', 'Pink', 'Brown'];
+
+export enum LFOMode {
+  TREMOLO = 'TREMOLO',
+  VIBRATO = 'VIBRATO',
+}
+
 export enum ControlTypes {
   MASTER = 'master',
   DEFAULT = 'default',
@@ -323,8 +330,6 @@ export const FILTER_VALUES = [
   'Notch',
   'Allpass',
 ];
-
-export const NOISE_VALUES = ['White', 'Pink', 'Brown'];
 
 export enum FXs {
   BITCRUSHER = 'bitcrusher',

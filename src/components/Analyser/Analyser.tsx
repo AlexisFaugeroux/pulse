@@ -87,7 +87,6 @@ const Analyser: FC = () => {
                 backgroundImage: `url(${
                   analyserMode === 1 ? activeIcon : inactiveIcon
                 })`,
-                backgroundSize: 'cover',
               }}
             />
           </div>

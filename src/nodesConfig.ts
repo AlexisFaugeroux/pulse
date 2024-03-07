@@ -8,7 +8,7 @@ import Filter from './utils/classes/Filter';
 import LFO from './utils/classes/LFO';
 import Limiter from './utils/classes/Limiter';
 import Reverb from './utils/classes/Reverb';
-import { DistortionType } from './utils/constants';
+import { DistortionType, LFOMode } from './utils/constants';
 
 export const initialSettings: InitialSettingsState = {
   oscillators: {
@@ -38,6 +38,7 @@ export const initialSettings: InitialSettingsState = {
   },
   lfo: {
     isActive: false,
+    mode: LFOMode.TREMOLO,
     type: 'sine',
     frequency: 0,
     gain: 0.3,

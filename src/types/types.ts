@@ -1,4 +1,4 @@
-import { DistortionType } from '../utils/constants';
+import { DistortionType, LFOMode } from '../utils/constants';
 
 export type OscSettings = {
   id: 'oscillatorA' | 'oscillatorB';
@@ -85,6 +85,7 @@ export type InitialSettingsState = {
   envelope: EnvelopeSettings;
   lfo: {
     isActive: boolean;
+    mode: LFOMode;
     type: OscillatorType;
     frequency: number;
     gain: number;
