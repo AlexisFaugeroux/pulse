@@ -1,19 +1,11 @@
 import { InitialSettingsState } from '../../types/types';
 import {
-  Chorus_ActionTypes,
   Chorus_SettingsActions,
-  Compressor_ActionTypes,
-  Delay_ActionTypes,
-  Envelope_ActionTypes,
-  Filter_ActionTypes,
-  Flanger_ActionTypes,
   Flanger_SettingsActions,
-  LFO_SettingsActionTypes,
-  Oscillator_SettingsActionTypes,
   Oscillator_TriggerActionsTypes,
-  Reverb_ActionTypes,
   type Compressor_SettingsActions,
   type Delay_SettingsActions,
+  type Distortion_SettingsActions,
   type Envelope_SettingsActions,
   type Filter_SettingsActions,
   type LFO_SettingsActions,
@@ -21,11 +13,7 @@ import {
   type Oscillator_TriggerActions,
   type Reverb_SettingsActions,
 } from '../types';
-import {
-  Distortion_ActionTypes,
-  Distortion_SettingsActions,
-} from '../types/distortion';
-import { Master_ActionTypes, Master_Actions } from '../types/master';
+import { Master_Actions } from '../types/master';
 import chorusReducer from './chorusReducer';
 import compressorReducer from './compressorReducer';
 import delayReducer from './delayReducer';
@@ -33,6 +21,7 @@ import distortionReducer from './distortionReducer';
 import envelopeReducer from './envelopeReducer';
 import filterReducer from './filterReducer';
 import flangerReducer from './flangerReducer';
+import { getActionType } from './helpers';
 import LFOReducer from './lfoReducer';
 import masterReducer from './masterReducer';
 import oscillatorTriggerReducer from './oscillatorTriggerReducer';
@@ -40,19 +29,7 @@ import oscillatorsReducer from './oscillatorsReducer';
 import reverbReducer from './reverbReducer';
 
 export const mainReducer = (
-  {
-    master,
-    oscillators,
-    envelope,
-    lfo,
-    filter,
-    flanger,
-    chorus,
-    distortion,
-    delay,
-    reverb,
-    compressor,
-  }: InitialSettingsState,
+  settings: InitialSettingsState,
 
   action:
     | Master_Actions
@@ -68,212 +45,10 @@ export const mainReducer = (
     | Reverb_SettingsActions
     | Compressor_SettingsActions,
 ): InitialSettingsState => {
+  const type = getActionType(action.type);
+
+  const { oscillators, envelope } = settings;
   if (
-    Object.values(Master_ActionTypes).includes(
-      action.type as Master_ActionTypes,
-    )
-  ) {
-    return {
-      master: masterReducer(master, action as Master_Actions),
-      oscillators,
-      envelope,
-      lfo,
-      filter,
-      distortion,
-      flanger,
-      chorus,
-      delay,
-      reverb,
-      compressor,
-    };
-  } else if (
-    Object.values(Oscillator_SettingsActionTypes).includes(
-      action.type as Oscillator_SettingsActionTypes,
-    )
-  ) {
-    return {
-      master,
-      oscillators: oscillatorsReducer(
-        oscillators,
-        action as Oscillator_SettingsActions,
-      ),
-      envelope,
-      lfo,
-      filter,
-      distortion,
-      flanger,
-      chorus,
-      delay,
-      reverb,
-      compressor,
-    };
-  } else if (
-    Object.values(Envelope_ActionTypes).includes(
-      action.type as Envelope_ActionTypes,
-    )
-  ) {
-    return {
-      master,
-      oscillators,
-      envelope: envelopeReducer(envelope, action as Envelope_SettingsActions),
-      lfo,
-      filter,
-      distortion,
-      flanger,
-      chorus,
-      delay,
-      reverb,
-      compressor,
-    };
-  } else if (
-    Object.values(LFO_SettingsActionTypes).includes(
-      action.type as LFO_SettingsActionTypes,
-    )
-  ) {
-    return {
-      master,
-      oscillators,
-      envelope,
-      lfo: LFOReducer(lfo, action as LFO_SettingsActions),
-      filter,
-      distortion,
-      flanger,
-      chorus,
-      delay,
-      reverb,
-      compressor,
-    };
-  } else if (
-    Object.values(Filter_ActionTypes).includes(
-      action.type as Filter_ActionTypes,
-    )
-  ) {
-    return {
-      master,
-      oscillators,
-      envelope,
-      lfo,
-      filter: filterReducer(filter, action as Filter_SettingsActions),
-      distortion,
-      flanger,
-      chorus,
-      delay,
-      reverb,
-      compressor,
-    };
-  } else if (
-    Object.values(Distortion_ActionTypes).includes(
-      action.type as Distortion_ActionTypes,
-    )
-  ) {
-    return {
-      master,
-      oscillators,
-      envelope,
-      lfo,
-      filter,
-      distortion: distortionReducer(
-        distortion,
-        action as Distortion_SettingsActions,
-      ),
-      flanger,
-      chorus,
-      delay,
-      reverb,
-      compressor,
-    };
-  } else if (
-    Object.values(Flanger_ActionTypes).includes(
-      action.type as Flanger_ActionTypes,
-    )
-  ) {
-    return {
-      master,
-      oscillators,
-      envelope,
-      lfo,
-      filter,
-      distortion,
-      flanger: flangerReducer(flanger, action as Flanger_SettingsActions),
-      chorus,
-      delay,
-      reverb,
-      compressor,
-    };
-  } else if (
-    Object.values(Chorus_ActionTypes).includes(
-      action.type as Chorus_ActionTypes,
-    )
-  ) {
-    return {
-      master,
-      oscillators,
-      envelope,
-      lfo,
-      filter,
-      distortion,
-      flanger,
-      chorus: chorusReducer(chorus, action as Chorus_SettingsActions),
-      delay,
-      reverb,
-      compressor,
-    };
-  } else if (
-    Object.values(Delay_ActionTypes).includes(action.type as Delay_ActionTypes)
-  ) {
-    return {
-      master,
-      oscillators,
-      envelope,
-      lfo,
-      filter,
-      distortion,
-      flanger,
-      chorus,
-      delay: delayReducer(delay, action as Delay_SettingsActions),
-      reverb,
-      compressor,
-    };
-  } else if (
-    Object.values(Reverb_ActionTypes).includes(
-      action.type as Reverb_ActionTypes,
-    )
-  ) {
-    return {
-      master,
-      oscillators,
-      envelope,
-      lfo,
-      filter,
-      distortion,
-      flanger,
-      chorus,
-      delay,
-      reverb: reverbReducer(reverb, action as Reverb_SettingsActions),
-      compressor,
-    };
-  } else if (
-    Object.values(Compressor_ActionTypes).includes(
-      action.type as Compressor_ActionTypes,
-    )
-  ) {
-    return {
-      master,
-      oscillators,
-      envelope,
-      lfo,
-      filter,
-      distortion,
-      flanger,
-      chorus,
-      delay,
-      reverb,
-      compressor: compressorReducer(
-        compressor,
-        action as Compressor_SettingsActions,
-      ),
-    };
-  } else if (
     Object.values(Oscillator_TriggerActionsTypes).includes(
       action.type as Oscillator_TriggerActionsTypes,
     )
@@ -285,16 +60,58 @@ export const mainReducer = (
   }
 
   return {
-    master,
-    oscillators,
-    envelope,
-    lfo,
-    filter,
-    distortion,
-    flanger,
-    chorus,
-    delay,
-    reverb,
-    compressor,
+    master:
+      type === 'master'
+        ? masterReducer(settings.master, action as Master_Actions)
+        : settings.master,
+    oscillators:
+      type === 'oscillators'
+        ? oscillatorsReducer(
+            settings.oscillators,
+            action as Oscillator_SettingsActions,
+          )
+        : settings.oscillators,
+    envelope:
+      type === 'envelope'
+        ? envelopeReducer(settings.envelope, action as Envelope_SettingsActions)
+        : settings.envelope,
+    lfo:
+      type === 'lfo'
+        ? LFOReducer(settings.lfo, action as LFO_SettingsActions)
+        : settings.lfo,
+    filter:
+      type === 'filter'
+        ? filterReducer(settings.filter, action as Filter_SettingsActions)
+        : settings.filter,
+    distortion:
+      type === 'distortion'
+        ? distortionReducer(
+            settings.distortion,
+            action as Distortion_SettingsActions,
+          )
+        : settings.distortion,
+    flanger:
+      type === 'flanger'
+        ? flangerReducer(settings.flanger, action as Flanger_SettingsActions)
+        : settings.flanger,
+    chorus:
+      type === 'chorus'
+        ? chorusReducer(settings.chorus, action as Chorus_SettingsActions)
+        : settings.chorus,
+    delay:
+      type === 'delay'
+        ? delayReducer(settings.delay, action as Delay_SettingsActions)
+        : settings.delay,
+    reverb:
+      type === 'reverb'
+        ? reverbReducer(settings.reverb, action as Reverb_SettingsActions)
+        : settings.reverb,
+    compressor:
+      type === 'compressor'
+        ? compressorReducer(
+            settings.compressor,
+            action as Compressor_SettingsActions,
+          )
+        : settings.compressor,
   };
 };
