@@ -13,6 +13,7 @@ import {
   oscAGain,
   oscBGain,
   reverb,
+  subGain,
 } from '../nodesConfig';
 
 const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
@@ -20,12 +21,15 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     // Oscillators
     oscAGain.connect(filter.dryGain);
     oscBGain.connect(filter.dryGain);
+    subGain.connect(filter.dryGain);
     oscAGain.connect(filter.node);
     oscBGain.connect(filter.node);
+    subGain.connect(filter.node);
 
     // LFO
     lfo.connect(oscAGain.gain);
     lfo.connect(oscBGain.gain);
+    lfo.connect(subGain.gain);
 
     // Filter
     filter.connect(clippingDistortion.dryGain);

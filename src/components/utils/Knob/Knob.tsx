@@ -98,7 +98,11 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
         type: Master_ActionTypes.UpdateValue,
         payload: { value },
       });
-    } else if (parent === 'oscillatorA' || parent === 'oscillatorB') {
+    } else if (
+      parent === 'oscillatorA' ||
+      parent === 'oscillatorB' ||
+      parent === 'subOscillator'
+    ) {
       dispatch({
         type: Oscillator_SettingsActionTypes.UpdateSettings,
         payload: { id: label, parent, value },

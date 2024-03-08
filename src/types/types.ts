@@ -9,6 +9,14 @@ export type OscSettings = {
   gain: number;
 };
 
+export type SubOscSettings = {
+  id: string;
+  isActive: boolean;
+  type: OscillatorType;
+  octaveOffset: number;
+  gain: number;
+};
+
 export type EnvelopeSettings = {
   [key: string]: boolean | number;
   isActive: boolean;
@@ -81,6 +89,7 @@ export type InitialSettingsState = {
   oscillators: {
     oscillatorA: OscSettings;
     oscillatorB: OscSettings;
+    subOscillator: SubOscSettings;
   };
   envelope: EnvelopeSettings;
   lfo: {

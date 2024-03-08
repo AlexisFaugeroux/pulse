@@ -1,5 +1,10 @@
 import { currentOscillators } from '../../contexts/reducers/oscillatorTriggerReducer';
-import { initialSettings, oscAGain, oscBGain } from '../../nodesConfig';
+import {
+  initialSettings,
+  oscAGain,
+  oscBGain,
+  subGain,
+} from '../../nodesConfig';
 import { LFOMode, TIME_CONSTANT } from '../constants';
 import { linearToLinearRange, roundTwoDigits } from '../helpers';
 
@@ -59,6 +64,7 @@ export default class LFO {
         this.disconnect();
         this.connect(oscAGain.gain);
         this.connect(oscBGain.gain);
+        this.connect(subGain.gain);
         return;
 
       case LFOMode.VIBRATO:

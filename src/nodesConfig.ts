@@ -28,6 +28,13 @@ export const initialSettings: InitialSettingsState = {
       detune: 0,
       gain: 0.3,
     },
+    subOscillator: {
+      id: 'subOscillator',
+      isActive: false,
+      type: 'sine',
+      octaveOffset: 0,
+      gain: 0.3,
+    },
   },
   envelope: {
     isActive: true,
@@ -137,6 +144,7 @@ export const masterGain = audioContext.createGain();
 // Oscillators
 export const oscAGain = audioContext.createGain();
 export const oscBGain = audioContext.createGain();
+export const subGain = audioContext.createGain();
 
 // Filter
 export const filter = new Filter(audioContext);

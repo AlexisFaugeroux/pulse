@@ -1,5 +1,5 @@
-import { audioContext, oscAGain, oscBGain } from '../../nodesConfig';
-import { OscSettings } from '../../types/types';
+import { audioContext, oscAGain, oscBGain, subGain } from '../../nodesConfig';
+import { OscSettings, SubOscSettings } from '../../types/types';
 import { TIME_CONSTANT } from '../../utils/constants';
 import { roundTwoDigitsNonFinite } from '../../utils/helpers';
 import {
@@ -12,10 +12,11 @@ const oscillatorsReducer = (
   state: {
     oscillatorA: OscSettings;
     oscillatorB: OscSettings;
+    subOscillator: SubOscSettings;
   },
   action: Oscillator_SettingsActions,
 ): typeof state => {
-  const { oscillatorA, oscillatorB } = state;
+  const { oscillatorA, oscillatorB, subOscillator } = state;
   const { id, parent, value: newValue } = action.payload;
 
   switch (action.type) {
@@ -58,8 +59,8 @@ const oscillatorsReducer = (
           );
           return {
             ...state,
-            [parent]: {
-              ...state[parent],
+            oscillatorA: {
+              ...state.oscillatorA,
               gain: newValue,
             },
           };
@@ -71,8 +72,21 @@ const oscillatorsReducer = (
           );
           return {
             ...state,
-            [parent]: {
-              ...state[parent],
+            oscillatorB: {
+              ...state.oscillatorB,
+              gain: newValue,
+            },
+          };
+        } else if (parent === 'subOscillator') {
+          subGain.gain.setTargetAtTime(
+            roundTwoDigitsNonFinite(newValue),
+            audioContext.currentTime,
+            TIME_CONSTANT,
+          );
+          return {
+            ...state,
+            subOscillator: {
+              ...state.subOscillator,
               gain: newValue,
             },
           };
@@ -136,6 +150,16 @@ const oscillatorsReducer = (
         return {
           ...state,
           oscillatorB: { ...oscillatorB, type: id as OscillatorType },
+        };
+      } else if (parent === 'subOscillator') {
+        currentOscillators.forEach(({ node, parent: currOscParent }) => {
+          if (currOscParent === parent) {
+            node.type = id as OscillatorType;
+          }
+        });
+        return {
+          ...state,
+          subOscillator: { ...subOscillator, type: id as OscillatorType },
         };
       } else {
         return { ...state };

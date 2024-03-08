@@ -57,7 +57,11 @@ const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves }) => {
             id={wave}
             onClick={() => {
               setActiveWave(wave);
-              if (parent === 'oscillatorA' || parent === 'oscillatorB')
+              if (
+                parent === 'oscillatorA' ||
+                parent === 'oscillatorB' ||
+                parent === 'subOscillator'
+              )
                 dispatch({
                   type: Oscillator_SettingsActionTypes.UpdateType,
                   payload: {
