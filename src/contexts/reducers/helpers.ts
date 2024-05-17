@@ -12,12 +12,14 @@ import {
   Reverb_ActionTypes,
 } from '../types';
 import { Master_ActionTypes } from '../types/master';
+import { Noise_SettingsActionTypes } from '../types/noises';
 
 export function getActionType(
   actionType:
     | Master_ActionTypes
     | Oscillator_TriggerActionsTypes
     | Oscillator_SettingsActionTypes
+    | Noise_SettingsActionTypes
     | Envelope_ActionTypes
     | LFO_SettingsActionTypes
     | Filter_ActionTypes
@@ -38,6 +40,12 @@ export function getActionType(
     )
   )
     return 'oscillators';
+  if (
+    Object.values(Noise_SettingsActionTypes).includes(
+      actionType as Noise_SettingsActionTypes,
+    )
+  )
+    return 'noises';
   if (
     Object.values(Envelope_ActionTypes).includes(
       actionType as Envelope_ActionTypes,

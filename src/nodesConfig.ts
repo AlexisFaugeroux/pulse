@@ -36,6 +36,13 @@ export const initialSettings: InitialSettingsState = {
       gain: 0.3,
     },
   },
+  noises: {
+    whiteNoise: {
+      id: 'whiteNoise',
+      isActive: false,
+      gain: 0.3,
+    },
+  },
   envelope: {
     isActive: true,
     attack: 0.005,
@@ -145,6 +152,9 @@ export const masterGain = audioContext.createGain();
 export const oscAGain = audioContext.createGain();
 export const oscBGain = audioContext.createGain();
 export const subGain = audioContext.createGain();
+
+// Noises
+export const whiteNoiseGain = audioContext.createGain();
 
 // Filter
 export const filter = new Filter(audioContext);

@@ -33,6 +33,13 @@ const Keyboard: FC = () => {
             frequency: noteInfo.frequency,
           },
         });
+        dispatch({
+          type: Oscillator_TriggerActionsTypes.CreateNoise,
+          payload: {
+            note: noteInfo.note,
+            frequency: noteInfo.frequency,
+          },
+        });
       }
     },
     [pressedKeys, setPressedKeys, offset, dispatch],
@@ -49,6 +56,10 @@ const Keyboard: FC = () => {
         const payload = getNoteInfo(note) ?? {};
         dispatch({
           type: Oscillator_TriggerActionsTypes.Kill,
+          payload,
+        });
+        dispatch({
+          type: Oscillator_TriggerActionsTypes.KillNoise,
           payload,
         });
       }

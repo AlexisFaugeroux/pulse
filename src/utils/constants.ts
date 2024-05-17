@@ -295,7 +295,11 @@ export const NOTE_TO_KEYS: Record<string, string[]> = {
   B8: ['u', 'b'],
 };
 
-export const NOISE_VALUES = ['White', 'Pink', 'Brown'];
+export enum Noise_Types {
+  WHITE = 'white',
+  PINK = 'pink',
+  BROWN = 'brown',
+}
 
 export enum LFOMode {
   TREMOLO = 'TREMOLO',

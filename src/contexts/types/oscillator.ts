@@ -3,6 +3,8 @@ import { ActionMap } from './helpers.ts';
 enum Oscillator_TriggerActionsTypes {
   Create = 'OSC_START',
   Kill = 'OSC_STOP',
+  CreateNoise = 'NOISE_CREATE_NOISE',
+  KillNoise = 'NOISE_KILL_NOISE',
 }
 
 enum Oscillator_SettingsActionTypes {

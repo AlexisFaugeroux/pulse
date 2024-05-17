@@ -1,6 +1,6 @@
 import { EnvelopeSettings } from '../../types/types';
 import { Envelope_ActionTypes, Envelope_SettingsActions } from '../types';
-import { currentOscillators } from './oscillatorTriggerReducer';
+import { currentNoises, currentOscillators } from './oscillatorTriggerReducer';
 
 const envelopeReducer = (
   state: EnvelopeSettings,
@@ -19,25 +19,29 @@ const envelopeReducer = (
 
       if (id === 'attack') {
         currentOscillators.forEach((oscillator) => oscillator.setAttack(value));
+        currentNoises.forEach((noise) => noise.setAttack(value));
         return { ...state, attack: value };
       }
       if (id === 'decay') {
         currentOscillators.forEach((oscillator) => oscillator.setDecay(value));
-        return { ...state, [id]: value };
+        currentNoises.forEach((noise) => noise.setDecay(value));
+        return { ...state, decay: value };
       }
 
       if (id === 'sustain') {
         currentOscillators.forEach((oscillator) =>
           oscillator.setSustain(value),
         );
-        return { ...state, [id]: value };
+        currentNoises.forEach((noise) => noise.setSustain(value));
+        return { ...state, sustain: value };
       }
 
       if (id === 'release') {
         currentOscillators.forEach((oscillator) =>
           oscillator.setRelease(value),
         );
-        return { ...state, [id]: value };
+        currentNoises.forEach((noise) => noise.setRelease(value));
+        return { ...state, release: value };
       }
       return { ...state };
     }

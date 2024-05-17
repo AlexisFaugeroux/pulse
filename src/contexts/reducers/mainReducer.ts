@@ -14,6 +14,7 @@ import {
   type Reverb_SettingsActions,
 } from '../types';
 import { Master_Actions } from '../types/master';
+import { Noise_SettingsActions } from '../types/noises';
 import chorusReducer from './chorusReducer';
 import compressorReducer from './compressorReducer';
 import delayReducer from './delayReducer';
@@ -24,6 +25,7 @@ import flangerReducer from './flangerReducer';
 import { getActionType } from './helpers';
 import LFOReducer from './lfoReducer';
 import masterReducer from './masterReducer';
+import noisesReducer from './noisesReducer';
 import oscillatorTriggerReducer from './oscillatorTriggerReducer';
 import oscillatorsReducer from './oscillatorsReducer';
 import reverbReducer from './reverbReducer';
@@ -35,6 +37,7 @@ export const mainReducer = (
     | Master_Actions
     | Oscillator_TriggerActions
     | Oscillator_SettingsActions
+    | Noise_SettingsActions
     | Envelope_SettingsActions
     | LFO_SettingsActions
     | Filter_SettingsActions
@@ -47,14 +50,14 @@ export const mainReducer = (
 ): InitialSettingsState => {
   const type = getActionType(action.type);
 
-  const { oscillators, envelope } = settings;
+  const { oscillators, noises, envelope } = settings;
   if (
     Object.values(Oscillator_TriggerActionsTypes).includes(
       action.type as Oscillator_TriggerActionsTypes,
     )
   ) {
     oscillatorTriggerReducer(
-      { oscillators, envelope },
+      { oscillators, noises, envelope },
       action as Oscillator_TriggerActions,
     );
   }
@@ -71,6 +74,10 @@ export const mainReducer = (
             action as Oscillator_SettingsActions,
           )
         : settings.oscillators,
+    noises:
+      type === 'noises'
+        ? noisesReducer(settings.noises, action as Noise_SettingsActions)
+        : settings.noises,
     envelope:
       type === 'envelope'
         ? envelopeReducer(settings.envelope, action as Envelope_SettingsActions)

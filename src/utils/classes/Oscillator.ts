@@ -3,6 +3,10 @@ import { NOTES } from '../constants';
 import { linearToLinearRange } from '../helpers';
 
 export default class Oscillator {
+  node;
+  easing;
+  gateGain;
+
   constructor(
     public audioContext: AudioContext,
     public destination: GainNode,
@@ -25,10 +29,14 @@ export default class Oscillator {
       this.audioContext.currentTime,
     );
     this.offset = offset;
-
     this.parent = parent;
 
-    this.envelope = envelope;
+    this.envelope = { ...envelope };
+    this.setAttack(envelope.attack);
+    this.setDecay(envelope.decay);
+    this.setSustain(envelope.sustain);
+    this.setRelease(envelope.release);
+
     this.easing = 0.006;
 
     this.gateGain = this.audioContext.createGain();
@@ -41,10 +49,6 @@ export default class Oscillator {
     this.node.start();
     this.start();
   }
-
-  node;
-  easing;
-  gateGain;
 
   start() {
     const { currentTime } = this.audioContext;

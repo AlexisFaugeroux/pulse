@@ -15,6 +15,7 @@ import type {
 import { Compressor_SettingsActions } from './types/compressor';
 import { Distortion_SettingsActions } from './types/distortion';
 import { Master_Actions } from './types/master';
+import { Noise_SettingsActions } from './types/noises';
 import { Reverb_SettingsActions } from './types/reverb';
 
 const SettingsContext = createContext<{
@@ -24,6 +25,7 @@ const SettingsContext = createContext<{
     | Master_Actions
     | Oscillator_TriggerActions
     | Oscillator_SettingsActions
+    | Noise_SettingsActions
     | Envelope_SettingsActions
     | LFO_SettingsActions
     | Filter_SettingsActions

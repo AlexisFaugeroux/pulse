@@ -11,6 +11,7 @@ import {
   Reverb_ActionTypes,
 } from '../../../contexts/types/index';
 import { Master_ActionTypes } from '../../../contexts/types/master';
+import { Noise_SettingsActionTypes } from '../../../contexts/types/noises';
 import { theme } from '../../../styles/_variables';
 import { ControlTypes, FXs } from '../../../utils/constants';
 import './Knob.scss';
@@ -106,6 +107,11 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
       dispatch({
         type: Oscillator_SettingsActionTypes.UpdateSettings,
         payload: { id: label, parent, value },
+      });
+    } else if (parent === 'noiseOsc') {
+      dispatch({
+        type: Noise_SettingsActionTypes.UpdateSettings,
+        payload: { id: label, value },
       });
     } else if (parent === 'envelope') {
       dispatch({

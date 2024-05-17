@@ -4,13 +4,16 @@ import {
   oscAGain,
   oscBGain,
   subGain,
+  whiteNoiseGain,
 } from '../../nodesConfig';
 import type {
   EnvelopeSettings,
+  NoiseSettings,
   OscSettings,
   SubOscSettings,
 } from '../../types/types';
 import Oscillator from '../../utils/classes/Oscillator';
+import WhiteNoise from '../../utils/classes/noises/WhiteNoise';
 import { LFOMode } from '../../utils/constants';
 import { roundTwoDigits } from '../../utils/helpers';
 import {
@@ -19,20 +22,25 @@ import {
 } from '../types';
 
 export let currentOscillators: Oscillator[] = [];
+export let currentNoises: WhiteNoise[] = []; // (WhiteNoise | PinkNoise | BrownNoise)[]
 
-const oscillatorTriggerReducer = (
+const oscillatorTriggerReducer = async (
   state: {
     oscillators: {
       oscillatorA: OscSettings;
       oscillatorB: OscSettings;
       subOscillator: SubOscSettings;
     };
+    noises: {
+      whiteNoise: NoiseSettings;
+    };
     envelope: EnvelopeSettings;
   },
   action: Oscillator_TriggerActions,
-): void => {
+): Promise<void> => {
   const {
     oscillators: { oscillatorA, oscillatorB, subOscillator },
+    noises: { whiteNoise },
     envelope,
   } = state;
   const { note, frequency } = action.payload;
@@ -136,6 +144,37 @@ const oscillatorTriggerReducer = (
         currentOscillators = activeOscillators;
       }
       return;
+
+    case Oscillator_TriggerActionsTypes.CreateNoise:
+      if (!frequency) {
+        console.error('Create noise: frequency not provided');
+        return;
+      }
+      if (whiteNoise.isActive) {
+        const newWhiteNoise = new WhiteNoise(
+          audioContext,
+          whiteNoiseGain,
+          envelope.isActive
+            ? envelope
+            : { isActive: false, ...defaultEnvelopeSettings },
+          frequency,
+        );
+        await newWhiteNoise.init();
+        currentNoises.push(newWhiteNoise);
+      }
+      return;
+
+    case Oscillator_TriggerActionsTypes.KillNoise: {
+      const activeNoises: WhiteNoise[] = [];
+
+      currentNoises.forEach((noise) => {
+        frequency === noise.refFrequency
+          ? noise.stop()
+          : activeNoises.push(noise);
+      });
+      currentNoises = activeNoises;
+      return;
+    }
 
     default:
       console.log('Reducer error action: ', action);

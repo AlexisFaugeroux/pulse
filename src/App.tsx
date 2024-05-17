@@ -25,7 +25,7 @@ function App() {
                 <Oscillator id="oscillatorB" label="oscillator b" />
                 <div className="subnoise">
                   <SubOsc id="subOscillator" label="sub" />
-                  <NoiseOsc />
+                  <NoiseOsc id="noiseOsc" label="noise" />
                 </div>
               </div>
 

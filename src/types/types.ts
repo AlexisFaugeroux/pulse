@@ -17,6 +17,12 @@ export type SubOscSettings = {
   gain: number;
 };
 
+export type NoiseSettings = {
+  id: string;
+  isActive: boolean;
+  gain: number;
+};
+
 export type EnvelopeSettings = {
   [key: string]: boolean | number;
   isActive: boolean;
@@ -90,6 +96,9 @@ export type InitialSettingsState = {
     oscillatorA: OscSettings;
     oscillatorB: OscSettings;
     subOscillator: SubOscSettings;
+  };
+  noises: {
+    whiteNoise: NoiseSettings;
   };
   envelope: EnvelopeSettings;
   lfo: {
