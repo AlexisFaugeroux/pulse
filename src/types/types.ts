@@ -98,7 +98,10 @@ export type InitialSettingsState = {
     subOscillator: SubOscSettings;
   };
   noises: {
+    [key: string]: NoiseSettings;
     whiteNoise: NoiseSettings;
+    pinkNoise: NoiseSettings;
+    brownNoise: NoiseSettings;
   };
   envelope: EnvelopeSettings;
   lfo: {

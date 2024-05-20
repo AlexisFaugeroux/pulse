@@ -32,11 +32,11 @@ export default class BitcrusherProcessor extends AudioWorkletProcessor {
     const bits = parameters.bitDepth[0];
     const downsampling = parameters.downsampling[0];
 
-    for (let channelIndex = 0; channelIndex < output.length; ++channelIndex) {
+    for (let channelIndex = 0; channelIndex < output.length; channelIndex++) {
       for (
         let sampleIndex = 0;
         sampleIndex < output[channelIndex].length;
-        ++sampleIndex
+        sampleIndex++
       ) {
         if (!input[channelIndex]) return false;
 

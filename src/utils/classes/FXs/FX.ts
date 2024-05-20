@@ -1,6 +1,6 @@
-import { initialSettings } from '../../nodesConfig';
-import { FXs, TIME_CONSTANT } from '../constants';
-import { roundTwoDigits } from '../helpers';
+import { initialSettings } from '../../../nodesConfig';
+import { FXs, TIME_CONSTANT } from '../../constants';
+import { roundTwoDigits } from '../../helpers';
 
 export default class FX {
   dryGain;

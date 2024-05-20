@@ -95,6 +95,7 @@ export default class Oscillator {
 
     setTimeout(() => {
       this.node.disconnect();
+      this.node.stop();
     }, 12000);
   }
 

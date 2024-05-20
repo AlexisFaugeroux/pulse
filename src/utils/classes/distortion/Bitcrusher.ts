@@ -1,7 +1,7 @@
 import { initialSettings } from '../../../nodesConfig';
 import { FXs } from '../../constants';
 import { linearToLinearRange } from '../../helpers';
-import FX from '../FX';
+import FX from '../FXs/FX';
 
 export default class BitcrusherDistortion extends FX {
   node: AudioWorkletNode | null;

@@ -1,6 +1,6 @@
-import { initialSettings } from '../../nodesConfig';
-import { FXs } from '../constants';
-import { linearToLinearRange } from '../helpers';
+import { initialSettings } from '../../../nodesConfig';
+import { FXs } from '../../constants';
+import { linearToLinearRange } from '../../helpers';
 import FX from './FX';
 
 export default class Reverb extends FX {

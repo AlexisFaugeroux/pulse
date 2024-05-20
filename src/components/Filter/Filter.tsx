@@ -2,7 +2,7 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { SettingsContext } from '../../contexts/Context';
 import { Filter_ActionTypes } from '../../contexts/types';
 import { initialSettings } from '../../nodesConfig';
-import { ControlTypes, FILTER_VALUES } from '../../utils/constants';
+import { ControlTypes, FILTER_TYPES } from '../../utils/constants';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
 import InactivePanel from '../utils/InactivePanel/InactivePanel';
 import Knob from '../utils/Knob/Knob';
@@ -11,8 +11,8 @@ import './Filter.scss';
 
 const Filter: FC = () => {
   const { dispatch } = useContext(SettingsContext);
-
   const [isActive, setIsActive] = useState(false);
+  const [currentType, setCurrentType] = useState(FILTER_TYPES[0]);
   const { filter: filterSettings } = initialSettings;
 
   useEffect(() => {
@@ -38,7 +38,12 @@ const Filter: FC = () => {
           isActive={isActive}
           setIsActive={setIsActive}
         />
-        <WordSelector parent="filter" values={FILTER_VALUES} />
+        <WordSelector
+          parent="filter"
+          values={FILTER_TYPES}
+          currentType={currentType}
+          setCurrentType={setCurrentType}
+        />
         <div className="knobs">
           <Knob
             parent="filter"

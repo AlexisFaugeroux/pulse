@@ -3,6 +3,7 @@ import {
   analyser,
   audioContextOutput,
   bitcrusherDistortion,
+  brownNoiseGain,
   clippingDistortion,
   compressor,
   delay,
@@ -12,6 +13,7 @@ import {
   masterGain,
   oscAGain,
   oscBGain,
+  pinkNoiseGain,
   reverb,
   subGain,
   whiteNoiseGain,
@@ -24,16 +26,22 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     oscBGain.connect(filter.dryGain);
     subGain.connect(filter.dryGain);
     whiteNoiseGain.connect(filter.dryGain);
+    pinkNoiseGain.connect(filter.dryGain);
+    brownNoiseGain.connect(filter.dryGain);
     oscAGain.connect(filter.node);
     oscBGain.connect(filter.node);
     subGain.connect(filter.node);
     whiteNoiseGain.connect(filter.node);
+    pinkNoiseGain.connect(filter.node);
+    brownNoiseGain.connect(filter.node);
 
     // LFO
     lfo.connect(oscAGain.gain);
     lfo.connect(oscBGain.gain);
     lfo.connect(subGain.gain);
     lfo.connect(whiteNoiseGain.gain);
+    lfo.connect(pinkNoiseGain.gain);
+    lfo.connect(brownNoiseGain.gain);
 
     // Filter
     filter.connect(clippingDistortion.dryGain);

@@ -1,9 +1,9 @@
-import { FXs, TIME_CONSTANT } from '../constants';
+import { FXs, TIME_CONSTANT } from '../../constants';
 import {
   linearToLinearRange,
   linearToLogarithmRange,
   roundTwoDigitsNonFinite,
-} from '../helpers';
+} from '../../helpers';
 import FX from './FX';
 
 export default class Filter extends FX {

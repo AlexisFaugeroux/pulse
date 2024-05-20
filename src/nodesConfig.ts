@@ -1,13 +1,13 @@
 import { InitialSettingsState } from './types/types';
 import Analyser from './utils/classes/Analyser';
-import Compressor from './utils/classes/Compressor';
-import Delay from './utils/classes/Delay';
-import BitcrusherDistortion from './utils/classes/distortion/Bitcrusher';
-import ClippingDistortion from './utils/classes/distortion/Clipping';
-import Filter from './utils/classes/Filter';
+import Compressor from './utils/classes/FXs/Compressor';
+import Delay from './utils/classes/FXs/Delay';
+import Filter from './utils/classes/FXs/Filter';
+import Reverb from './utils/classes/FXs/Reverb';
 import LFO from './utils/classes/LFO';
 import Limiter from './utils/classes/Limiter';
-import Reverb from './utils/classes/Reverb';
+import BitcrusherDistortion from './utils/classes/distortion/Bitcrusher';
+import ClippingDistortion from './utils/classes/distortion/Clipping';
 import { DistortionType, LFOMode } from './utils/constants';
 
 export const initialSettings: InitialSettingsState = {
@@ -39,6 +39,16 @@ export const initialSettings: InitialSettingsState = {
   noises: {
     whiteNoise: {
       id: 'whiteNoise',
+      isActive: false,
+      gain: 0.3,
+    },
+    pinkNoise: {
+      id: 'pinkNoise',
+      isActive: false,
+      gain: 0.3,
+    },
+    brownNoise: {
+      id: 'brownNoise',
       isActive: false,
       gain: 0.3,
     },
@@ -150,11 +160,19 @@ export const masterGain = audioContext.createGain();
 
 // Oscillators
 export const oscAGain = audioContext.createGain();
+oscAGain.gain.value = initialSettings.oscillators.oscillatorA.gain;
 export const oscBGain = audioContext.createGain();
+oscBGain.gain.value = initialSettings.oscillators.oscillatorB.gain;
 export const subGain = audioContext.createGain();
+subGain.gain.value = initialSettings.oscillators.subOscillator.gain;
 
 // Noises
 export const whiteNoiseGain = audioContext.createGain();
+whiteNoiseGain.gain.value = initialSettings.noises.whiteNoise.gain;
+export const pinkNoiseGain = audioContext.createGain();
+pinkNoiseGain.gain.value = initialSettings.noises.pinkNoise.gain;
+export const brownNoiseGain = audioContext.createGain();
+brownNoiseGain.gain.value = initialSettings.noises.brownNoise.gain;
 
 // Filter
 export const filter = new Filter(audioContext);

@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { SettingsContext } from '../../contexts/Context';
 import { Noise_SettingsActionTypes } from '../../contexts/types/noises';
-import { initialSettings } from '../../nodesConfig';
+// import { initialSettings } from '../../nodesConfig';
 import { ControlTypes, Noise_Types } from '../../utils/constants';
 import BlocTitle from '../utils/BlocTitle/BlocTitle';
 import InactivePanel from '../utils/InactivePanel/InactivePanel';
@@ -15,29 +15,25 @@ interface NoiseOscProps {
 }
 
 const NoiseOsc: FC<NoiseOscProps> = ({ id, label }) => {
-  const {
-    dispatch,
-    state: { noises },
-  } = useContext(SettingsContext);
+  const { dispatch } = useContext(SettingsContext);
   const [isActive, setIsActive] = useState(false);
-
-  const {
-    noises: { whiteNoise },
-  } = initialSettings;
+  const [currentType, setCurrentType] = useState(Noise_Types.WHITE.toString());
 
   useEffect(() => {
     if (isActive) {
       dispatch({
         type: Noise_SettingsActionTypes.Activate,
-        payload: { id: noises.whiteNoise.id },
+        payload: { id: Noise_Types[currentType as keyof typeof Noise_Types] },
       });
     } else {
-      dispatch({
-        type: Noise_SettingsActionTypes.Deactivate,
-        payload: { id: noises.whiteNoise.id },
-      });
+      Object.values(Noise_Types).forEach((noise) =>
+        dispatch({
+          type: Noise_SettingsActionTypes.Deactivate,
+          payload: { id: noise },
+        }),
+      );
     }
-  }, [isActive, dispatch, id, noises.whiteNoise.id]);
+  }, [isActive, dispatch, currentType]);
 
   return (
     <div className="noiseOsc">
@@ -48,11 +44,16 @@ const NoiseOsc: FC<NoiseOscProps> = ({ id, label }) => {
           isActive={isActive}
           setIsActive={setIsActive}
         />
-        <WordSelector parent="noiseOsc" values={Object.keys(Noise_Types)} />
+        <WordSelector
+          parent={id}
+          values={Object.keys(Noise_Types)}
+          currentType={currentType}
+          setCurrentType={setCurrentType}
+        />
         <Knob
-          initialValue={whiteNoise.gain}
+          initialValue={0.3}
           label="level"
-          parent="noiseOsc"
+          parent={id}
           type={ControlTypes.DEFAULT}
         />
       </div>

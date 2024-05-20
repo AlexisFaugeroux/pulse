@@ -1,4 +1,11 @@
-import { audioContext, filter, whiteNoiseGain } from '../../nodesConfig';
+import {
+  audioContext,
+  brownNoiseGain,
+  filter,
+  pinkNoiseGain,
+  whiteNoiseGain,
+} from '../../nodesConfig';
+import { NoiseSettings } from '../../types/types';
 import { Noise_Types, TIME_CONSTANT } from '../../utils/constants';
 import { roundTwoDigitsNonFinite } from '../../utils/helpers';
 import {
@@ -8,15 +15,13 @@ import {
 
 const noisesReducer = (
   state: {
-    whiteNoise: {
-      id: string;
-      isActive: boolean;
-      gain: number;
-    };
+    whiteNoise: NoiseSettings;
+    pinkNoise: NoiseSettings;
+    brownNoise: NoiseSettings;
   },
   action: Noise_SettingsActions,
 ): typeof state => {
-  const { whiteNoise } = state;
+  const { whiteNoise, pinkNoise, brownNoise } = state;
   const { id, value: newValue } = action.payload;
 
   switch (action.type) {
@@ -39,25 +44,44 @@ const noisesReducer = (
         [id]: { ...state[id as keyof typeof state], isActive: false },
       };
     case Noise_SettingsActionTypes.UpdateSettings: {
-      if (!id || newValue === undefined) {
-        console.error('Update noise settings: no id or value provided');
+      if (newValue === undefined) {
+        console.error('Update noise settings: no value provided');
         return { ...state };
       }
 
-      // Noise is too loud compared with oscillators
-      const noiseGainValue =
+      // Noise is too loud compared with oscillators volume
+      const reducedGainValue =
         roundTwoDigitsNonFinite(newValue) -
         roundTwoDigitsNonFinite(newValue) * 0.7;
 
       whiteNoiseGain.gain.setTargetAtTime(
-        noiseGainValue,
+        reducedGainValue,
         audioContext.currentTime,
         TIME_CONSTANT,
       );
+      pinkNoiseGain.gain.setTargetAtTime(
+        reducedGainValue,
+        audioContext.currentTime,
+        TIME_CONSTANT,
+      );
+      brownNoiseGain.gain.setTargetAtTime(
+        reducedGainValue,
+        audioContext.currentTime,
+        TIME_CONSTANT,
+      );
+
       return {
         ...state,
         whiteNoise: {
           ...whiteNoise,
+          gain: newValue,
+        },
+        pinkNoise: {
+          ...pinkNoise,
+          gain: newValue,
+        },
+        brownNoise: {
+          ...brownNoise,
           gain: newValue,
         },
       };
@@ -69,8 +93,41 @@ const noisesReducer = (
         return { ...state };
       }
       if (id === Noise_Types.WHITE) {
-        // disconnect other noises
+        pinkNoiseGain.disconnect();
+        brownNoiseGain.disconnect();
+
+        whiteNoiseGain.connect(filter.dryGain);
         whiteNoiseGain.connect(filter.node);
+
+        return {
+          ...state,
+          pinkNoise: { ...state.pinkNoise, isActive: false },
+          brownNoise: { ...state.brownNoise, isActive: false },
+        };
+      } else if (id === Noise_Types.PINK) {
+        whiteNoiseGain.disconnect();
+        brownNoiseGain.disconnect();
+
+        pinkNoiseGain.connect(filter.dryGain);
+        pinkNoiseGain.connect(filter.node);
+
+        return {
+          ...state,
+          whiteNoise: { ...state.whiteNoise, isActive: false },
+          brownNoise: { ...state.brownNoise, isActive: false },
+        };
+      } else if (id === Noise_Types.BROWN) {
+        whiteNoiseGain.disconnect();
+        pinkNoiseGain.disconnect();
+
+        brownNoiseGain.connect(filter.dryGain);
+        brownNoiseGain.connect(filter.node);
+
+        return {
+          ...state,
+          whiteNoise: { ...state.whiteNoise, isActive: false },
+          pinkNoise: { ...state.pinkNoise, isActive: false },
+        };
       }
       return { ...state };
     default:

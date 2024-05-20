@@ -296,9 +296,9 @@ export const NOTE_TO_KEYS: Record<string, string[]> = {
 };
 
 export enum Noise_Types {
-  WHITE = 'white',
-  PINK = 'pink',
-  BROWN = 'brown',
+  WHITE = 'whiteNoise',
+  PINK = 'pinkNoise',
+  BROWN = 'brownNoise',
 }
 
 export enum LFOMode {
@@ -324,7 +324,7 @@ export enum Waves {
   SQUARE = 'square',
 }
 
-export const FILTER_VALUES = [
+export const FILTER_TYPES = [
   'Lowpass',
   'Highpass',
   'Bandpass',

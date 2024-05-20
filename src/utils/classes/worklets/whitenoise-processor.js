@@ -2,13 +2,13 @@ export default class WhiteNoiseProcessor extends AudioWorkletProcessor {
   process(_, outputs) {
     const output = outputs[0];
 
-    for (let channelIndex = 0; channelIndex < output.length; ++channelIndex) {
+    for (let channelIndex = 0; channelIndex < output.length; channelIndex++) {
       for (
         let sampleIndex = 0;
         sampleIndex < output[channelIndex].length;
-        ++sampleIndex
+        sampleIndex++
       ) {
-        output[channelIndex][sampleIndex] = Math.random() * 2 + 1;
+        output[channelIndex][sampleIndex] = Math.random() * 2 - 1;
       }
     }
 
@@ -16,4 +16,4 @@ export default class WhiteNoiseProcessor extends AudioWorkletProcessor {
   }
 }
 
-registerProcessor('whitenoise', WhiteNoiseProcessor);
+registerProcessor('whiteNoise', WhiteNoiseProcessor);

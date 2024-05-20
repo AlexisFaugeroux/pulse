@@ -1,9 +1,12 @@
 import { currentOscillators } from '../../contexts/reducers/oscillatorTriggerReducer';
 import {
+  brownNoiseGain,
   initialSettings,
   oscAGain,
   oscBGain,
+  pinkNoiseGain,
   subGain,
+  whiteNoiseGain,
 } from '../../nodesConfig';
 import { LFOMode, TIME_CONSTANT } from '../constants';
 import { linearToLinearRange, roundTwoDigits } from '../helpers';
@@ -65,6 +68,9 @@ export default class LFO {
         this.connect(oscAGain.gain);
         this.connect(oscBGain.gain);
         this.connect(subGain.gain);
+        this.connect(whiteNoiseGain.gain);
+        this.connect(pinkNoiseGain.gain);
+        this.connect(brownNoiseGain.gain);
         return;
 
       case LFOMode.VIBRATO:

@@ -111,7 +111,7 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
     } else if (parent === 'noiseOsc') {
       dispatch({
         type: Noise_SettingsActionTypes.UpdateSettings,
-        payload: { id: label, value },
+        payload: { value },
       });
     } else if (parent === 'envelope') {
       dispatch({

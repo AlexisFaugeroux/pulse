@@ -1,16 +1,31 @@
-import { FC, useContext, useEffect, useState } from 'react';
-import './WordSelector.scss';
-import { Filter_ActionTypes } from '../../../contexts/types';
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { SettingsContext } from '../../../contexts/Context';
+import { Filter_ActionTypes } from '../../../contexts/types';
+import { Noise_SettingsActionTypes } from '../../../contexts/types/noises';
+import { Noise_Types } from '../../../utils/constants';
+import './WordSelector.scss';
 
 interface WordSelectorProps {
   parent: string;
   values: string[];
+  currentType: string | Noise_Types;
+  setCurrentType: Dispatch<SetStateAction<string>>;
 }
 
-const WordSelector: FC<WordSelectorProps> = ({ parent, values }) => {
+const WordSelector: FC<WordSelectorProps> = ({
+  parent,
+  values,
+  currentType,
+  setCurrentType,
+}) => {
   const { dispatch } = useContext(SettingsContext);
-  const [currentWord, setCurrentWord] = useState(values[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const lastIndex = values.length - 1;
@@ -24,17 +39,23 @@ const WordSelector: FC<WordSelectorProps> = ({ parent, values }) => {
   };
 
   useEffect(() => {
-    setCurrentWord(values[currentIndex]);
-  }, [currentIndex, currentWord, values]);
+    setCurrentType(values[currentIndex]);
+  }, [currentIndex, currentType, values, setCurrentType]);
 
   useEffect(() => {
     if (parent === 'filter') {
       dispatch({
         type: Filter_ActionTypes.UpdateType,
-        payload: { id: currentWord.toLowerCase() },
+        payload: { id: currentType.toLowerCase() },
       });
     }
-  }, [currentWord]);
+    if (parent === 'noiseOsc') {
+      dispatch({
+        type: Noise_SettingsActionTypes.UpdateType,
+        payload: { id: Noise_Types[currentType as keyof typeof Noise_Types] },
+      });
+    }
+  }, [currentType, dispatch, parent]);
 
   return (
     <div className="word-selector">
@@ -42,7 +63,7 @@ const WordSelector: FC<WordSelectorProps> = ({ parent, values }) => {
         <button className="arrow-left-button" onClick={handleLeftClick}>
           <i className="arrow-left"></i>
         </button>
-        <div className="word-selector-sreen">{currentWord}</div>
+        <div className="word-selector-sreen">{currentType}</div>
         <button className="arrow-right-button" onClick={handleRightClick}>
           <i className="arrow-right"></i>
         </button>

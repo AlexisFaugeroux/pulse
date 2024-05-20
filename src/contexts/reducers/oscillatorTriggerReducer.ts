@@ -1,8 +1,10 @@
 import {
   audioContext,
+  brownNoiseGain,
   lfo,
   oscAGain,
   oscBGain,
+  pinkNoiseGain,
   subGain,
   whiteNoiseGain,
 } from '../../nodesConfig';
@@ -13,6 +15,9 @@ import type {
   SubOscSettings,
 } from '../../types/types';
 import Oscillator from '../../utils/classes/Oscillator';
+import BrownNoise from '../../utils/classes/noises/BrownNoise';
+import Noise from '../../utils/classes/noises/Noise';
+import PinkNoise from '../../utils/classes/noises/PinkNoise';
 import WhiteNoise from '../../utils/classes/noises/WhiteNoise';
 import { LFOMode } from '../../utils/constants';
 import { roundTwoDigits } from '../../utils/helpers';
@@ -22,7 +27,7 @@ import {
 } from '../types';
 
 export let currentOscillators: Oscillator[] = [];
-export let currentNoises: WhiteNoise[] = []; // (WhiteNoise | PinkNoise | BrownNoise)[]
+export let currentNoises: Noise[] = [];
 
 const oscillatorTriggerReducer = async (
   state: {
@@ -33,6 +38,8 @@ const oscillatorTriggerReducer = async (
     };
     noises: {
       whiteNoise: NoiseSettings;
+      pinkNoise: NoiseSettings;
+      brownNoise: NoiseSettings;
     };
     envelope: EnvelopeSettings;
   },
@@ -40,7 +47,7 @@ const oscillatorTriggerReducer = async (
 ): Promise<void> => {
   const {
     oscillators: { oscillatorA, oscillatorB, subOscillator },
-    noises: { whiteNoise },
+    noises: { whiteNoise, pinkNoise, brownNoise },
     envelope,
   } = state;
   const { note, frequency } = action.payload;
@@ -161,11 +168,33 @@ const oscillatorTriggerReducer = async (
         );
         await newWhiteNoise.init();
         currentNoises.push(newWhiteNoise);
+      } else if (pinkNoise.isActive) {
+        const newPinkNoise = new PinkNoise(
+          audioContext,
+          pinkNoiseGain,
+          envelope.isActive
+            ? envelope
+            : { isActive: false, ...defaultEnvelopeSettings },
+          frequency,
+        );
+        await newPinkNoise.init();
+        currentNoises.push(newPinkNoise);
+      } else if (brownNoise.isActive) {
+        const newBrownNoise = new BrownNoise(
+          audioContext,
+          brownNoiseGain,
+          envelope.isActive
+            ? envelope
+            : { isActive: false, ...defaultEnvelopeSettings },
+          frequency,
+        );
+        await newBrownNoise.init();
+        currentNoises.push(newBrownNoise);
       }
       return;
 
     case Oscillator_TriggerActionsTypes.KillNoise: {
-      const activeNoises: WhiteNoise[] = [];
+      const activeNoises: Noise[] = [];
 
       currentNoises.forEach((noise) => {
         frequency === noise.refFrequency
