@@ -18,9 +18,9 @@ const Rack: FC<RackProps> = ({ type, isActive, setIsActive, children }) => {
       rackType = FXs.DISTORTION;
       backgroundColor = theme.distortionColor;
       break;
-    case FXs.FLANGER:
-      rackType = FXs.FLANGER;
-      backgroundColor = theme.flangerColor;
+    case FXs.PHASER:
+      rackType = FXs.PHASER;
+      backgroundColor = theme.phaserColor;
       break;
     case FXs.DELAY:
       rackType = FXs.DELAY;

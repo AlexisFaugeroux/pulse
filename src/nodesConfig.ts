@@ -1,8 +1,10 @@
 import { InitialSettingsState } from './types/types';
 import Analyser from './utils/classes/Analyser';
+import Chorus from './utils/classes/FXs/Chorus';
 import Compressor from './utils/classes/FXs/Compressor';
 import Delay from './utils/classes/FXs/Delay';
 import Filter from './utils/classes/FXs/Filter';
+import Phaser from './utils/classes/FXs/Phaser';
 import Reverb from './utils/classes/FXs/Reverb';
 import LFO from './utils/classes/LFO';
 import Limiter from './utils/classes/Limiter';
@@ -97,22 +99,24 @@ export const initialSettings: InitialSettingsState = {
       mixGain: 1,
     },
   },
-  flanger: {
+  phaser: {
     isActive: false,
-    delay: 0.5,
-    feedback: 0.5,
-    depth: 0.5,
-    speed: 0.5,
+    frequency: 700,
+    stereo: 40,
+    feedback: 0.7,
+    depth: 0.6,
+    rate: 0.1,
     dryGain: 1,
     wetGain: 0,
     mixGain: 1,
   },
   chorus: {
     isActive: false,
-    delay: 0.5,
-    feedback: 0.5,
-    depth: 0.5,
-    speed: 0.5,
+    time: 0.35,
+    feedback: 0.4,
+    depth: 0.1,
+    rate: 0.2,
+    stereoPhase: 0.5,
     dryGain: 1,
     wetGain: 0,
     mixGain: 1,
@@ -184,6 +188,12 @@ export const lfo = new LFO(audioContext);
 export const clippingDistortion = new ClippingDistortion(audioContext);
 export const bitcrusherDistortion = new BitcrusherDistortion(audioContext);
 await bitcrusherDistortion.init();
+
+// Chorus
+export const chorus = new Chorus(audioContext);
+
+// Phaser
+export const phaser = new Phaser(audioContext);
 
 // Delay
 export const delay = new Delay(audioContext);

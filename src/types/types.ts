@@ -59,18 +59,20 @@ export type DistortionSettings = {
   };
 };
 
-export type FlangerSettings = BaseFxSettings & {
-  delay: number;
-  feedback: number;
+export type PhaserSettings = BaseFxSettings & {
   depth: number;
-  speed: number;
+  feedback: number;
+  rate: number;
+  stereo: number;
+  frequency: number;
 };
 
 export type ChorusSettings = BaseFxSettings & {
-  delay: number;
-  feedback: number;
+  time: number;
   depth: number;
-  speed: number;
+  feedback: number;
+  rate: number;
+  stereoPhase: number;
 };
 
 export type DelaySettings = BaseFxSettings & {
@@ -113,7 +115,7 @@ export type InitialSettingsState = {
   };
   filter: FilterSettings;
   distortion: DistortionSettings;
-  flanger: FlangerSettings;
+  phaser: PhaserSettings;
   chorus: ChorusSettings;
   delay: DelaySettings;
   reverb: ReverbSettings;

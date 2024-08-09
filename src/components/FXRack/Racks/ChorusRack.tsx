@@ -12,7 +12,7 @@ const ChorusRack: FC = () => {
   const [isActive, setIsActive] = useState(false);
 
   const {
-    chorus: { delay, depth, speed, feedback, wetGain },
+    chorus: { rate, time, depth, feedback, stereoPhase, wetGain },
   } = initialSettings;
 
   useEffect(() => {
@@ -32,8 +32,14 @@ const ChorusRack: FC = () => {
   return (
     <Rack type={FXs.CHORUS} isActive={isActive} setIsActive={setIsActive}>
       <Knob
-        initialValue={delay}
-        label="delay"
+        initialValue={rate}
+        label="rate"
+        type={ControlTypes.CHORUS}
+        parent={FXs.CHORUS}
+      />
+      <Knob
+        initialValue={time}
+        label="time"
         type={ControlTypes.CHORUS}
         parent={FXs.CHORUS}
       />
@@ -44,14 +50,14 @@ const ChorusRack: FC = () => {
         parent={FXs.CHORUS}
       />
       <Knob
-        initialValue={speed}
-        label="speed"
+        initialValue={feedback}
+        label="feedback"
         type={ControlTypes.CHORUS}
         parent={FXs.CHORUS}
       />
       <Knob
-        initialValue={feedback}
-        label="feedback"
+        initialValue={stereoPhase}
+        label="phase"
         type={ControlTypes.CHORUS}
         parent={FXs.CHORUS}
       />

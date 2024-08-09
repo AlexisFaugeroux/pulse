@@ -1,43 +1,24 @@
 import { initialSettings } from '../../../nodesConfig';
-import { FXs, TIME_CONSTANT } from '../../constants';
+import { TIME_CONSTANT } from '../../constants';
 import { roundTwoDigits } from '../../helpers';
 
-export default class FX {
-  dryGain;
-  wetGain;
-  mixGain;
+export default class Phaser {
+  dryGain: GainNode;
+  wetGain: GainNode;
+  mixGain: GainNode;
+  // node: AudioNode;
 
-  constructor(
-    public audioContext: AudioContext,
-    fxName: FXs,
-  ) {
-    const { chorus, compressor, delay, distortion, filter, reverb } = initialSettings;
-
-    const fxInitialSettings = {
-      chorus: { dryGain: chorus.dryGain, wetGain: chorus.wetGain },
-      delay: { dryGain: delay.dryGain, wetGain: delay.wetGain },
-      filter: { dryGain: filter.dryGain, wetGain: filter.wetGain },
-      reverb: { dryGain: reverb.dryGain, wetGain: reverb.wetGain },
-      clipping: {
-        dryGain: distortion.clipping.dryGain,
-        wetGain: distortion.clipping.wetGain,
-      },
-      bitcrusher: {
-        dryGain: distortion.bitcrusher.dryGain,
-        wetGain: distortion.bitcrusher.wetGain,
-      },
-      compressor: { dryGain: compressor.dryGain, wetGain: compressor.wetGain },
-    };
-
+  constructor(public audioContext: AudioContext) {
     this.audioContext = audioContext;
     this.dryGain = audioContext.createGain();
     this.wetGain = audioContext.createGain();
     this.mixGain = audioContext.createGain();
 
-    this.dryGain.gain.value =
-      fxInitialSettings[fxName as keyof typeof fxInitialSettings].dryGain;
-    this.wetGain.gain.value =
-      fxInitialSettings[fxName as keyof typeof fxInitialSettings].wetGain;
+    this.dryGain.gain.value = initialSettings.phaser.dryGain;
+    this.wetGain.gain.value = initialSettings.phaser.wetGain;
+
+    // this.node =
+    // this.wireUp(this.node);
   }
 
   connect(destination: AudioNode) {

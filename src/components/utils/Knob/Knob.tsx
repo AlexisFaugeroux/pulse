@@ -2,12 +2,14 @@ import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
 import { Distortion_ActionTypes } from '../../../contexts/types/distortion';
 import {
+  Chorus_ActionTypes,
   Compressor_ActionTypes,
   Delay_ActionTypes,
   Envelope_ActionTypes,
   Filter_ActionTypes,
   LFO_SettingsActionTypes,
   Oscillator_SettingsActionTypes,
+  Phaser_ActionTypes,
   Reverb_ActionTypes,
 } from '../../../contexts/types/index';
 import { Master_ActionTypes } from '../../../contexts/types/master';
@@ -87,7 +89,7 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
         'd',
         `M20,20l0,${r}${
           value > 0.5 ? `A${r},${r},0,0,1,20,${20 - r}` : ''
-        }A-${r},${r},0,0,1,${endX},${endY}Z`,
+        }A-${r},${r},0,0,1,${endX},${endY}`,
       );
       indicatorDotRef.current.style.transform = `rotate(${360 * value}deg)`;
     }
@@ -140,6 +142,16 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
           payload: { id: label, value },
         });
       }
+    } else if (parent === FXs.PHASER) {
+      dispatch({
+        type: Phaser_ActionTypes.UpdateSettings,
+        payload: { id: label, value },
+      });
+    } else if (parent === FXs.CHORUS) {
+      dispatch({
+        type: Chorus_ActionTypes.UpdateSettings,
+        payload: { id: label, value },
+      });
     } else if (parent === FXs.DELAY) {
       dispatch({
         type: Delay_ActionTypes.UpdateSettings,
@@ -183,9 +195,9 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
       indicatorDotFillColor = theme.distortionColor;
       indcatorDotStrokeColor = 'black';
       break;
-    case ControlTypes.FLANGER:
-      indicatorRingFillColor = theme.flangerColor;
-      indicatorDotFillColor = theme.flangerColor;
+    case ControlTypes.PHASER:
+      indicatorRingFillColor = theme.phaserColor;
+      indicatorDotFillColor = theme.phaserColor;
       indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.DELAY:

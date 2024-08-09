@@ -1,68 +1,74 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
-import { Flanger_ActionTypes } from '../../../contexts/types';
+import { Phaser_ActionTypes } from '../../../contexts/types';
 import { initialSettings } from '../../../nodesConfig';
 import { ControlTypes, FXs } from '../../../utils/constants';
 import Knob from '../../utils/Knob/Knob';
 import Rack from './Rack';
 import './Racks.scss';
 
-const FlangerRack: FC = () => {
+const PhaserRack: FC = () => {
   const { dispatch } = useContext(SettingsContext);
   const [isActive, setIsActive] = useState(false);
 
   const {
-    flanger: { delay, depth, speed, feedback, wetGain },
+    phaser: { rate, depth, frequency, feedback, stereo, wetGain },
   } = initialSettings;
 
   useEffect(() => {
     if (isActive) {
       dispatch({
-        type: Flanger_ActionTypes.Activate,
+        type: Phaser_ActionTypes.Activate,
         payload: {},
       });
     } else {
       dispatch({
-        type: Flanger_ActionTypes.Deactivate,
+        type: Phaser_ActionTypes.Deactivate,
         payload: {},
       });
     }
   }, [isActive, dispatch]);
 
   return (
-    <Rack type={FXs.FLANGER} isActive={isActive} setIsActive={setIsActive}>
+    <Rack type={FXs.PHASER} isActive={isActive} setIsActive={setIsActive}>
       <Knob
-        initialValue={delay}
-        label="delay"
-        type={ControlTypes.FLANGER}
-        parent={FXs.FLANGER}
+        initialValue={rate}
+        label="rate"
+        type={ControlTypes.PHASER}
+        parent={FXs.PHASER}
       />
       <Knob
         initialValue={depth}
         label="depth"
-        type={ControlTypes.FLANGER}
-        parent={FXs.FLANGER}
+        type={ControlTypes.PHASER}
+        parent={FXs.PHASER}
       />
       <Knob
-        initialValue={speed}
-        label="speed"
-        type={ControlTypes.FLANGER}
-        parent={FXs.FLANGER}
+        initialValue={frequency}
+        label="frequency"
+        type={ControlTypes.PHASER}
+        parent={FXs.PHASER}
       />
       <Knob
         initialValue={feedback}
         label="feedback"
-        type={ControlTypes.FLANGER}
-        parent={FXs.FLANGER}
+        type={ControlTypes.PHASER}
+        parent={FXs.PHASER}
+      />
+      <Knob
+        initialValue={stereo}
+        label="stereo"
+        type={ControlTypes.PHASER}
+        parent={FXs.PHASER}
       />
       <Knob
         initialValue={wetGain}
         label="mix"
-        type={ControlTypes.FLANGER}
-        parent={FXs.FLANGER}
+        type={ControlTypes.PHASER}
+        parent={FXs.PHASER}
       />
     </Rack>
   );
 };
 
-export default FlangerRack;
+export default PhaserRack;

@@ -7,7 +7,7 @@ import type {
   Delay_SettingsActions,
   Envelope_SettingsActions,
   Filter_SettingsActions,
-  Flanger_SettingsActions,
+  Phaser_SettingsActions,
   LFO_SettingsActions,
   Oscillator_SettingsActions,
   Oscillator_TriggerActions,
@@ -30,7 +30,7 @@ const SettingsContext = createContext<{
     | LFO_SettingsActions
     | Filter_SettingsActions
     | Distortion_SettingsActions
-    | Flanger_SettingsActions
+    | Phaser_SettingsActions
     | Chorus_SettingsActions
     | Delay_SettingsActions
     | Reverb_SettingsActions

@@ -4,6 +4,7 @@ import {
   audioContextOutput,
   bitcrusherDistortion,
   brownNoiseGain,
+  chorus,
   clippingDistortion,
   compressor,
   delay,
@@ -13,6 +14,7 @@ import {
   masterGain,
   oscAGain,
   oscBGain,
+  //  phaser,
   pinkNoiseGain,
   reverb,
   subGain,
@@ -55,8 +57,16 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
       console.log('Bitcrusher node is null');
     }
 
-    bitcrusherDistortion.connect(delay.dryGain);
-    bitcrusherDistortion.connect(delay.node);
+    bitcrusherDistortion.connect(chorus.dryGain);
+    bitcrusherDistortion.connect(chorus.node);
+
+    // Phaser
+    //    phaser.connect(chorus.dryGain);
+    //   phaser.connect(chorus.node);
+
+    // Chorus
+    chorus.connect(delay.dryGain);
+    chorus.connect(delay.node);
 
     // Delay
     delay.connect(reverb.dryGain);

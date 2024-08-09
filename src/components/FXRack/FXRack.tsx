@@ -3,7 +3,7 @@ import './FXRack.scss';
 import ChorusRack from './Racks/ChorusRack';
 import CompressorRack from './Racks/CompressorRack';
 import DelayRack from './Racks/DelayRack';
-import FlangerRack from './Racks/FlangerRack';
+import PhaserRack from './Racks/PhaserRack';
 import ReverbRack from './Racks/ReverbRack';
 import DistortionRack from './Racks/distortion/DistortionRack';
 
@@ -15,7 +15,7 @@ const FXRack: FC = () => {
         <div className="line" />
       </div>
       <DistortionRack />
-      <FlangerRack />
+      <PhaserRack />
       <ChorusRack />
       <DelayRack />
       <ReverbRack />

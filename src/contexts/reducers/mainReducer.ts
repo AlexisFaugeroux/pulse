@@ -1,8 +1,8 @@
 import { InitialSettingsState } from '../../types/types';
 import {
   Chorus_SettingsActions,
-  Flanger_SettingsActions,
   Oscillator_TriggerActionsTypes,
+  Phaser_SettingsActions,
   type Compressor_SettingsActions,
   type Delay_SettingsActions,
   type Distortion_SettingsActions,
@@ -21,13 +21,13 @@ import delayReducer from './delayReducer';
 import distortionReducer from './distortionReducer';
 import envelopeReducer from './envelopeReducer';
 import filterReducer from './filterReducer';
-import flangerReducer from './flangerReducer';
 import { getActionType } from './helpers';
 import LFOReducer from './lfoReducer';
 import masterReducer from './masterReducer';
 import noisesReducer from './noisesReducer';
 import oscillatorTriggerReducer from './oscillatorTriggerReducer';
 import oscillatorsReducer from './oscillatorsReducer';
+import phaserReducer from './phaserReducer';
 import reverbReducer from './reverbReducer';
 
 export const mainReducer = (
@@ -42,7 +42,7 @@ export const mainReducer = (
     | LFO_SettingsActions
     | Filter_SettingsActions
     | Distortion_SettingsActions
-    | Flanger_SettingsActions
+    | Phaser_SettingsActions
     | Chorus_SettingsActions
     | Delay_SettingsActions
     | Reverb_SettingsActions
@@ -97,10 +97,10 @@ export const mainReducer = (
             action as Distortion_SettingsActions,
           )
         : settings.distortion,
-    flanger:
-      type === 'flanger'
-        ? flangerReducer(settings.flanger, action as Flanger_SettingsActions)
-        : settings.flanger,
+    phaser:
+      type === 'Phaser'
+        ? phaserReducer(settings.phaser, action as Phaser_SettingsActions)
+        : settings.phaser,
     chorus:
       type === 'chorus'
         ? chorusReducer(settings.chorus, action as Chorus_SettingsActions)
