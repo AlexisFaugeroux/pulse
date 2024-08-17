@@ -11,7 +11,7 @@ export default class FX {
     public audioContext: AudioContext,
     fxName: FXs,
   ) {
-    const { chorus, compressor, delay, distortion, filter, reverb } = initialSettings;
+    const { chorus, phaser, compressor, delay, distortion, filter, reverb } = initialSettings;
 
     const fxInitialSettings = {
       chorus: { dryGain: chorus.dryGain, wetGain: chorus.wetGain },
@@ -27,6 +27,7 @@ export default class FX {
         wetGain: distortion.bitcrusher.wetGain,
       },
       compressor: { dryGain: compressor.dryGain, wetGain: compressor.wetGain },
+      phaser: { dryGain: phaser.dryGain, wetGain: phaser.wetGain },
     };
 
     this.audioContext = audioContext;

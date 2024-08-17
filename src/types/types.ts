@@ -61,10 +61,11 @@ export type DistortionSettings = {
 
 export type PhaserSettings = BaseFxSettings & {
   depth: number;
-  feedback: number;
   rate: number;
-  stereo: number;
-  frequency: number;
+  frequencyOffset: number;
+  q: number;
+  baseFrequency: number;
+  stereoPhase: number;
 };
 
 export type ChorusSettings = BaseFxSettings & {

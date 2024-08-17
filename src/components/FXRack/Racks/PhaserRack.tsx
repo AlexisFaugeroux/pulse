@@ -12,7 +12,7 @@ const PhaserRack: FC = () => {
   const [isActive, setIsActive] = useState(false);
 
   const {
-    phaser: { rate, depth, frequency, feedback, stereo, wetGain },
+    phaser: { rate, depth, baseFrequency, q, wetGain },
   } = initialSettings;
 
   useEffect(() => {
@@ -44,20 +44,14 @@ const PhaserRack: FC = () => {
         parent={FXs.PHASER}
       />
       <Knob
-        initialValue={frequency}
-        label="frequency"
+        initialValue={q}
+        label="Q"
         type={ControlTypes.PHASER}
         parent={FXs.PHASER}
       />
       <Knob
-        initialValue={feedback}
-        label="feedback"
-        type={ControlTypes.PHASER}
-        parent={FXs.PHASER}
-      />
-      <Knob
-        initialValue={stereo}
-        label="stereo"
+        initialValue={baseFrequency}
+        label="base.freq"
         type={ControlTypes.PHASER}
         parent={FXs.PHASER}
       />

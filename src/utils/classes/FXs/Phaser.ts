@@ -1,70 +1,187 @@
-import { initialSettings } from '../../../nodesConfig';
-import { TIME_CONSTANT } from '../../constants';
-import { roundTwoDigits } from '../../helpers';
+import { FXs } from '../../constants';
+import { linearToLinearRange, linearToLogarithmRange } from '../../helpers';
+import FX from './FX';
 
-export default class Phaser {
-  dryGain: GainNode;
-  wetGain: GainNode;
-  mixGain: GainNode;
-  // node: AudioNode;
+// Inspired by Tuna.js and Tone.js Phaser classes
+
+class PhaserNode extends GainNode {
+  public baseFrequency: number;
+  public depth: number;
+  public frequencyOffset: number;
+  readonly octaves: number;
+  readonly stages: BiquadFilterNode[];
+  readonly output: GainNode;
+  readonly feedbackGain: GainNode;
+  readonly lfo: OscillatorNode;
+  readonly lfoGain: GainNode;
 
   constructor(public audioContext: AudioContext) {
-    this.audioContext = audioContext;
-    this.dryGain = audioContext.createGain();
-    this.wetGain = audioContext.createGain();
-    this.mixGain = audioContext.createGain();
+    super(audioContext);
 
-    this.dryGain.gain.value = initialSettings.phaser.dryGain;
-    this.wetGain.gain.value = initialSettings.phaser.wetGain;
+    const defaultParams = {
+      rate: 0.3,
+      depth: 0.5,
+      feedback: 0.3,
+      baseFrequency: 580,
+      frequencyOffset: 200,
+      q: 0.005,
+      stages: 4,
+      octaves: 2,
+    };
 
-    // this.node =
-    // this.wireUp(this.node);
+    this.baseFrequency = defaultParams.baseFrequency;
+    this.octaves = defaultParams.octaves;
+    this.depth = defaultParams.depth;
+    this.frequencyOffset = defaultParams.frequencyOffset;
+
+    this.output = this.audioContext.createGain();
+
+    // Create all the filters for the phaser
+    this.stages = [];
+    for (let i = 0; i < defaultParams.stages - 1; i++) {
+      const filter = this.audioContext.createBiquadFilter();
+      filter.type = 'allpass';
+      filter.frequency.value = this.baseFrequency + i * this.frequencyOffset;
+      filter.Q.value = defaultParams.q;
+      this.stages.push(filter);
+    }
+
+    // Connect stages
+    this.connect(this.stages[0]);
+    for (let i = 0; i < this.stages.length - 1; i++) {
+      this.stages[i].connect(this.stages[i + 1]);
+    }
+    this.stages[this.stages.length - 1].connect(this.output);
+
+    this.feedbackGain = this.audioContext.createGain();
+    this.feedbackGain.gain.value = defaultParams.feedback;
+    this.stages[this.stages.length - 1].connect(this.feedbackGain);
+    this.feedbackGain.connect(this.stages[0]);
+
+    this.lfo = this.audioContext.createOscillator();
+    this.lfoGain = this.audioContext.createGain();
+
+    this.lfo.connect(this.lfoGain);
+    this.stages.forEach((filter) => {
+      this.lfoGain.connect(filter.frequency);
+    });
   }
+}
 
-  connect(destination: AudioNode) {
-    this.mixGain.connect(destination);
-  }
+class StereoPhaser extends GainNode {
+  readonly output: GainNode;
+  private splitter: ChannelSplitterNode;
+  private merger: ChannelSplitterNode;
+  readonly leftPhaser: PhaserNode;
+  readonly rightPhaser: PhaserNode;
 
-  disconnect() {
-    this.mixGain.disconnect();
-  }
+  constructor(public audioContext: AudioContext) {
+    super(audioContext);
 
-  activate({ dryValue, wetValue }: { dryValue: number; wetValue: number }) {
-    const { currentTime } = this.audioContext;
+    this.leftPhaser = new PhaserNode(audioContext);
+    this.rightPhaser = new PhaserNode(audioContext);
+    this.splitter = audioContext.createChannelSplitter(2);
+    this.merger = audioContext.createChannelMerger(2);
+    this.output = audioContext.createGain();
 
-    this.dryGain.gain.setValueAtTime(dryValue, currentTime + TIME_CONSTANT);
-    this.wetGain.gain.setValueAtTime(wetValue, currentTime + TIME_CONSTANT);
-    this.wetGain.connect(this.mixGain);
-  }
+    this.connect(this.splitter);
 
-  deactivate() {
-    const { currentTime } = this.audioContext;
-    this.dryGain.gain.setValueAtTime(1, currentTime + TIME_CONSTANT);
-    this.wetGain.gain.setValueAtTime(0, currentTime + TIME_CONSTANT);
-    this.wetGain.disconnect();
-  }
+    this.splitter.connect(this.leftPhaser, 0);
+    this.leftPhaser.output.connect(this.merger, 0, 0);
 
-  setDryGain(value: number) {
-    this.dryGain.gain.setValueAtTime(
-      roundTwoDigits(value),
-      this.audioContext.currentTime + TIME_CONSTANT,
+    this.splitter.connect(this.rightPhaser, 1);
+    this.rightPhaser.output.connect(this.merger, 0, 1);
+
+    this.merger.connect(this.output);
+
+    this.leftPhaser.lfo.start();
+    this.rightPhaser.lfo.start(
+      this.audioContext.currentTime +
+      Math.PI / 2 / this.rightPhaser.lfo.frequency.value, // 90° offset
     );
   }
 
-  setWetGain(value: number) {
-    this.wetGain.gain.setValueAtTime(
-      // Input value based on mouse drag has precision issue, value is often not 0 when input visually is
-      value < 0.03 ? 0 : roundTwoDigits(value),
-      this.audioContext.currentTime + TIME_CONSTANT,
-    );
+  setRate(value: number) {
+    const convertedValue = linearToLogarithmRange({
+      base: 10,
+      value,
+      linearRange: [0, 1],
+      logarithmicRange: [0.05, 1],
+    });
+
+    this.leftPhaser.lfo.frequency.value = convertedValue;
+    this.rightPhaser.lfo.frequency.value = convertedValue;
   }
 
-  wireUp(node: AudioNode) {
-    this.dryGain.connect(this.mixGain);
+  setDepth(value: number) {
+    let depth =
+      (value *
+        this.leftPhaser.baseFrequency *
+        Math.pow(2, this.leftPhaser.octaves)) /
+      2;
+    this.leftPhaser.lfoGain.gain.value = depth;
 
-    if (!node) throw new Error('FX class wireUp: node is null');
-    node.connect(this.wetGain);
+    depth =
+      (value *
+        this.rightPhaser.baseFrequency *
+        Math.pow(2, this.rightPhaser.octaves)) /
+      2;
+    this.rightPhaser.lfoGain.gain.value = depth;
+  }
 
-    this.wetGain.connect(this.mixGain);
+  setQ(value: number) {
+    const convertedValue = linearToLinearRange(value, [0, 10]);
+
+    this.leftPhaser.stages.forEach((filter) => {
+      filter.Q.value = convertedValue;
+    });
+    this.rightPhaser.stages.forEach((filter) => {
+      filter.Q.value = convertedValue;
+    });
+  }
+
+  setBaseFrequency(value: number) {
+    const convertedValue = linearToLinearRange(value, [500, 1500]);
+
+    this.leftPhaser.baseFrequency = convertedValue;
+    this.leftPhaser.stages.forEach((filter, index) => {
+      filter.frequency.value =
+        convertedValue + index * this.leftPhaser.frequencyOffset;
+    });
+
+    this.rightPhaser.baseFrequency = convertedValue;
+    this.rightPhaser.stages.forEach((filter, index) => {
+      filter.frequency.value =
+        convertedValue + index * this.rightPhaser.frequencyOffset;
+    });
+
+    this.setDepth(this.leftPhaser.depth);
+    this.setDepth(this.rightPhaser.depth);
+  }
+}
+
+export default class Phaser extends FX {
+  node: StereoPhaser;
+
+  constructor(audioContext: AudioContext) {
+    super(audioContext, FXs.PHASER);
+    this.node = new StereoPhaser(audioContext);
+    this.wireUp(this.node.output);
+  }
+
+  setRate(value: number) {
+    this.node.setRate(value);
+  }
+
+  setDepth(value: number) {
+    this.node.setDepth(value);
+  }
+
+  setQ(value: number) {
+    this.node.setQ(value);
+  }
+
+  setBaseFrequency(value: number) {
+    this.node.setBaseFrequency(value);
   }
 }

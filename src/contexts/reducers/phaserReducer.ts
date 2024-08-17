@@ -14,32 +14,27 @@ const phaserReducer = (
     case Phaser_ActionTypes.Deactivate:
       phaser.deactivate();
       return { ...state, dryGain: 1 - state.wetGain, isActive: false };
-/*
+
     case Phaser_ActionTypes.UpdateSettings:
       {
         const { id, value } = action.payload;
         if (!id || !value) return { ...state };
+        if (id === 'base.freq') {
+          phaser.setBaseFrequency(value);
+          return { ...state, baseFrequency: value };
+        }
         if (id === 'rate') {
           phaser.setRate(value);
           return { ...state, rate: value };
-        }
-        if (id === 'feedback') {
-          phaser.setFeedback(value);
-          return { ...state, feedback: value };
         }
         if (id === 'depth') {
           phaser.setDepth(value);
           return { ...state, depth: value };
         }
-        if (id === 'stereo') {
-          phaser.setStereoPhase(value);
-          return { ...state, stereo: value };
+        if (id === 'Q') {
+          phaser.setQ(value);
+          return { ...state, q: value };
         }
-        if (id === 'frequency') {
-          phaser.setModulationFrequency(value);
-          return { ...state, frequency: value };
-        }
-
         if (id === 'mix' && state.isActive) {
           const newDryValue = 1 - value;
           phaser.setDryGain(newDryValue);
@@ -52,7 +47,7 @@ const phaserReducer = (
           };
         }
       }
-      return { ...state };*/
+      return { ...state };
     default:
       console.log('Reducer error action', action);
       return { ...state };
