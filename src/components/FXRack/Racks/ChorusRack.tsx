@@ -1,36 +1,20 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type FC, useContext } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
-import { Chorus_ActionTypes } from '../../../contexts/types';
-import { initialSettings } from '../../../nodesConfig';
 import { ControlTypes, FXs } from '../../../utils/constants';
-import Knob from '../../utils/Knob/Knob';
-import Rack from './Rack';
+import { Knob } from '../../utils/Knob/Knob';
+import { Rack } from './Rack';
 import './Racks.scss';
 
-const ChorusRack: FC = () => {
-  const { dispatch } = useContext(SettingsContext);
-  const [isActive, setIsActive] = useState(false);
-
+export const ChorusRack: FC = () => {
   const {
-    chorus: { rate, time, depth, feedback, stereoPhase, wetGain },
-  } = initialSettings;
+    state: { chorus },
+  } = useContext(SettingsContext);
 
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: Chorus_ActionTypes.Activate,
-        payload: {},
-      });
-    } else {
-      dispatch({
-        type: Chorus_ActionTypes.Deactivate,
-        payload: {},
-      });
-    }
-  }, [isActive, dispatch]);
+  const { isActive, rate, time, depth, feedback, stereoPhase, wetGain } =
+    chorus;
 
   return (
-    <Rack type={FXs.CHORUS} isActive={isActive} setIsActive={setIsActive}>
+    <Rack type={FXs.CHORUS} isActive={isActive}>
       <Knob
         initialValue={rate}
         label="rate"
@@ -70,5 +54,3 @@ const ChorusRack: FC = () => {
     </Rack>
   );
 };
-
-export default ChorusRack;

@@ -1,4 +1,4 @@
-import { initialSettings } from '../../../nodesConfig';
+import { DelaySettings } from '../../../types/types';
 import { FXs, TIME_CONSTANT } from '../../constants';
 import { linearToLinearRange } from '../../helpers';
 import FX from './FX';
@@ -7,12 +7,15 @@ export default class Delay extends FX {
   node: DelayNode;
   feedback;
 
-  constructor(public audioContext: AudioContext) {
+  constructor(
+    public audioContext: AudioContext,
+    public settings: DelaySettings,
+  ) {
     super(audioContext, FXs.DELAY);
     this.node = audioContext.createDelay(10); // 10 = maximum delay time allowed
     this.feedback = audioContext.createGain();
 
-    this.feedback.gain.value = initialSettings.delay.feedback;
+    this.feedback.gain.value = settings.feedback;
 
     this.wireUp();
   }

@@ -1,4 +1,4 @@
-import { FC, useCallback, useContext, useEffect, useState } from 'react';
+import { type FC, useCallback, useContext, useEffect, useState } from 'react';
 import { SettingsContext } from '../../contexts/Context';
 import { Oscillator_TriggerActionsTypes } from '../../contexts/types/index';
 import { ALLOWED_KEYS, NOTES, NOTE_TO_KEYS } from '../../utils/constants';
@@ -9,11 +9,14 @@ import {
   getNoteInfo,
   isNoteInKeyboardOctaveRange,
 } from './helpers';
+import { Keyboard_ActionTypes } from '../../contexts/types/keyboard';
 
-const Keyboard: FC = () => {
-  const { dispatch } = useContext(SettingsContext);
+export const Keyboard: FC = () => {
+  const {
+    state: { keyboardOffset: { offset } },
+    dispatch,
+  } = useContext(SettingsContext);
   const [pressedKeys, setPressedKeys] = useState<string[]>([]);
-  const [offset, setOffset] = useState<number>(0);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -88,7 +91,10 @@ const Keyboard: FC = () => {
             min={-2}
             max={5}
             onChange={(e) => {
-              setOffset(parseInt(e.currentTarget.value, 10));
+              dispatch({
+                type: Keyboard_ActionTypes.UpdateSettings,
+                payload: { offset: parseInt(e.currentTarget.value, 10)}
+              })
             }}
           />
         </div>
@@ -160,5 +166,3 @@ const Keyboard: FC = () => {
     </div>
   );
 };
-
-export default Keyboard;

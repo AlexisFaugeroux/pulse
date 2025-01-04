@@ -21,7 +21,7 @@ import {
   whiteNoiseGain,
 } from '../nodesConfig';
 
-const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
+export const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     // Oscillators
     oscAGain.connect(filter.dryGain);
@@ -54,7 +54,7 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
     if (bitcrusherDistortion.node) {
       clippingDistortion.connect(bitcrusherDistortion.node);
     } else {
-      console.log('Bitcrusher node is null');
+      console.error('Bitcrusher node is null');
     }
 
     bitcrusherDistortion.connect(phaser.dryGain);
@@ -91,5 +91,3 @@ const AudioNodesConnect: FC<PropsWithChildren> = ({ children }) => {
 
   return <>{children}</>;
 };
-
-export default AudioNodesConnect;

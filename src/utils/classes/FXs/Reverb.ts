@@ -1,4 +1,4 @@
-import { initialSettings } from '../../../nodesConfig';
+import { ReverbSettings } from '../../../types/types';
 import { FXs } from '../../constants';
 import { linearToLinearRange } from '../../helpers';
 import FX from './FX';
@@ -6,15 +6,18 @@ import FX from './FX';
 export default class Reverb extends FX {
   node: ConvolverNode;
 
-  constructor(public audioContext: AudioContext) {
+  constructor(
+    public audioContext: AudioContext,
+    public settings: ReverbSettings,
+  ) {
     super(audioContext, FXs.REVERB);
     this.node = audioContext.createConvolver();
 
     this.setImpulseResponse(
       audioContext,
       this.node,
-      linearToLinearRange(initialSettings.reverb.time, [0, 5]),
-      linearToLinearRange(initialSettings.reverb.decay, [0, 10]),
+      linearToLinearRange(settings.time, [0, 5]),
+      linearToLinearRange(settings.decay, [0, 10]),
     );
 
     this.wireUp(this.node);

@@ -1,4 +1,4 @@
-import { initialSettings } from '../../../nodesConfig';
+import { DistortionSettings } from '../../../types/types';
 import { DistortionType, FXs } from '../../constants';
 import { linearToLinearRange } from '../../helpers';
 import FX from '../FXs/FX';
@@ -8,11 +8,15 @@ export default class ClippingDistortion extends FX {
   drive;
   type;
 
-  constructor(public audioContext: AudioContext) {
+  constructor(
+    public audioContext: AudioContext,
+    public settings: DistortionSettings,
+  ) {
+    const { clipping } = settings;
     super(audioContext, FXs.DELAY);
 
-    this.drive = initialSettings.distortion.clipping.drive;
-    this.type = initialSettings.distortion.clipping.type;
+    this.drive = clipping.drive;
+    this.type = clipping.type;
 
     this.node = audioContext.createWaveShaper();
     this.node.oversample = '2x';

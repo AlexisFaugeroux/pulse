@@ -1,17 +1,10 @@
+import { ChorusSettings } from '../../../types/types';
 import { FXs, TIME_CONSTANT } from '../../constants';
 import { linearToLinearRange } from '../../helpers';
 import FX from './FX';
 
 // Inspired by Tuna.js and Tone.js chorus classes
-
-type ChorusParams = {
-  time: number;
-  depth: number;
-  rate: number;
-  feedback: number;
-  stereoPhase: number;
-};
-
+//
 class ChorusNode extends GainNode {
   readonly delayNodeLeft;
   readonly delayNodeRight;
@@ -25,29 +18,23 @@ class ChorusNode extends GainNode {
   readonly splitter;
   readonly merger;
   readonly stereoSource;
-  readonly defaultParams: ChorusParams;
   public feedback: number;
   public delayTime: number;
   public depth: number;
   public rate: number;
   public stereoPhase: number;
 
-  constructor(public audioContext: AudioContext) {
+  constructor(public audioContext: AudioContext, public settings: ChorusSettings) {
     super(audioContext);
 
-    this.defaultParams = {
-      time: 0.35,
-      depth: 0.1,
-      rate: 0.2,
-      feedback: 0.4,
-      stereoPhase: 90,
-    };
-
-    this.delayTime = this.defaultParams.time;
-    this.depth = this.defaultParams.depth;
-    this.feedback = this.defaultParams.feedback;
-    this.rate = this.defaultParams.rate;
-    this.stereoPhase = this.defaultParams.stereoPhase;
+    this.delayTime = this.settings.time;
+    this.depth = this.settings.depth;
+    this.feedback = this.settings.feedback;
+    this.rate = this.settings.rate;
+    this.stereoPhase = linearToLinearRange(
+      this.settings.stereoPhase,
+      [0, 180],
+    );
 
     this.delayNodeLeft = this.audioContext.createDelay();
     this.delayNodeRight = this.audioContext.createDelay();
@@ -97,10 +84,10 @@ class ChorusNode extends GainNode {
 export default class Chorus extends FX {
   node: ChorusNode;
 
-  constructor(public audioContext: AudioContext) {
+  constructor(public audioContext: AudioContext, public settings: ChorusSettings) {
     super(audioContext, FXs.CHORUS);
 
-    this.node = new ChorusNode(this.audioContext);
+    this.node = new ChorusNode(this.audioContext, settings);
     this.wireUp(this.node.merger);
   }
 

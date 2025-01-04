@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type ChangeEvent, type FC, useContext } from 'react';
 import activeIcon from '../../../assets/octave-light-switch-active.png';
 import inactiveIcon from '../../../assets/octave-light-switch-inactive.png';
 import { SettingsContext } from '../../../contexts/Context';
@@ -6,13 +6,17 @@ import { Oscillator_SettingsActionTypes } from '../../../contexts/types';
 import './OctaveSelector.scss';
 
 interface OctaveSelectorProps {
+  initialOctaveOffset: number;
   size: 3 | 5 | 7;
   parent: string;
 }
 
-const OctaveSelector: FC<OctaveSelectorProps> = ({ size, parent }) => {
+export const OctaveSelector: FC<OctaveSelectorProps> = ({
+  initialOctaveOffset,
+  size,
+  parent,
+}) => {
   const { dispatch } = useContext(SettingsContext);
-  const [octaveOffset, setOctaveOffset] = useState(0);
 
   const min = (1 - size) / 2;
   const max = (size - 1) / 2;
@@ -22,22 +26,22 @@ const OctaveSelector: FC<OctaveSelectorProps> = ({ size, parent }) => {
     values.push(i > 0 ? `+${i.toString()}` : i.toString());
   }
 
-  useEffect(() => {
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseInt(e.target.value, 10);
     dispatch({
       type: Oscillator_SettingsActionTypes.UpdateSettings,
       payload: {
         id: 'octaveOffset',
         parent,
-        value: octaveOffset,
+        value: newValue,
       },
     });
-  }, [dispatch, octaveOffset, parent]);
+  }
 
   return (
     <div
-      className={`octave-selector-layout ${
-        size === 3 ? 'octave-selector-layout__small' : ''
-      }`}
+      className={`octave-selector-layout ${size === 3 ? 'octave-selector-layout__small' : ''
+        }`}
     >
       <div className="rangeWrap">
         <datalist id="values">
@@ -47,11 +51,10 @@ const OctaveSelector: FC<OctaveSelectorProps> = ({ size, parent }) => {
                 key={`button${value}`}
                 className="light"
                 style={{
-                  backgroundImage: `url(${
-                    octaveOffset === parseInt(value, 10)
+                  backgroundImage: `url(${initialOctaveOffset === parseInt(value, 10)
                       ? activeIcon
                       : inactiveIcon
-                  })`,
+                    })`,
                   backgroundSize: 'cover',
                   backgroundColor: 'transparent',
                   border: 'none',
@@ -74,8 +77,8 @@ const OctaveSelector: FC<OctaveSelectorProps> = ({ size, parent }) => {
           min={min}
           max={max}
           step={1}
-          value={octaveOffset}
-          onChange={(e) => setOctaveOffset(parseInt(e.target.value, 10))}
+          value={initialOctaveOffset}
+          onChange={handleOnChange}
           list="values"
         />
       </div>
@@ -83,5 +86,3 @@ const OctaveSelector: FC<OctaveSelectorProps> = ({ size, parent }) => {
     </div>
   );
 };
-
-export default OctaveSelector;

@@ -11,11 +11,14 @@ import {
   Phaser_ActionTypes,
   Reverb_ActionTypes,
 } from '../types';
+import { Keyboard_ActionTypes } from '../types/keyboard';
 import { Master_ActionTypes } from '../types/master';
 import { Noise_SettingsActionTypes } from '../types/noises';
+import { Preset_SettingsActionTypes } from '../types/preset';
 
 export function getActionType(
   actionType:
+    | Preset_SettingsActionTypes
     | Master_ActionTypes
     | Oscillator_TriggerActionsTypes
     | Oscillator_SettingsActionTypes
@@ -28,8 +31,15 @@ export function getActionType(
     | Chorus_ActionTypes
     | Delay_ActionTypes
     | Reverb_ActionTypes
-    | Compressor_ActionTypes,
+    | Compressor_ActionTypes
+    | Keyboard_ActionTypes,
 ): string {
+  if (
+    Object.values(Preset_SettingsActionTypes).includes(
+      actionType as Preset_SettingsActionTypes,
+    )
+  )
+    return 'preset';
   if (
     Object.values(Master_ActionTypes).includes(actionType as Master_ActionTypes)
   )
@@ -71,7 +81,7 @@ export function getActionType(
   if (
     Object.values(Phaser_ActionTypes).includes(actionType as Phaser_ActionTypes)
   )
-    return 'Phaser';
+    return 'phaser';
   if (
     Object.values(Chorus_ActionTypes).includes(actionType as Chorus_ActionTypes)
   )
@@ -90,5 +100,11 @@ export function getActionType(
     )
   )
     return 'compressor';
+  if (
+    Object.values(Keyboard_ActionTypes).includes(
+      actionType as Keyboard_ActionTypes,
+    )
+  )
+    return 'keyboard';
   return 'trigger';
 }

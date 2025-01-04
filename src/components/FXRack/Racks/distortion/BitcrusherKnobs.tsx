@@ -1,12 +1,14 @@
-import { FC } from 'react';
-import { initialSettings } from '../../../../nodesConfig';
+import { FC, useContext } from 'react';
 import { ControlTypes, FXs } from '../../../../utils/constants';
-import Knob from '../../../utils/Knob/Knob';
+import { Knob } from '../../../utils/Knob/Knob';
+import { SettingsContext } from '../../../../contexts/Context';
 
-const BitcrusherKnobs: FC = () => {
+export const BitcrusherKnobs: FC = () => {
   const {
-    distortion: { bitcrusher },
-  } = initialSettings;
+    state: {
+      distortion: { bitcrusher },
+    },
+  } = useContext(SettingsContext);
 
   return (
     <>

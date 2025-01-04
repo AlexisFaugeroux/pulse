@@ -1,6 +1,5 @@
 import { Dispatch, PropsWithChildren, createContext, useReducer } from 'react';
-import { initialSettings } from '../nodesConfig';
-import type { InitialSettingsState } from '../types/types';
+import type { Settings } from '../types/types';
 import { mainReducer } from './reducers/mainReducer';
 import type {
   Chorus_SettingsActions,
@@ -17,11 +16,14 @@ import { Distortion_SettingsActions } from './types/distortion';
 import { Master_Actions } from './types/master';
 import { Noise_SettingsActions } from './types/noises';
 import { Reverb_SettingsActions } from './types/reverb';
+import { Preset_SettingsActions } from './types/preset';
+import { presets } from '../presets/presets';
+import { Keyboard_SettingsActions } from './types/keyboard';
 
 const SettingsContext = createContext<{
-  state: InitialSettingsState;
-
+  state: Settings;
   dispatch: Dispatch<
+    | Preset_SettingsActions
     | Master_Actions
     | Oscillator_TriggerActions
     | Oscillator_SettingsActions
@@ -35,14 +37,15 @@ const SettingsContext = createContext<{
     | Delay_SettingsActions
     | Reverb_SettingsActions
     | Compressor_SettingsActions
+    | Keyboard_SettingsActions
   >;
 }>({
-  state: initialSettings,
+  state: presets[0].settings,
   dispatch: () => null,
 });
 
 const Provider = ({ children }: PropsWithChildren) => {
-  const [state, dispatch] = useReducer(mainReducer, initialSettings);
+  const [state, dispatch] = useReducer(mainReducer, presets[0].settings);
 
   return (
     <SettingsContext.Provider value={{ state, dispatch }}>

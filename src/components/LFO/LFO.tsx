@@ -1,63 +1,46 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type FC, useContext } from 'react';
 import activeIcon from '../../assets/octave-light-switch-active.png';
 import inactiveIcon from '../../assets/octave-light-switch-inactive.png';
 import { SettingsContext } from '../../contexts/Context';
 import { LFO_SettingsActionTypes } from '../../contexts/types';
-import { initialSettings } from '../../nodesConfig';
 import { ControlTypes, LFOMode, Waves } from '../../utils/constants';
-import BlocTitle from '../utils/BlocTitle/BlocTitle';
-import InactivePanel from '../utils/InactivePanel/InactivePanel';
-import Knob from '../utils/Knob/Knob';
-import WaveSelector from '../utils/WaveSelector/WaveSelector';
+import { BlocTitle } from '../utils/BlocTitle/BlocTitle';
+import { InactivePanel } from '../utils/InactivePanel/InactivePanel';
+import { Knob } from '../utils/Knob/Knob';
+import { WaveSelector } from '../utils/WaveSelector/WaveSelector';
 import './LFO.scss';
 
-const LFO: FC = () => {
-  const { dispatch } = useContext(SettingsContext);
-  const [isActive, setIsActive] = useState(false);
-  const [mode, setMode] = useState<LFOMode>(LFOMode.TREMOLO);
+export const LFO: FC = () => {
+  const {
+    state: { lfo },
+    dispatch,
+  } = useContext(SettingsContext);
 
   const waves = [Waves.SINE, Waves.SQUARE];
-  const { lfo } = initialSettings;
-
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: LFO_SettingsActionTypes.Activate,
-        payload: {},
-      });
-    } else {
-      dispatch({
-        type: LFO_SettingsActionTypes.Deactivate,
-        payload: {},
-      });
-    }
-  }, [isActive, dispatch]);
-
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: LFO_SettingsActionTypes.UpdateMode,
-        payload: { mode },
-      });
-    }
-  }, [isActive, dispatch, mode]);
 
   return (
     <div className="lfo">
-      <InactivePanel isActive={isActive} />
+      <InactivePanel isActive={lfo.isActive} />
       <div className="lfo-background">
-        <BlocTitle label="lfo" isActive={isActive} setIsActive={setIsActive} />
-        <WaveSelector parent="lfo" waves={waves} />
+        <BlocTitle label="lfo" isActive={lfo.isActive} parent="lfo" />
+        <WaveSelector parent="lfo" waves={waves} activeWave={lfo.type} />
         <div className="lfo-selector">
           <div className="selector-option">
             <button
               className="selector-option-light"
               style={{
                 backgroundImage: `url(${
-                  mode === LFOMode.TREMOLO ? activeIcon : inactiveIcon
+                  lfo.mode === LFOMode.TREMOLO ? activeIcon : inactiveIcon
                 })`,
               }}
-              onClick={() => setMode(LFOMode.TREMOLO)}
+              onClick={() => {
+                if (lfo.isActive) {
+                  dispatch({
+                    type: LFO_SettingsActionTypes.UpdateMode,
+                    payload: { mode: LFOMode.TREMOLO },
+                  });
+                }
+              }}
             />
             <span className="selector-option-label">TREMOLO</span>
           </div>
@@ -66,10 +49,17 @@ const LFO: FC = () => {
               className="selector-option-light"
               style={{
                 backgroundImage: `url(${
-                  mode === LFOMode.VIBRATO ? activeIcon : inactiveIcon
+                  lfo.mode === LFOMode.VIBRATO ? activeIcon : inactiveIcon
                 })`,
               }}
-              onClick={() => setMode(LFOMode.VIBRATO)}
+              onClick={() => {
+                if (lfo.isActive) {
+                  dispatch({
+                    type: LFO_SettingsActionTypes.UpdateMode,
+                    payload: { mode: LFOMode.VIBRATO },
+                  });
+                }
+              }}
             />
             <span className="selector-option-label">VIBRATO</span>
           </div>
@@ -92,5 +82,3 @@ const LFO: FC = () => {
     </div>
   );
 };
-
-export default LFO;

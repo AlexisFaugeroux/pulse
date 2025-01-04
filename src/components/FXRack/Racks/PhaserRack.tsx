@@ -1,36 +1,19 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type FC, useContext } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
-import { Phaser_ActionTypes } from '../../../contexts/types';
-import { initialSettings } from '../../../nodesConfig';
 import { ControlTypes, FXs } from '../../../utils/constants';
-import Knob from '../../utils/Knob/Knob';
-import Rack from './Rack';
+import { Knob } from '../../utils/Knob/Knob';
+import { Rack } from './Rack';
 import './Racks.scss';
 
-const PhaserRack: FC = () => {
-  const { dispatch } = useContext(SettingsContext);
-  const [isActive, setIsActive] = useState(false);
-
+export const PhaserRack: FC = () => {
   const {
-    phaser: { rate, depth, baseFrequency, q, wetGain },
-  } = initialSettings;
+    state: { phaser },
+  } = useContext(SettingsContext);
 
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: Phaser_ActionTypes.Activate,
-        payload: {},
-      });
-    } else {
-      dispatch({
-        type: Phaser_ActionTypes.Deactivate,
-        payload: {},
-      });
-    }
-  }, [isActive, dispatch]);
+  const { isActive, rate, depth, baseFrequency, q, wetGain } = phaser;
 
   return (
-    <Rack type={FXs.PHASER} isActive={isActive} setIsActive={setIsActive}>
+    <Rack type={FXs.PHASER} isActive={isActive}>
       <Knob
         initialValue={rate}
         label="rate"
@@ -64,5 +47,3 @@ const PhaserRack: FC = () => {
     </Rack>
   );
 };
-
-export default PhaserRack;

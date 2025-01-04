@@ -9,7 +9,7 @@ const masterReducer = (
   action: Master_Actions,
 ): typeof state => {
   masterGain.gain.setTargetAtTime(
-    action.payload.value,
+    action.payload.value ?? 0,
     audioContext.currentTime,
     TIME_CONSTANT,
   );

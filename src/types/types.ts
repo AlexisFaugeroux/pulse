@@ -1,7 +1,7 @@
 import { DistortionType, LFOMode } from '../utils/constants';
 
 export type OscSettings = {
-  id: 'oscillatorA' | 'oscillatorB';
+  id: string;
   isActive: boolean;
   type: OscillatorType;
   octaveOffset: number;
@@ -32,6 +32,14 @@ export type EnvelopeSettings = {
   release: number;
 };
 
+export type LFOSettings = {
+  isActive: boolean;
+  mode: LFOMode;
+  type: OscillatorType;
+  frequency: number;
+  gain: number;
+};
+
 type BaseFxSettings = {
   isActive: boolean;
   dryGain: number;
@@ -53,7 +61,7 @@ export type DistortionSettings = {
     drive: number;
   };
   bitcrusher: BaseFxSettings & {
-    type: DistortionType.BITCRUSHER;
+    type: DistortionType;
     bitDepth: number;
     downsampling: number;
   };
@@ -94,7 +102,7 @@ export type CompressorSettings = BaseFxSettings & {
   release: number;
 };
 
-export type InitialSettingsState = {
+export type Settings = {
   oscillators: {
     oscillatorA: OscSettings;
     oscillatorB: OscSettings;
@@ -107,13 +115,7 @@ export type InitialSettingsState = {
     brownNoise: NoiseSettings;
   };
   envelope: EnvelopeSettings;
-  lfo: {
-    isActive: boolean;
-    mode: LFOMode;
-    type: OscillatorType;
-    frequency: number;
-    gain: number;
-  };
+  lfo: LFOSettings;
   filter: FilterSettings;
   distortion: DistortionSettings;
   phaser: PhaserSettings;
@@ -123,5 +125,8 @@ export type InitialSettingsState = {
   compressor: CompressorSettings;
   master: {
     gain: number;
+  };
+  keyboardOffset: {
+    offset: number;
   };
 };

@@ -1,9 +1,10 @@
 import {
-  Dispatch,
-  FC,
-  SetStateAction,
+  type Dispatch,
+  type FC,
+  type SetStateAction,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
@@ -19,13 +20,16 @@ interface WordSelectorProps {
   setCurrentType: Dispatch<SetStateAction<string>>;
 }
 
-const WordSelector: FC<WordSelectorProps> = ({
+export const WordSelector: FC<WordSelectorProps> = ({
   parent,
   values,
   currentType,
   setCurrentType,
 }) => {
-  const { dispatch } = useContext(SettingsContext);
+  const {
+    state: { noises },
+    dispatch,
+  } = useContext(SettingsContext);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const lastIndex = values.length - 1;
@@ -37,6 +41,11 @@ const WordSelector: FC<WordSelectorProps> = ({
   const handleRightClick = () => {
     setCurrentIndex(currentIndex === lastIndex ? 0 : currentIndex + 1);
   };
+
+  const isNoiseActivated = useMemo(
+    () => Object.values(noises).some((noise) => noise.isActive),
+    [noises],
+  );
 
   useEffect(() => {
     setCurrentType(values[currentIndex]);
@@ -54,8 +63,15 @@ const WordSelector: FC<WordSelectorProps> = ({
         type: Noise_SettingsActionTypes.UpdateType,
         payload: { id: Noise_Types[currentType as keyof typeof Noise_Types] },
       });
+
+      if (isNoiseActivated) {
+        dispatch({
+          type: Noise_SettingsActionTypes.Activate,
+          payload: { id: Noise_Types[currentType as keyof typeof Noise_Types] },
+        });
+      }
     }
-  }, [currentType, dispatch, parent]);
+  }, [currentType, dispatch, parent, isNoiseActivated]);
 
   return (
     <div className="word-selector">
@@ -71,5 +87,3 @@ const WordSelector: FC<WordSelectorProps> = ({
     </div>
   );
 };
-
-export default WordSelector;

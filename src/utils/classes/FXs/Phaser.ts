@@ -1,3 +1,4 @@
+import { PhaserSettings } from '../../../types/types';
 import { FXs } from '../../constants';
 import { linearToLinearRange, linearToLogarithmRange } from '../../helpers';
 import FX from './FX';
@@ -8,17 +9,20 @@ class PhaserNode extends GainNode {
   public baseFrequency: number;
   public depth: number;
   public frequencyOffset: number;
+	public q: number;
+	readonly feedback: number;
   readonly octaves: number;
   readonly stages: BiquadFilterNode[];
+	readonly numberOfStages: number;
   readonly output: GainNode;
   readonly feedbackGain: GainNode;
   readonly lfo: OscillatorNode;
   readonly lfoGain: GainNode;
 
-  constructor(public audioContext: AudioContext) {
+  constructor(public audioContext: AudioContext, public settings: PhaserSettings) {
     super(audioContext);
 
-    const defaultParams = {
+    /* const settings = {
       rate: 0.3,
       depth: 0.5,
       feedback: 0.3,
@@ -27,22 +31,25 @@ class PhaserNode extends GainNode {
       q: 0.005,
       stages: 4,
       octaves: 2,
-    };
+    }; */
 
-    this.baseFrequency = defaultParams.baseFrequency;
-    this.octaves = defaultParams.octaves;
-    this.depth = defaultParams.depth;
-    this.frequencyOffset = defaultParams.frequencyOffset;
+		this.feedback = 0.3;
+    this.baseFrequency = settings.baseFrequency * 1000;
+    this.octaves = 2;
+    this.depth = settings.depth;
+    this.frequencyOffset = settings.frequencyOffset * 1000;
+		this.q = settings.q / 10.0;
+		this.numberOfStages = 4;
 
     this.output = this.audioContext.createGain();
 
     // Create all the filters for the phaser
     this.stages = [];
-    for (let i = 0; i < defaultParams.stages - 1; i++) {
+    for (let i = 0; i < this.numberOfStages - 1; i++) {
       const filter = this.audioContext.createBiquadFilter();
       filter.type = 'allpass';
       filter.frequency.value = this.baseFrequency + i * this.frequencyOffset;
-      filter.Q.value = defaultParams.q;
+      filter.Q.value = settings.q;
       this.stages.push(filter);
     }
 
@@ -54,7 +61,7 @@ class PhaserNode extends GainNode {
     this.stages[this.stages.length - 1].connect(this.output);
 
     this.feedbackGain = this.audioContext.createGain();
-    this.feedbackGain.gain.value = defaultParams.feedback;
+    this.feedbackGain.gain.value = this.feedback;
     this.stages[this.stages.length - 1].connect(this.feedbackGain);
     this.feedbackGain.connect(this.stages[0]);
 
@@ -75,11 +82,11 @@ class StereoPhaser extends GainNode {
   readonly leftPhaser: PhaserNode;
   readonly rightPhaser: PhaserNode;
 
-  constructor(public audioContext: AudioContext) {
+  constructor(public audioContext: AudioContext, public settings: PhaserSettings) {
     super(audioContext);
 
-    this.leftPhaser = new PhaserNode(audioContext);
-    this.rightPhaser = new PhaserNode(audioContext);
+    this.leftPhaser = new PhaserNode(audioContext, settings);
+    this.rightPhaser = new PhaserNode(audioContext, settings);
     this.splitter = audioContext.createChannelSplitter(2);
     this.merger = audioContext.createChannelMerger(2);
     this.output = audioContext.createGain();
@@ -163,9 +170,9 @@ class StereoPhaser extends GainNode {
 export default class Phaser extends FX {
   node: StereoPhaser;
 
-  constructor(audioContext: AudioContext) {
+  constructor(public audioContext: AudioContext, public settings: PhaserSettings) {
     super(audioContext, FXs.PHASER);
-    this.node = new StereoPhaser(audioContext);
+    this.node = new StereoPhaser(audioContext, settings);
     this.wireUp(this.node.output);
   }
 

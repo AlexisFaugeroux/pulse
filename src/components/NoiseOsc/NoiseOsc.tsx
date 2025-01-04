@@ -1,12 +1,10 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type FC, useContext, useState } from 'react';
 import { SettingsContext } from '../../contexts/Context';
-import { Noise_SettingsActionTypes } from '../../contexts/types/noises';
-// import { initialSettings } from '../../nodesConfig';
 import { ControlTypes, Noise_Types } from '../../utils/constants';
-import BlocTitle from '../utils/BlocTitle/BlocTitle';
-import InactivePanel from '../utils/InactivePanel/InactivePanel';
-import Knob from '../utils/Knob/Knob';
-import WordSelector from '../utils/WordSelector/WordSelector';
+import { BlocTitle } from '../utils/BlocTitle/BlocTitle';
+import { InactivePanel } from '../utils/InactivePanel/InactivePanel';
+import { Knob } from '../utils/Knob/Knob';
+import { WordSelector } from '../utils/WordSelector/WordSelector';
 import './NoiseOsc.scss';
 
 interface NoiseOscProps {
@@ -14,35 +12,26 @@ interface NoiseOscProps {
   label: string;
 }
 
-const NoiseOsc: FC<NoiseOscProps> = ({ id, label }) => {
-  const { dispatch } = useContext(SettingsContext);
-  const [isActive, setIsActive] = useState(false);
+export const NoiseOsc: FC<NoiseOscProps> = ({ id, label }) => {
+  const {
+    state: { noises },
+  } = useContext(SettingsContext);
   const [currentType, setCurrentType] = useState(Noise_Types.WHITE.toString());
 
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: Noise_SettingsActionTypes.Activate,
-        payload: { id: Noise_Types[currentType as keyof typeof Noise_Types] },
-      });
-    } else {
-      Object.values(Noise_Types).forEach((noise) =>
-        dispatch({
-          type: Noise_SettingsActionTypes.Deactivate,
-          payload: { id: noise },
-        }),
-      );
-    }
-  }, [isActive, dispatch, currentType]);
+  const currentNoise = Object.values(noises).find((noise) => {
+    return noise.id === Noise_Types[currentType as keyof typeof Noise_Types];
+  });
 
   return (
     <div className="noiseOsc">
-      <InactivePanel isActive={isActive} />
+      <InactivePanel
+        isActive={Object.values(noises).some((noise) => noise.isActive)}
+      />
       <div className="noiseOsc-background">
         <BlocTitle
           label={label}
-          isActive={isActive}
-          setIsActive={setIsActive}
+          isActive={currentNoise?.isActive ?? false}
+          parent={currentNoise?.id ?? 'whiteNoise'}
         />
         <WordSelector
           parent={id}
@@ -60,5 +49,3 @@ const NoiseOsc: FC<NoiseOscProps> = ({ id, label }) => {
     </div>
   );
 };
-
-export default NoiseOsc;

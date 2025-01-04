@@ -1,22 +1,63 @@
-import React, { FC } from 'react';
+import { useContext, type FC } from 'react';
 import { DistortionType, FXs } from '../../../utils/constants';
 import './FxPushButton.scss';
+import { SettingsContext } from '../../../contexts/Context';
+import { Distortion_ActionTypes } from '../../../contexts/types';
 
 interface FxPushButtonProps {
   label: DistortionType;
   parent: FXs;
   isRackActive: boolean;
   activePush: DistortionType;
-  setActivePush: React.Dispatch<React.SetStateAction<DistortionType>>;
 }
 
-const FxPushButton: FC<FxPushButtonProps> = ({
+export const FxPushButton: FC<FxPushButtonProps> = ({
   label,
   parent,
   isRackActive,
   activePush,
-  setActivePush,
 }) => {
+  const { dispatch } = useContext(SettingsContext);
+
+  const handleOnClick = () => {
+    if (isRackActive) {
+      if (label === DistortionType.BITCRUSHER) {
+        dispatch({
+          type: Distortion_ActionTypes.DeactivateClipping,
+          payload: {},
+        });
+        dispatch({
+          type: Distortion_ActionTypes.ActivateBitcrusher,
+          payload: {},
+        });
+      } else {
+        dispatch({
+          type: Distortion_ActionTypes.DeactivateBitcrusher,
+          payload: {},
+        });
+        dispatch({
+          type: Distortion_ActionTypes.ActivateClipping,
+          payload: {},
+        });
+        dispatch({
+          type: Distortion_ActionTypes.UpdateType,
+          payload: {
+            id: label,
+          },
+        });
+      }
+    } else {
+      dispatch({
+        type: Distortion_ActionTypes.DeactivateClipping,
+        payload: {},
+      });
+      dispatch({
+        type: Distortion_ActionTypes.DeactivateBitcrusher,
+        payload: {},
+      });
+    }
+  };
+
   return (
     <div className="fx-push-button">
       <div
@@ -32,12 +73,10 @@ const FxPushButton: FC<FxPushButtonProps> = ({
               ? `fx-button-light__active fx-button-light__${parent}__active`
               : ''
           }`}
-          onClick={() => setActivePush(label)}
+          onClick={handleOnClick}
         />
       </div>
       <h2 className="fx-push-button-label">{label.toUpperCase()}</h2>
     </div>
   );
 };
-
-export default FxPushButton;

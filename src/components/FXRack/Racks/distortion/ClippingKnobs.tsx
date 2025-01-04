@@ -1,12 +1,14 @@
-import { FC } from 'react';
-import { initialSettings } from '../../../../nodesConfig';
+import { FC, useContext } from 'react';
 import { ControlTypes, FXs } from '../../../../utils/constants';
-import Knob from '../../../utils/Knob/Knob';
+import { Knob } from '../../../utils/Knob/Knob';
+import { SettingsContext } from '../../../../contexts/Context';
 
-const ClippingKnobs: FC = () => {
+export const ClippingKnobs: FC = () => {
   const {
-    distortion: { clipping },
-  } = initialSettings;
+    state: {
+      distortion: { clipping },
+    },
+  } = useContext(SettingsContext);
 
   return (
     <>
@@ -25,5 +27,3 @@ const ClippingKnobs: FC = () => {
     </>
   );
 };
-
-export default ClippingKnobs;

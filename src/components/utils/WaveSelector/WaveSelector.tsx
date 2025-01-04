@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react';
+import { type FC, useContext } from 'react';
 import sawtoothActive from '../../../assets/saw-wave-active.png';
 import sawtoothInactive from '../../../assets/saw-wave-inactive.png';
 import sineActive from '../../../assets/sine-wave-active.png';
@@ -18,11 +18,11 @@ import './WaveSelector.scss';
 interface WaveSelectorProps {
   parent: string;
   waves: Waves[];
+  activeWave: OscillatorNode['type'];
 }
 
-const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves }) => {
+export const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves, activeWave }) => {
   const { dispatch } = useContext(SettingsContext);
-  const [activeWave, setActiveWave] = useState<Waves>(Waves.SINE);
 
   const wavesToImages = waves.map((wave) => ({
     wave,
@@ -56,7 +56,6 @@ const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves }) => {
             key={wave + Date.now()}
             id={wave}
             onClick={() => {
-              setActiveWave(wave);
               if (
                 parent === 'oscillatorA' ||
                 parent === 'oscillatorB' ||
@@ -95,5 +94,3 @@ const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves }) => {
     </div>
   );
 };
-
-export default WaveSelector;

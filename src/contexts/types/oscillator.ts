@@ -43,3 +43,8 @@ export {
   type Oscillator_TriggerActions,
   type Oscillator_TriggerPayload,
 };
+
+export interface Action<T, P> {
+  type: T;
+  payload: P;
+}

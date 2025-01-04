@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { theme } from '../../../styles/_variables';
 
-const SvgDefs: FC = () => {
+export const SvgDefs: FC = () => {
   return (
     <svg className="defs">
       <defs>
@@ -76,5 +76,3 @@ const SvgDefs: FC = () => {
     </svg>
   );
 };
-
-export default SvgDefs;

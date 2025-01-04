@@ -1,6 +1,6 @@
-import { initialSettings } from '../../../nodesConfig';
 import { FXs, TIME_CONSTANT } from '../../constants';
 import { roundTwoDigits } from '../../helpers';
+import { presets } from '../../../presets/presets';
 
 export default class FX {
   dryGain;
@@ -11,7 +11,18 @@ export default class FX {
     public audioContext: AudioContext,
     fxName: FXs,
   ) {
-    const { chorus, phaser, compressor, delay, distortion, filter, reverb } = initialSettings;
+    // Get default preset for initialisation
+    const {
+      settings: {
+        chorus,
+        phaser,
+        compressor,
+        delay,
+        distortion: { clipping, bitcrusher },
+        filter,
+        reverb,
+      },
+    } = presets[0];
 
     const fxInitialSettings = {
       chorus: { dryGain: chorus.dryGain, wetGain: chorus.wetGain },
@@ -19,12 +30,12 @@ export default class FX {
       filter: { dryGain: filter.dryGain, wetGain: filter.wetGain },
       reverb: { dryGain: reverb.dryGain, wetGain: reverb.wetGain },
       clipping: {
-        dryGain: distortion.clipping.dryGain,
-        wetGain: distortion.clipping.wetGain,
+        dryGain: clipping.dryGain,
+        wetGain: clipping.wetGain,
       },
       bitcrusher: {
-        dryGain: distortion.bitcrusher.dryGain,
-        wetGain: distortion.bitcrusher.wetGain,
+        dryGain: bitcrusher.dryGain,
+        wetGain: bitcrusher.wetGain,
       },
       compressor: { dryGain: compressor.dryGain, wetGain: compressor.wetGain },
       phaser: { dryGain: phaser.dryGain, wetGain: phaser.wetGain },
