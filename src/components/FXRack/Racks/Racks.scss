@@ -173,6 +173,7 @@
       border-bottom: 5px solid v.$mainBlue;
       text-align: left;
       padding-left: 7px;
+      font-size: 0.8rem;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: -0.7px;
@@ -267,8 +268,8 @@
     }
     .rack-knobs {
       display: flex;
-      gap: 15px;
-      margin-left: 25px;
+      gap: 12px;
+      margin-left: 12px;
     }
   }
 }

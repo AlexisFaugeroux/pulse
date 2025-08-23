@@ -6,7 +6,7 @@
   padding: 5px;
   margin-bottom: 3px;
   position: relative;
-  width: 50%;
+  width: 33%;
   .lfo-background {
     background-color: v.$mainBlue;
     border-radius: 2px;
@@ -45,7 +45,7 @@
 
         .selector-option-label {
           color: v.$lowerTextColor;
-          font-size: x-small;
+          font-size: 0.6rem;
           font-style: italic;
           text-decoration: underline;
           text-decoration-color: v.$mainGreen;

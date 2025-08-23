@@ -735,5 +735,152 @@
         "offset": 0
       }
     }
+  },
+  {
+    "name": "This is not a test",
+    "settings": {
+      "master": {
+        "gain": 0.3
+      },
+      "oscillators": {
+        "oscillatorA": {
+          "id": "oscillatorA",
+          "isActive": true,
+          "type": "sawtooth",
+          "octaveOffset": 2,
+          "detune": 0,
+          "gain": 0.3
+        },
+        "oscillatorB": {
+          "id": "oscillatorB",
+          "isActive": true,
+          "type": "square",
+          "octaveOffset": 2,
+          "detune": 0,
+          "gain": 0.3
+        },
+        "subOscillator": {
+          "id": "subOscillator",
+          "isActive": true,
+          "type": "sawtooth",
+          "octaveOffset": 0,
+          "gain": 0.224724264705882
+        }
+      },
+      "noises": {
+        "whiteNoise": {
+          "id": "whiteNoise",
+          "isActive": true,
+          "gain": 0.156479779411765
+        },
+        "pinkNoise": {
+          "id": "pinkNoise",
+          "isActive": false,
+          "gain": 0.156479779411765
+        },
+        "brownNoise": {
+          "id": "brownNoise",
+          "isActive": false,
+          "gain": 0.156479779411765
+        }
+      },
+      "envelope": {
+        "isActive": true,
+        "attack": 0.005,
+        "decay": 0.2,
+        "sustain": 1,
+        "release": 0.015
+      },
+      "lfo": {
+        "isActive": true,
+        "mode": "VIBRATO",
+        "type": "square",
+        "frequency": 0.0875459558823529,
+        "gain": 0.776194852941177
+      },
+      "filter": {
+        "isActive": true,
+        "dryGain": 0,
+        "wetGain": 1,
+        "mixGain": 1,
+        "frequency": 0.774356617647059,
+        "gain": 0.5,
+        "Q": 0.001,
+        "type": "lowpass"
+      },
+      "distortion": {
+        "isActive": false,
+        "clipping": {
+          "isActive": false,
+          "dryGain": 1,
+          "wetGain": 0,
+          "mixGain": 1,
+          "type": "soft clip",
+          "drive": 0.25
+        },
+        "bitcrusher": {
+          "isActive": false,
+          "dryGain": 1,
+          "wetGain": 0,
+          "mixGain": 1,
+          "type": "bitcrusher",
+          "bitDepth": 0,
+          "downsampling": 0.5
+        }
+      },
+      "phaser": {
+        "isActive": false,
+        "dryGain": 0.5622702205882351,
+        "wetGain": 0.437729779411765,
+        "mixGain": 1,
+        "depth": 0.778492647058824,
+        "rate": 0.58984375,
+        "frequencyOffset": 0.2,
+        "q": 0.05,
+        "baseFrequency": 0.58,
+        "stereoPhase": 0.4
+      },
+      "chorus": {
+        "isActive": false,
+        "dryGain": 1,
+        "wetGain": 0,
+        "mixGain": 1,
+        "time": 0.35,
+        "depth": 0.1,
+        "feedback": 0.4,
+        "rate": 0.2,
+        "stereoPhase": 0.5
+      },
+      "delay": {
+        "isActive": false,
+        "dryGain": 1,
+        "wetGain": 0,
+        "mixGain": 1,
+        "time": 0.4,
+        "feedback": 0.3
+      },
+      "reverb": {
+        "isActive": true,
+        "dryGain": 0.25758272058823495,
+        "wetGain": 0.742417279411765,
+        "mixGain": 1,
+        "time": 0.660615808823529,
+        "decay": 0.711397058823529
+      },
+      "compressor": {
+        "isActive": true,
+        "dryGain": 0,
+        "wetGain": 1,
+        "mixGain": 1,
+        "threshold": 0.742647058823529,
+        "knee": 0.485064338235294,
+        "ratio": 0.58,
+        "attack": 0.388327205882353,
+        "release": 0.276424632352941
+      },
+      "keyboardOffset": {
+        "offset": 0
+      }
+    }
   }
 ]

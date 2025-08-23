@@ -85,8 +85,8 @@ export const WaveSelector: FC<WaveSelectorProps> = ({ parent, waves, activeWave 
               border: 'none',
               objectFit: 'cover',
               cursor: 'pointer',
-              width: '40px',
-              height: '40px',
+              width: '35px',
+              height: '35px',
             }}
           />
         ))}

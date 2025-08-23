@@ -91,7 +91,6 @@ export const mainReducer = (
   }
 
   if (type === 'preset') {
-    console.log('SETTINGS: ', action.payload);
     const { payload } = action as Preset_SettingsActions;
     return {
       master: masterReducer(master, {
@@ -113,7 +112,7 @@ export const mainReducer = (
     };
   }
 
-  const plantey = {
+  const newState = {
     master:
       type === 'master'
         ? masterReducer(master, action as Master_Actions)
@@ -165,6 +164,5 @@ export const mainReducer = (
         : keyboardOffset,
   };
 
-  console.log(JSON.stringify(plantey));
-  return plantey;
+  return newState;
 };

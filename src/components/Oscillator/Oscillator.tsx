@@ -44,12 +44,6 @@ export const Oscillator: FC<OscillatorProps> = ({ id, label }) => {
             />
             <Knob
               parent={id}
-              initialValue={0}
-              label="unisson"
-              type={ControlTypes.DEFAULT}
-            />
-            <Knob
-              parent={id}
               initialValue={oscillator.detune}
               label="detune"
               type={ControlTypes.DEFAULT}
