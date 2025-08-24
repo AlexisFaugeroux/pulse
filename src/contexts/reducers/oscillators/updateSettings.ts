@@ -2,7 +2,6 @@ import { getAudioGraph } from '../../../audio/audioGraph';
 import { TIME_CONSTANT } from '../../../utils/constants';
 import { roundTwoDigitsNonFinite } from '../../../utils/helpers';
 import type { Oscillator_SettingsActions } from '../../types';
-import { currentOscillators } from './oscillatorTriggerReducer';
 import type { OscillatorState } from './types';
 
 export function updateSettings(
@@ -28,7 +27,7 @@ export function updateSettings(
 
   const {
     ctx,
-    nodes: {oscAGain, oscBGain, subGain },
+    nodes: {activeOscillators, oscAGain, oscBGain, subGain },
   } = graph;
 
   if (id === 'level') {
@@ -74,8 +73,8 @@ export function updateSettings(
     }
   }
 
-  if (currentOscillators.length > 0) {
-    currentOscillators.forEach(
+  if (activeOscillators.length > 0) {
+    activeOscillators.forEach(
       ({ node, parent: currOscParent, frequency, octaveShift }) => {
         if (id === 'detune' && currOscParent === parent) {
           node.detune.value = newValue * 100;

@@ -2,7 +2,6 @@ import { getAudioGraph } from '../../../audio/audioGraph';
 import Oscillator from '../../../utils/classes/Oscillator';
 import { LFOMode } from '../../../utils/constants';
 import type { Oscillator_TriggerActions } from '../../types';
-import { currentOscillators } from './oscillatorTriggerReducer';
 import type { OscillatroTriggerState } from './types';
 
 export function createOsc(
@@ -36,7 +35,7 @@ export function createOsc(
 
   const {
     ctx,
-    nodes: {oscAGain, oscBGain, subGain, lfo},
+    nodes: {activeOscillators, oscAGain, oscBGain, subGain, lfo},
   } = graph;
 
   if (oscillatorA.isActive) {
@@ -56,7 +55,7 @@ export function createOsc(
     if (lfo.mode === LFOMode.VIBRATO) {
       lfo.connect(newOscillatorA.node.frequency);
     }
-    currentOscillators.push(newOscillatorA);
+    activeOscillators.push(newOscillatorA);
   }
 
   if (oscillatorB.isActive) {
@@ -76,7 +75,7 @@ export function createOsc(
     if (lfo.mode === LFOMode.VIBRATO) {
       lfo.connect(newOscillatorB.node.frequency);
     }
-    currentOscillators.push(newOscillatorB);
+    activeOscillators.push(newOscillatorB);
   }
 
   if (subOscillator.isActive) {
@@ -96,6 +95,6 @@ export function createOsc(
     if (lfo.mode === LFOMode.VIBRATO) {
       lfo.connect(newSub.node.frequency);
     }
-    currentOscillators.push(newSub);
+    activeOscillators.push(newSub);
   }
 }

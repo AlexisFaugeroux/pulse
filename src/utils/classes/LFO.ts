@@ -1,5 +1,4 @@
 import { getAudioGraph } from '../../audio/audioGraph';
-import { currentOscillators } from '../../contexts/reducers/oscillators/oscillatorTriggerReducer';
 import { LFOSettings } from '../../types/types';
 import { LFOMode, TIME_CONSTANT } from '../constants';
 import { linearToLinearRange, roundTwoDigits } from '../helpers';
@@ -80,6 +79,7 @@ export default class LFO {
 
     if (graph) {
       const {
+        activeOscillators,
         oscAGain,
         oscBGain,
         subGain,
@@ -102,7 +102,7 @@ export default class LFO {
 
         case LFOMode.VIBRATO:
           this.disconnect();
-          currentOscillators.forEach((oscillator) => {
+          activeOscillators.forEach((oscillator) => {
             this.connect(oscillator.node.frequency);
           });
           return;
