@@ -1,5 +1,5 @@
-import { chorus } from '../../../nodesConfig';
-import { ChorusSettings } from '../../../types/types';
+import { getAudioNode } from '../../../audio/audioGraph';
+import type { ChorusSettings } from '../../../types/types';
 import { Chorus_ActionTypes, Chorus_SettingsActions } from '../../types';
 import { updateSettings } from './updateSettings';
 
@@ -7,6 +7,12 @@ const chorusReducer = (
   state: ChorusSettings,
   action: Chorus_SettingsActions,
 ): ChorusSettings => {
+  const chorus = getAudioNode('chorus');
+  if (!chorus) {
+    console.error("chorus node is not initialized");
+    return state;
+  }
+
   switch (action.type) {
     case Chorus_ActionTypes.Activate:
       chorus.activate({ dryValue: 1 - state.wetGain, wetValue: state.wetGain });
@@ -21,7 +27,7 @@ const chorusReducer = (
       return updateSettings(state, action);
     default:
       console.error('Reducer error action', action);
-      return { ...state };
+      return state;
   }
 };
 

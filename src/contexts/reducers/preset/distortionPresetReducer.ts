@@ -1,28 +1,40 @@
-import { bitcrusherDistortion, clippingDistortion } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import type { DistortionSettings } from '../../../types/types';
 
 export function distortionPresetReducer(
+  state: DistortionSettings,
   preset: DistortionSettings,
 ): DistortionSettings {
+  const clippingNode = getAudioNode('clipping');
+  if (!clippingNode) {
+    console.error('clipping node is not initialized');
+    return state;
+  }
+
+  const bitcrusherNode = getAudioNode('bitcrusher');
+  if (!bitcrusherNode) {
+    console.error('bitcrusher node is not initialized');
+    return state;
+  }
+
   const { clipping, bitcrusher } = preset;
 
   if (clipping.isActive) {
-    clippingDistortion.setType(clippingDistortion.type);
+    clippingNode.setType(clippingNode.type);
 
-    const newDriveValue = clippingDistortion.setDrive(clipping.drive);
-    clippingDistortion.makeDistortionCurve(newDriveValue, clipping.type);
+    const newDriveValue = clippingNode.setDrive(clipping.drive);
+    clippingNode.makeDistortionCurve(newDriveValue, clipping.type);
 
-    clippingDistortion.setDryGain(clipping.dryGain);
-    clippingDistortion.setWetGain(clipping.wetGain);
+    clippingNode.setDryGain(clipping.dryGain);
+    clippingNode.setWetGain(clipping.wetGain);
   } else if (bitcrusher.isActive) {
-    bitcrusherDistortion.setBitDepth(bitcrusher.bitDepth);
-    bitcrusherDistortion.setDownsampling(bitcrusher.downsampling);
-    bitcrusherDistortion.setDryGain(bitcrusher.dryGain);
-    bitcrusherDistortion.setWetGain(bitcrusher.wetGain);
-  }
-  else {
-    clippingDistortion.deactivate();
-    bitcrusherDistortion.deactivate();
+    bitcrusherNode.setBitDepth(bitcrusher.bitDepth);
+    bitcrusherNode.setDownsampling(bitcrusher.downsampling);
+    bitcrusherNode.setDryGain(bitcrusher.dryGain);
+    bitcrusherNode.setWetGain(bitcrusher.wetGain);
+  } else {
+    clippingNode.deactivate();
+    bitcrusherNode.deactivate();
   }
 
   return { ...preset };

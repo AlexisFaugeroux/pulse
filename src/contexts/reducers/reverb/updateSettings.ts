@@ -1,4 +1,4 @@
-import { audioContext, reverb } from '../../../nodesConfig';
+import { getAudioGraph } from '../../../audio/audioGraph';
 import type { ReverbSettings } from '../../../types/types';
 import type { Reverb_SettingsActions } from '../../types';
 
@@ -6,18 +6,24 @@ export function updateSettings(
   state: ReverbSettings,
   action: Reverb_SettingsActions,
 ): ReverbSettings {
-  const { node } = reverb;
+  const graph = getAudioGraph();
+  if (!graph || !graph.nodes.reverb) {
+    console.error("reverb node is not initialized");
+    return state;
+  }
+
+  const reverb = graph.nodes.reverb;
 
   const { id, value } = action.payload;
-  if (!id || !value) return { ...state };
+  if (!id || !value) return state;
 
   if (id === 'time') {
-    reverb.setImpulseResponse(audioContext, node, value, state.decay);
+    reverb.setImpulseResponse(graph.ctx, reverb.node, value, state.decay);
     return { ...state, time: value };
   }
 
   if (id === 'decay') {
-    reverb.setImpulseResponse(audioContext, node, state.time, value);
+    reverb.setImpulseResponse(graph.ctx, reverb.node, state.time, value);
     return { ...state, decay: value };
   }
 
@@ -32,5 +38,5 @@ export function updateSettings(
       wetGain: value,
     };
   }
-  return { ...state };
+  return state;
 }

@@ -27,7 +27,7 @@ const oscillatorsReducer = (
 
     default:
       console.error('Reducer error action: ', action);
-      return { ...state };
+      return state;
   }
 };
 

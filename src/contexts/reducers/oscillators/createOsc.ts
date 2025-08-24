@@ -1,5 +1,5 @@
+import { getAudioGraph } from '../../../audio/audioGraph';
 import Oscillator from '../../../utils/classes/Oscillator';
-import { audioContext, lfo, oscAGain, oscBGain, subGain } from '../../../nodesConfig';
 import { LFOMode } from '../../../utils/constants';
 import type { Oscillator_TriggerActions } from '../../types';
 import { currentOscillators } from './oscillatorTriggerReducer';
@@ -9,12 +9,20 @@ export function createOsc(
   state: OscillatroTriggerState,
   action: Oscillator_TriggerActions,
   defaultEnvelopeSettings: {
-    attack: number,
-    decay: number,
-    sustain: number,
-    release: number,
+    attack: number;
+    decay: number;
+    sustain: number;
+    release: number;
   },
 ): void {
+  const graph = getAudioGraph();
+  if (!graph) {
+    console.error(
+      'Could not update noise settings, audio graph is not initialized',
+    );
+    return;
+  }
+
   const {
     oscillators: { oscillatorA, oscillatorB, subOscillator },
     envelope,
@@ -26,9 +34,14 @@ export function createOsc(
     return;
   }
 
+  const {
+    ctx,
+    nodes: {oscAGain, oscBGain, subGain, lfo},
+  } = graph;
+
   if (oscillatorA.isActive) {
     const newOscillatorA = new Oscillator(
-      audioContext,
+      ctx,
       oscAGain,
       oscillatorA.type,
       note,
@@ -48,7 +61,7 @@ export function createOsc(
 
   if (oscillatorB.isActive) {
     const newOscillatorB = new Oscillator(
-      audioContext,
+      ctx,
       oscBGain,
       oscillatorB.type,
       note,
@@ -68,7 +81,7 @@ export function createOsc(
 
   if (subOscillator.isActive) {
     const newSub = new Oscillator(
-      audioContext,
+      ctx,
       subGain,
       subOscillator.type,
       note,

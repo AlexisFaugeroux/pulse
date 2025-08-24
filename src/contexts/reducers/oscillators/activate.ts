@@ -9,7 +9,7 @@ export function activate(
 
   if (!id) {
     console.error('Activate oscillator: no id provided');
-    return { ...state };
+    return state;
   }
 
   return {

@@ -1,4 +1,4 @@
-import { lfo } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import { LFOMode } from '../../../utils/constants';
 import type { LFO_SettingsActions } from '../../types';
 
@@ -12,11 +12,18 @@ export function updateType(
   },
   action: LFO_SettingsActions,
 ): typeof state {
+  const lfo = getAudioNode('lfo');
+  
+  if (!lfo) {
+    console.error("lfo node is not initialized");
+    return state;
+  }
+
   const { id } = action.payload;
 
   if (!id) {
     console.error('Update LFO type: no id provided');
-    return { ...state };
+    return state;
   }
 
   lfo.setType(id as OscillatorType);

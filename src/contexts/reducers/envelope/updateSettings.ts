@@ -8,7 +8,7 @@ export function updateSettings(
 ): EnvelopeSettings {
   const { id, value } = action.payload;
 
-  if (!id || !value) return { ...state };
+  if (!id || !value) return state;
 
   if (id === 'attack') {
     currentOscillators.forEach((oscillator) => oscillator.setAttack(value));
@@ -32,5 +32,5 @@ export function updateSettings(
     currentNoises.forEach((noise) => noise.setRelease(value));
     return { ...state, release: value };
   }
-  return { ...state };
+  return state;
 }

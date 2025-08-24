@@ -1,4 +1,4 @@
-import { reverb } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import type { ReverbSettings } from '../../../types/types';
 import { Reverb_ActionTypes, type Reverb_SettingsActions } from '../../types';
 import { updateSettings } from './updateSettings';
@@ -7,6 +7,12 @@ const reverbReducer = (
   state: ReverbSettings,
   action: Reverb_SettingsActions,
 ): ReverbSettings => {
+  const reverb = getAudioNode('reverb');
+  if (!reverb) {
+    console.error("reverb node is not initialized");
+    return state;
+  }
+
   switch (action.type) {
     case Reverb_ActionTypes.Activate:
       reverb.activate({ dryValue: 1 - state.wetGain, wetValue: state.wetGain });
@@ -26,7 +32,7 @@ const reverbReducer = (
       return updateSettings(state, action);
     default:
       console.error('Reducer error action', action);
-      return { ...state };
+      return state;
   }
 };
 

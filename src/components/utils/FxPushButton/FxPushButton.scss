@@ -13,7 +13,7 @@
     background-color: v.$darkGrey;
 
     .fx-button-light {
-      background-image: url('src/assets/octave-light-switch-inactive.png');
+      background-image: url('../../../assets/octave-light-switch-inactive.png');
       background-size: cover;
       border-radius: 5px;
       cursor: grab;
@@ -24,7 +24,7 @@
     }
 
     .fx-button-light__distortion__active {
-      background-image: url('src/assets/distortion-light-active.png');
+      background-image: url('../../../assets/distortion-light-active.png');
     }
   }
 

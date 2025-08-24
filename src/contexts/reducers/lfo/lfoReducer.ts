@@ -1,4 +1,4 @@
-import { lfo } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import { LFOMode } from '../../../utils/constants';
 import { LFO_SettingsActionTypes, type LFO_SettingsActions } from '../../types';
 import { updateMode } from './updateMode';
@@ -15,6 +15,13 @@ const LFOReducer = (
   },
   action: LFO_SettingsActions,
 ): typeof state => {
+  const lfo = getAudioNode('lfo');
+  
+  if (!lfo) {
+    console.error("lfo node is not initialized");
+    return state;
+  }
+
   switch (action.type) {
     case LFO_SettingsActionTypes.Activate:
       lfo.activate({ gain: state.gain });
@@ -35,7 +42,7 @@ const LFOReducer = (
 
     default:
       console.error('Reducer error action: ', action);
-      return { ...state };
+      return state;
   }
 };
 export default LFOReducer;

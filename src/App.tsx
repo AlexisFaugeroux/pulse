@@ -1,4 +1,4 @@
-import './App.scss';
+import { useState } from 'react';
 import { Analyser } from './components/Analyser/Analyser';
 import { Envelope } from './components/Envelope/Envelope';
 import { FXRack } from './components/FXRack/FXRack';
@@ -10,13 +10,21 @@ import { NoiseOsc } from './components/NoiseOsc/NoiseOsc';
 import { Oscillator } from './components/Oscillator/Oscillator';
 import { SubOsc } from './components/SubOsc/SubOsc';
 import { Provider } from './contexts/Context';
-import { AudioNodesConnect } from './utils/AudioNodesConnect';
+import { startAudio } from './audio/startAudio';
+import './App.scss';
 
 function App() {
+  const [isAudioOn, setIsAudioOn] = useState(false);
+
+  const handleOnClick = async () => {
+    await startAudio();
+    setIsAudioOn(true);
+  }
+
   return (
-    <AudioNodesConnect>
-      <Provider>
-        <div className="background">
+    <div className="background">
+      {isAudioOn ? (
+        <Provider>
           <Header />
           <div className="main">
             <div className="core">
@@ -29,7 +37,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="center ">
+              <div className="center">
                 <div className="envelopefilter">
                   <Envelope />
                   <LFO />
@@ -45,9 +53,14 @@ function App() {
 
             <Keyboard />
           </div>
+        </Provider>
+      ) : (
+        <div className="enable-audio-container">
+          <span>Click the button below to enable audio in the browser</span>
+          <button onClick={handleOnClick} />
         </div>
-      </Provider>
-    </AudioNodesConnect>
+      )}
+    </div>
   );
 }
 

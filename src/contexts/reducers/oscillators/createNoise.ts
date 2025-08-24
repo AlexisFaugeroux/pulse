@@ -1,15 +1,10 @@
-import {
-  audioContext,
-  brownNoiseGain,
-  pinkNoiseGain,
-  whiteNoiseGain,
-} from '../../../nodesConfig';
 import type { Oscillator_TriggerActions } from '../../types';
 import type { OscillatroTriggerState } from './types';
 import WhiteNoise from '../../../utils/classes/noises/WhiteNoise';
 import PinkNoise from '../../../utils/classes/noises/PinkNoise';
 import BrownNoise from '../../../utils/classes/noises/BrownNoise';
 import Noise from '../../../utils/classes/noises/Noise';
+import { getAudioGraph } from '../../../audio/audioGraph';
 
 export function createNoise(
   state: OscillatroTriggerState,
@@ -22,6 +17,13 @@ export function createNoise(
     release: number;
   },
 ): void {
+  const graph = getAudioGraph();
+  if (!graph) {
+    console.error(
+      'Could not create noise, audio graph is not initialized',
+    );
+    return ;
+  }
   const {
     noises: { whiteNoise, pinkNoise, brownNoise },
     envelope,
@@ -32,9 +34,14 @@ export function createNoise(
     console.error('Create noise: frequency not provided');
     return;
   }
+  const {
+    ctx,
+    nodes: { whiteNoiseGain, pinkNoiseGain, brownNoiseGain },
+  } = graph;
+
   if (whiteNoise.isActive) {
     const newWhiteNoise = new WhiteNoise(
-      audioContext,
+      ctx,
       whiteNoiseGain,
       envelope.isActive
         ? envelope
@@ -47,7 +54,7 @@ export function createNoise(
       .catch((e) => console.error(e));
   } else if (pinkNoise.isActive) {
     const newPinkNoise = new PinkNoise(
-      audioContext,
+      ctx,
       pinkNoiseGain,
       envelope.isActive
         ? envelope
@@ -61,7 +68,7 @@ export function createNoise(
     currentNoises.push(newPinkNoise);
   } else if (brownNoise.isActive) {
     const newBrownNoise = new BrownNoise(
-      audioContext,
+      ctx,
       brownNoiseGain,
       envelope.isActive
         ? envelope

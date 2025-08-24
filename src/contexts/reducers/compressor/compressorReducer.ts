@@ -1,4 +1,4 @@
-import { compressor } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import { CompressorSettings } from '../../../types/types';
 import {
   Compressor_ActionTypes,
@@ -10,6 +10,13 @@ const compressorReducer = (
   state: CompressorSettings,
   action: Compressor_SettingsActions,
 ): CompressorSettings => {
+  const compressor = getAudioNode('compressor');
+
+  if (!compressor) {
+    console.error("compressor node is not initialized");
+    return state;
+  }
+
   switch (action.type) {
     case Compressor_ActionTypes.Activate:
       compressor.activate({
@@ -32,7 +39,7 @@ const compressorReducer = (
       return updateSettings(state, action);
     default:
       console.error('Reducer error action', action);
-      return { ...state };
+      return state;
   }
 };
 

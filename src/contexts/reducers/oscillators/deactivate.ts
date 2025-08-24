@@ -9,7 +9,7 @@ export function deactivate(
 
   if (!id) {
     console.error('Deactivate oscillator: no id provided');
-    return { ...state };
+    return state;
   }
 
   return {

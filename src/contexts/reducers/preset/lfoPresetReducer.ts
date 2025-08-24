@@ -1,8 +1,15 @@
-import { lfo, oscAGain, oscBGain } from '../../../nodesConfig';
+import { getAudioGraph } from '../../../audio/audioGraph';
 import type { LFOSettings } from '../../../types/types';
 import { LFOMode } from '../../../utils/constants';
 
-export function lfoPresetReducer(preset: LFOSettings) {
+export function lfoPresetReducer(state: LFOSettings, preset: LFOSettings) {
+  const graph = getAudioGraph();
+  if (!graph) {
+    console.error("lfo node is not initialized");
+    return state;
+  }
+
+  const { nodes: { lfo, oscAGain, oscBGain} } = graph;
   const { type, isActive, mode, gain, frequency } = preset;
 
   lfo.disconnect();

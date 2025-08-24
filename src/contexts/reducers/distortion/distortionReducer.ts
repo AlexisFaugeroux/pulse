@@ -1,4 +1,4 @@
-import { bitcrusherDistortion, clippingDistortion } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import { DistortionSettings } from '../../../types/types';
 import {
   Distortion_ActionTypes,
@@ -14,6 +14,14 @@ const distortionReducer = (
   state: DistortionSettings,
   action: Distortion_SettingsActions,
 ): DistortionSettings => {
+  const clippingNode = getAudioNode('clipping');
+  const bitcrusherNode = getAudioNode('bitcrusher');
+
+  if (!clippingNode || !bitcrusherNode) {
+    console.error("distortion node is uninitialized");
+    return state;
+  }
+
   const { clipping, bitcrusher } = state;
 
   switch (action.type) {
@@ -24,7 +32,7 @@ const distortionReducer = (
       return activateBitcrusher(state);
 
     case Distortion_ActionTypes.DeactivateClipping:
-      clippingDistortion.deactivate();
+      clippingNode.deactivate();
       return {
         ...state,
         clipping: { ...clipping, isActive: false, dryGain: 1 },
@@ -32,7 +40,7 @@ const distortionReducer = (
       };
 
     case Distortion_ActionTypes.DeactivateBitcrusher:
-      bitcrusherDistortion.deactivate();
+      bitcrusherNode.deactivate();
       return {
         ...state,
         bitcrusher: { ...bitcrusher, isActive: false, dryGain: 1 },
@@ -50,7 +58,7 @@ const distortionReducer = (
 
     default:
       console.error('Reducer error action', action);
-      return { ...state };
+      return state;
   }
 };
 

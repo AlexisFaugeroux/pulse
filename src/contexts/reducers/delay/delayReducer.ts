@@ -1,4 +1,4 @@
-import { delay } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import { DelaySettings } from '../../../types/types';
 import { Delay_ActionTypes, Delay_SettingsActions } from '../../types';
 import { updateSettings } from './updateSettings';
@@ -7,6 +7,13 @@ const delayReducer = (
   state: DelaySettings,
   action: Delay_SettingsActions,
 ): DelaySettings => {
+  const delay = getAudioNode('delay');
+
+  if (!delay) {
+    console.error("delay node is not initialized");
+    return state;
+  }
+
   switch (action.type) {
     case Delay_ActionTypes.Activate:
       delay.activate({ dryValue: 1 - state.wetGain, wetValue: state.wetGain });
@@ -26,7 +33,7 @@ const delayReducer = (
       return updateSettings(state, action);
     default:
       console.error('Reducer error action', action);
-      return { ...state };
+      return state;
   }
 };
 

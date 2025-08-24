@@ -45,6 +45,32 @@ body {
   border-color: v.$lightBlue;
 }
 
+.enable-audio-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+
+  span {
+    color: v.$textColor;
+    font-style: italic;
+  }
+
+  button {
+    width: 48px;
+    height: 48px;
+    background: url('./assets/speaker-icon.svg');
+    background-repeat: no-repeat;
+    background-size: 48px;
+    border: none;
+    cursor: pointer;
+  }
+}
+
 .main {
   width: 100%;
   height: $mainHeight;
