@@ -1,36 +1,17 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type FC, useContext } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
-import { Reverb_ActionTypes } from '../../../contexts/types/reverb';
-import { initialSettings } from '../../../nodesConfig';
 import { ControlTypes, FXs } from '../../../utils/constants';
-import Knob from '../../utils/Knob/Knob';
-import Rack from './Rack';
+import { Knob } from '../../utils/Knob/Knob';
+import { Rack } from './Rack';
 import './Racks.scss';
 
-const ReverbRack: FC = () => {
-  const { dispatch } = useContext(SettingsContext);
-  const [isActive, setIsActive] = useState(false);
+export const ReverbRack: FC = () => {
+	const { state: { reverb } } = useContext(SettingsContext);
 
-  const {
-    reverb: { time, decay, wetGain },
-  } = initialSettings;
-
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: Reverb_ActionTypes.Activate,
-        payload: {},
-      });
-    } else {
-      dispatch({
-        type: Reverb_ActionTypes.Deactivate,
-        payload: {},
-      });
-    }
-  }, [isActive, dispatch]);
+  const { isActive, time, decay, wetGain } = reverb;
 
   return (
-    <Rack type={FXs.REVERB} isActive={isActive} setIsActive={setIsActive}>
+    <Rack type={FXs.REVERB} isActive={isActive}>
       <Knob
         initialValue={time}
         label="time"
@@ -52,5 +33,3 @@ const ReverbRack: FC = () => {
     </Rack>
   );
 };
-
-export default ReverbRack;

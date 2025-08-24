@@ -1,20 +1,23 @@
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
 import { Distortion_ActionTypes } from '../../../contexts/types/distortion';
 import {
+  Chorus_ActionTypes,
   Compressor_ActionTypes,
   Delay_ActionTypes,
   Envelope_ActionTypes,
   Filter_ActionTypes,
   LFO_SettingsActionTypes,
   Oscillator_SettingsActionTypes,
+  Phaser_ActionTypes,
   Reverb_ActionTypes,
 } from '../../../contexts/types/index';
 import { Master_ActionTypes } from '../../../contexts/types/master';
+import { Noise_SettingsActionTypes } from '../../../contexts/types/noises';
 import { theme } from '../../../styles/_variables';
 import { ControlTypes, FXs } from '../../../utils/constants';
 import './Knob.scss';
-import SvgDefs from './SvgDefs';
+import { SvgDefs } from './SvgDefs';
 import { clampValue } from './helpers';
 
 interface KnobProps {
@@ -24,11 +27,9 @@ interface KnobProps {
   type: ControlTypes;
 }
 
-const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
+export const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
   const min = 0;
   const max = 1;
-  const dragResistance = 300 / (max - min);
-  let dragStartPosition = 0;
 
   const { state, dispatch } = useContext(SettingsContext);
   const [value, setValue] = useState(initialValue);
@@ -38,30 +39,6 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
   const indicatorRingBgRef = useRef<SVGCircleElement>(null);
   const indicatorRingRef = useRef<SVGPathElement>(null);
   const indicatorDotRef = useRef<SVGCircleElement>(null);
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (e.buttons & 1) {
-      const dragAmount = e.clientY - dragStartPosition;
-      setValue(clampValue(value - dragAmount / dragResistance, min, max));
-    } else {
-      clearDrag();
-    }
-  };
-
-  const handleMouseUp = (e: MouseEvent) => {
-    const dragAmount = e.clientY - dragStartPosition;
-    setValue(clampValue(value - dragAmount / dragResistance, min, max));
-
-    clearDrag();
-  };
-
-  const clearDrag = () => {
-    document.body.classList.remove('knob-input__drag-active');
-    setIsActiveDrag(false);
-
-    document.body.removeEventListener('mousemove', handleMouseMove);
-    document.body.removeEventListener('mouseup', handleMouseUp);
-  };
 
   useEffect(() => {
     let r = 0;
@@ -84,76 +61,127 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
     if (indicatorRingRef.current && indicatorDotRef.current) {
       indicatorRingRef.current.setAttribute(
         'd',
-        `M20,20l0,${r}${
-          value > 0.5 ? `A${r},${r},0,0,1,20,${20 - r}` : ''
-        }A-${r},${r},0,0,1,${endX},${endY}Z`,
+        `M20,20l0,${r}${value > 0.5 ? `A${r},${r},0,0,1,20,${20 - r}` : ''
+        }A-${r},${r},0,0,1,${endX},${endY}`,
       );
       indicatorDotRef.current.style.transform = `rotate(${360 * value}deg)`;
     }
   }, [indicatorRingRef, indicatorRingBgRef, indicatorDotRef, value]);
 
   useEffect(() => {
-    if (parent === 'master') {
-      dispatch({
-        type: Master_ActionTypes.UpdateValue,
-        payload: { value },
-      });
-    } else if (parent === 'oscillatorA' || parent === 'oscillatorB') {
-      dispatch({
-        type: Oscillator_SettingsActionTypes.UpdateSettings,
-        payload: { id: label, parent, value },
-      });
-    } else if (parent === 'envelope') {
-      dispatch({
-        type: Envelope_ActionTypes.UpdateSettings,
-        payload: { id: label, value },
-      });
-    } else if (parent === 'lfo') {
-      dispatch({
-        type: LFO_SettingsActionTypes.UpdateSettings,
-        payload: { id: label, value },
-      });
-    } else if (parent === 'filter') {
-      dispatch({
-        type: Filter_ActionTypes.UpdateSettings,
-        payload: { id: label, value },
-      });
-    } else if (parent === FXs.DISTORTION) {
-      if (state.distortion.clipping.isActive) {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  const activeDistortion = useMemo(
+    () => ({
+      clippingIsActive: state.distortion.clipping.isActive,
+      bitCrusherIsActive: state.distortion.bitcrusher.isActive,
+    }),
+    [state.distortion.clipping.isActive, state.distortion.bitcrusher.isActive],
+  );
+
+  const applyValue = (newValue: number) => {
+    const payload = { id: label, value: newValue };
+    setValue(newValue);
+
+    switch (parent) {
+      case 'master':
         dispatch({
-          type: Distortion_ActionTypes.UpdateSettingsClipping,
-          payload: { id: label, value },
+          type: Master_ActionTypes.UpdateValue,
+          payload: { value: newValue },
         });
-      } else if (state.distortion.bitcrusher.isActive) {
+        break;
+
+      case 'oscillatorA':
+      case 'oscillatorB':
+      case 'subOscillator':
         dispatch({
-          type: Distortion_ActionTypes.UpdateSettingsBitcrusher,
-          payload: { id: label, value },
+          type: Oscillator_SettingsActionTypes.UpdateSettings,
+          payload: { id: label, parent, value: newValue },
         });
-      }
-    } else if (parent === FXs.DELAY) {
-      dispatch({
-        type: Delay_ActionTypes.UpdateSettings,
-        payload: { id: label, value },
-      });
-    } else if (parent === FXs.REVERB) {
-      dispatch({
-        type: Reverb_ActionTypes.UpdateSettings,
-        payload: { id: label, value },
-      });
-    } else if (parent === FXs.COMPRESSOR) {
-      dispatch({
-        type: Compressor_ActionTypes.UpdateSettings,
-        payload: { id: label, value },
-      });
+        break;
+
+      case 'noiseOsc':
+        dispatch({
+          type: Noise_SettingsActionTypes.UpdateSettings,
+          payload: { value: newValue },
+        });
+        break;
+
+      case 'envelope':
+        dispatch({
+          type: Envelope_ActionTypes.UpdateSettings,
+          payload,
+        });
+        break;
+
+      case 'lfo':
+        dispatch({
+          type: LFO_SettingsActionTypes.UpdateSettings,
+          payload,
+        });
+        break;
+
+      case 'filter':
+        dispatch({
+          type: Filter_ActionTypes.UpdateSettings,
+          payload,
+        });
+        break;
+
+      case FXs.DISTORTION:
+        if (activeDistortion.clippingIsActive) {
+          dispatch({
+            type: Distortion_ActionTypes.UpdateSettingsClipping,
+            payload,
+          });
+        } else if (activeDistortion.bitCrusherIsActive) {
+          dispatch({
+            type: Distortion_ActionTypes.UpdateSettingsBitcrusher,
+            payload,
+          });
+        }
+        break;
+
+      case FXs.PHASER:
+        dispatch({
+          type: Phaser_ActionTypes.UpdateSettings,
+          payload,
+        });
+        break;
+
+      case FXs.CHORUS:
+        dispatch({
+          type: Chorus_ActionTypes.UpdateSettings,
+          payload,
+        });
+        break;
+
+      case FXs.DELAY:
+        dispatch({
+          type: Delay_ActionTypes.UpdateSettings,
+          payload: { id: label, value: newValue },
+        });
+        break;
+
+      case FXs.REVERB:
+        dispatch({
+          type: Reverb_ActionTypes.UpdateSettings,
+          payload: { id: label, value: newValue },
+        });
+        break;
+
+      case FXs.COMPRESSOR:
+        dispatch({
+          type: Compressor_ActionTypes.UpdateSettings,
+          payload: { id: label, value: newValue },
+        });
+        break;
+
+      default:
+        break;
     }
-  }, [
-    label,
-    parent,
-    value,
-    dispatch,
-    state.distortion.clipping.isActive,
-    state.distortion.bitcrusher.isActive,
-  ]);
+  };
 
   let indicatorRingFillColor = '';
   let indicatorDotFillColor = '';
@@ -173,9 +201,9 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
       indicatorDotFillColor = theme.distortionColor;
       indcatorDotStrokeColor = 'black';
       break;
-    case ControlTypes.FLANGER:
-      indicatorRingFillColor = theme.flangerColor;
-      indicatorDotFillColor = theme.flangerColor;
+    case ControlTypes.PHASER:
+      indicatorRingFillColor = theme.phaserColor;
+      indicatorDotFillColor = theme.phaserColor;
       indcatorDotStrokeColor = 'black';
       break;
     case ControlTypes.DELAY:
@@ -290,25 +318,14 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
             max={max}
             step="any"
             value={value}
-            onChange={(e) => {
-              setValue(parseFloat(e.target.value));
-            }}
-            onMouseDown={(e) => {
-              clearDrag();
-              e.preventDefault();
-
-              document.body.classList.add('knob-input__drag-active');
-              setIsActiveDrag(true);
-
-              dragStartPosition = e.clientY;
-              setValue(parseFloat(e.currentTarget.value));
-
-              document.body.addEventListener('mousemove', handleMouseMove);
-              document.body.addEventListener('mouseup', handleMouseUp);
-            }}
+            onInput={(e) =>
+              applyValue(
+                clampValue(parseFloat(e.currentTarget.value), min, max),
+              )
+            }
             onDoubleClick={() => {
-              clearDrag();
-
+              document.body.classList.remove('knob-input__drag-active');
+              setIsActiveDrag(false);
               setValue(initialValue);
             }}
             onFocus={() => {
@@ -326,5 +343,3 @@ const Knob: FC<KnobProps> = ({ parent, initialValue, label, type }) => {
     </div>
   );
 };
-
-export default Knob;

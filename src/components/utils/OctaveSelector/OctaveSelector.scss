@@ -1,10 +1,10 @@
 @use '../../../styles//variables' as v;
 
-$thumb-w: 1.2rem;
-$thumb-h: 1.2rem;
+$thumb-w: 1rem;
+$thumb-h: 1rem;
 $thumb-pad: 15px;
 $ot-w: 115px;
-$ot-h: ($thumb-h * 0.4);
+$ot-h: ($thumb-h * 0.45);
 $it-w: ($ot-w - ($thumb-pad * 2));
 $it-h: 0.2rem;
 
@@ -26,8 +26,7 @@ $thumb-bg: #66696b;
   background-color: v.$lightGreen;
   border: 1px solid v.$lowerTextColor;
   border-radius: 5px;
-  min-width: 75px;
-  max-width: 135px;
+  width: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -174,12 +173,12 @@ $thumb-bg: #66696b;
   }
   .label {
     color: v.$lowerTextColor;
-    font-size: x-small;
+    font-size: 0.55rem;
     font-weight: 500;
     margin-bottom: 2px;
   }
 }
 
 .octave-selector-layout__small {
-  width: 90px;
+  width: 75px;
 }

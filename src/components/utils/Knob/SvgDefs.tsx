@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { theme } from '../../../styles/_variables';
 
-const SvgDefs: FC = () => {
+export const SvgDefs: FC = () => {
   return (
     <svg className="defs">
       <defs>
@@ -31,8 +31,8 @@ const SvgDefs: FC = () => {
           <stop offset="100%" stopColor="#2b3238" />
         </linearGradient>
 
-        <linearGradient id="grad-dial-base-flanger" x1={0} y1={0} x2={0} y2={1}>
-          <stop offset="85%" stopColor={theme.flangerColor} />
+        <linearGradient id="grad-dial-base-phaser" x1={0} y1={0} x2={0} y2={1}>
+          <stop offset="85%" stopColor={theme.phaserColor} />
           <stop offset="100%" stopColor="#2b3238" />
         </linearGradient>
 
@@ -76,5 +76,3 @@ const SvgDefs: FC = () => {
     </svg>
   );
 };
-
-export default SvgDefs;

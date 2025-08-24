@@ -73,17 +73,17 @@
     .line-left__distortion__active {
       background: linear-gradient(360deg, transparent, v.$distortionColor);
     }
-    .line-top__flanger__active {
-      background: linear-gradient(90deg, transparent, v.$flangerColor);
+    .line-top__phaser__active {
+      background: linear-gradient(90deg, transparent, v.$phaserColor);
     }
-    .line-right__flanger__active {
-      background: linear-gradient(180deg, transparent, v.$flangerColor);
+    .line-right__phaser__active {
+      background: linear-gradient(180deg, transparent, v.$phaserColor);
     }
-    .line-bottom__flanger__active {
-      background: linear-gradient(270deg, transparent, v.$flangerColor);
+    .line-bottom__phaser__active {
+      background: linear-gradient(270deg, transparent, v.$phaserColor);
     }
-    .line-left__flanger__active {
-      background: linear-gradient(360deg, transparent, v.$flangerColor);
+    .line-left__phaser__active {
+      background: linear-gradient(360deg, transparent, v.$phaserColor);
     }
     .line-top__delay__active {
       background: linear-gradient(90deg, transparent, v.$delayColor);
@@ -173,6 +173,7 @@
       border-bottom: 5px solid v.$mainBlue;
       text-align: left;
       padding-left: 7px;
+      font-size: 0.8rem;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: -0.7px;
@@ -189,12 +190,12 @@
         0 0 50px v.$distortionColor,
         0 0 200px v.$distortionColor;
     }
-    .rack-button__flanger:hover {
+    .rack-button__phaser:hover {
       box-shadow:
-        0 0 5px v.$flangerColor,
-        0 0 25px v.$flangerColor,
-        0 0 50px v.$flangerColor,
-        0 0 200px v.$flangerColor;
+        0 0 5px v.$phaserColor,
+        0 0 25px v.$phaserColor,
+        0 0 50px v.$phaserColor,
+        0 0 200px v.$phaserColor;
     }
     .rack-button__delay:hover {
       box-shadow:
@@ -235,11 +236,11 @@
         0px 3px 5px v.$distortionColor,
         0px 0 10px v.$distortionColor;
     }
-    .rack-button__flanger__active {
+    .rack-button__phaser__active {
       box-shadow:
-        10px 2px 50px v.$flangerColor,
-        0px 3px 5px v.$flangerColor,
-        0px 0 10px v.$flangerColor;
+        10px 2px 50px v.$phaserColor,
+        0px 3px 5px v.$phaserColor,
+        0px 0 10px v.$phaserColor;
     }
     .rack-button__delay__active {
       box-shadow:
@@ -267,8 +268,8 @@
     }
     .rack-knobs {
       display: flex;
-      gap: 15px;
-      margin-left: 25px;
+      gap: 12px;
+      margin-left: 12px;
     }
   }
 }

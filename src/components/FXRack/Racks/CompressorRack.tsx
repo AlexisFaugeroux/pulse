@@ -1,36 +1,20 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type FC, useContext } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
-import { initialSettings } from '../../../nodesConfig';
 import { ControlTypes, FXs } from '../../../utils/constants';
-import Knob from '../../utils/Knob/Knob';
-import Rack from './Rack';
+import { Knob } from '../../utils/Knob/Knob';
+import { Rack } from './Rack';
 import './Racks.scss';
-import { Compressor_ActionTypes } from '../../../contexts/types/compressor';
 
-const CompressorRack: FC = () => {
-  const { dispatch } = useContext(SettingsContext);
-  const [isActive, setIsActive] = useState(false);
-
+export const CompressorRack: FC = () => {
   const {
-    compressor: { attack, release, knee, ratio, threshold, wetGain },
-  } = initialSettings;
+    state: { compressor },
+  } = useContext(SettingsContext);
 
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: Compressor_ActionTypes.Activate,
-        payload: {},
-      });
-    } else {
-      dispatch({
-        type: Compressor_ActionTypes.Deactivate,
-        payload: {},
-      });
-    }
-  }, [isActive, dispatch]);
+  const { isActive, attack, release, knee, ratio, threshold, wetGain } =
+    compressor;
 
   return (
-    <Rack type={FXs.COMPRESSOR} isActive={isActive} setIsActive={setIsActive}>
+    <Rack type={FXs.COMPRESSOR} isActive={isActive}>
       <Knob
         initialValue={threshold}
         label="thresh."
@@ -70,5 +54,3 @@ const CompressorRack: FC = () => {
     </Rack>
   );
 };
-
-export default CompressorRack;

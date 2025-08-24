@@ -1,11 +1,25 @@
 import { DistortionType, LFOMode } from '../utils/constants';
 
 export type OscSettings = {
-  id: 'oscillatorA' | 'oscillatorB';
+  id: string;
   isActive: boolean;
   type: OscillatorType;
   octaveOffset: number;
   detune: number;
+  gain: number;
+};
+
+export type SubOscSettings = {
+  id: string;
+  isActive: boolean;
+  type: OscillatorType;
+  octaveOffset: number;
+  gain: number;
+};
+
+export type NoiseSettings = {
+  id: string;
+  isActive: boolean;
   gain: number;
 };
 
@@ -16,6 +30,14 @@ export type EnvelopeSettings = {
   decay: number;
   sustain: number;
   release: number;
+};
+
+export type LFOSettings = {
+  isActive: boolean;
+  mode: LFOMode;
+  type: OscillatorType;
+  frequency: number;
+  gain: number;
 };
 
 type BaseFxSettings = {
@@ -39,24 +61,27 @@ export type DistortionSettings = {
     drive: number;
   };
   bitcrusher: BaseFxSettings & {
-    type: DistortionType.BITCRUSHER;
+    type: DistortionType;
     bitDepth: number;
     downsampling: number;
   };
 };
 
-export type FlangerSettings = BaseFxSettings & {
-  delay: number;
-  feedback: number;
+export type PhaserSettings = BaseFxSettings & {
   depth: number;
-  speed: number;
+  rate: number;
+  frequencyOffset: number;
+  q: number;
+  baseFrequency: number;
+  stereoPhase: number;
 };
 
 export type ChorusSettings = BaseFxSettings & {
-  delay: number;
-  feedback: number;
+  time: number;
   depth: number;
-  speed: number;
+  feedback: number;
+  rate: number;
+  stereoPhase: number;
 };
 
 export type DelaySettings = BaseFxSettings & {
@@ -77,27 +102,31 @@ export type CompressorSettings = BaseFxSettings & {
   release: number;
 };
 
-export type InitialSettingsState = {
+export type Settings = {
   oscillators: {
     oscillatorA: OscSettings;
     oscillatorB: OscSettings;
+    subOscillator: SubOscSettings;
+  };
+  noises: {
+    [key: string]: NoiseSettings;
+    whiteNoise: NoiseSettings;
+    pinkNoise: NoiseSettings;
+    brownNoise: NoiseSettings;
   };
   envelope: EnvelopeSettings;
-  lfo: {
-    isActive: boolean;
-    mode: LFOMode;
-    type: OscillatorType;
-    frequency: number;
-    gain: number;
-  };
+  lfo: LFOSettings;
   filter: FilterSettings;
   distortion: DistortionSettings;
-  flanger: FlangerSettings;
+  phaser: PhaserSettings;
   chorus: ChorusSettings;
   delay: DelaySettings;
   reverb: ReverbSettings;
   compressor: CompressorSettings;
   master: {
     gain: number;
+  };
+  keyboardOffset: {
+    offset: number;
   };
 };

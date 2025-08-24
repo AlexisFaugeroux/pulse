@@ -1,44 +1,33 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type FC, useContext, useState } from 'react';
 import { SettingsContext } from '../../contexts/Context';
-import { Filter_ActionTypes } from '../../contexts/types';
-import { initialSettings } from '../../nodesConfig';
-import { ControlTypes, FILTER_VALUES } from '../../utils/constants';
-import BlocTitle from '../utils/BlocTitle/BlocTitle';
-import InactivePanel from '../utils/InactivePanel/InactivePanel';
-import Knob from '../utils/Knob/Knob';
-import WordSelector from '../utils/WordSelector/WordSelector';
+import { ControlTypes, FILTER_TYPES } from '../../utils/constants';
+import { BlocTitle } from '../utils/BlocTitle/BlocTitle';
+import { InactivePanel } from '../utils/InactivePanel/InactivePanel';
+import { Knob } from '../utils/Knob/Knob';
+import { WordSelector } from '../utils/WordSelector/WordSelector';
 import './Filter.scss';
 
-const Filter: FC = () => {
-  const { dispatch } = useContext(SettingsContext);
-
-  const [isActive, setIsActive] = useState(false);
-  const { filter: filterSettings } = initialSettings;
-
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: Filter_ActionTypes.Activate,
-        payload: {},
-      });
-    } else {
-      dispatch({
-        type: Filter_ActionTypes.Deactivate,
-        payload: {},
-      });
-    }
-  }, [isActive, dispatch]);
+export const Filter: FC = () => {
+  const {
+    state: { filter: filterSettings },
+  } = useContext(SettingsContext);
+  const [currentType, setCurrentType] = useState(FILTER_TYPES[0]);
 
   return (
     <div className="filter">
-      <InactivePanel isActive={isActive} />
+      <InactivePanel isActive={filterSettings.isActive} />
       <div className="filter-background">
         <BlocTitle
           label="filter"
-          isActive={isActive}
-          setIsActive={setIsActive}
+          isActive={filterSettings.isActive}
+          parent="filter"
         />
-        <WordSelector parent="filter" values={FILTER_VALUES} />
+        <WordSelector
+          parent="filter"
+          values={FILTER_TYPES}
+          currentType={currentType}
+          setCurrentType={setCurrentType}
+        />
         <div className="knobs">
           <Knob
             parent="filter"
@@ -63,5 +52,3 @@ const Filter: FC = () => {
     </div>
   );
 };
-
-export default Filter;

@@ -1,30 +1,51 @@
-import { FC, useState } from 'react';
+import { type FC, useContext } from 'react';
+import { SettingsContext } from '../../contexts/Context';
 import { ControlTypes, Waves } from '../../utils/constants';
-import InactivePanel from '../utils/InactivePanel/InactivePanel';
-import BlocTitle from '../utils/BlocTitle/BlocTitle';
-import WaveSelector from '../utils/WaveSelector/WaveSelector';
-import Knob from '../utils/Knob/Knob';
-import OctaveSelector from '../utils/OctaveSelector/OctaveSelector';
+import { BlocTitle } from '../utils/BlocTitle/BlocTitle';
+import { InactivePanel } from '../utils/InactivePanel/InactivePanel';
+import { Knob } from '../utils/Knob/Knob';
+import { OctaveSelector } from '../utils/OctaveSelector/OctaveSelector';
+import { WaveSelector } from '../utils/WaveSelector/WaveSelector';
 import './SubOsc.scss';
 
-const SubOsc: FC = () => {
-  const [isActive, setIsActive] = useState(false);
+interface SubOscillatorProps {
+  id: string;
+  label: string;
+}
+
+export const SubOsc: FC<SubOscillatorProps> = ({ id, label }) => {
+  const {
+    state: {
+      oscillators: { subOscillator },
+    },
+  } = useContext(SettingsContext);
 
   const waves = [Waves.SINE, Waves.SAWTOOTH];
 
   return (
     <div className="subOsc">
-      <InactivePanel isActive={isActive} />
+      <InactivePanel isActive={subOscillator.isActive} />
       <div className="subOsc-background">
-        <BlocTitle label="sub" isActive={isActive} setIsActive={setIsActive} />
-        <WaveSelector waves={waves} />
+        <BlocTitle
+          label={label}
+          isActive={subOscillator.isActive}
+          parent={id}
+        />
+        <WaveSelector parent={id} waves={waves} activeWave={subOscillator.type} />
         <div className="controls">
-          <Knob initialValue={30} label="level" type={ControlTypes.DEFAULT} />
-          <OctaveSelector size={3} />
+          <Knob
+            parent={id}
+            initialValue={subOscillator.gain}
+            label="level"
+            type={ControlTypes.DEFAULT}
+          />
+          <OctaveSelector
+            initialOctaveOffset={subOscillator.octaveOffset}
+            parent={id}
+            size={3}
+          />
         </div>
       </div>
     </div>
   );
 };
-
-export default SubOsc;

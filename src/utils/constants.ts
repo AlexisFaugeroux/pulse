@@ -295,7 +295,11 @@ export const NOTE_TO_KEYS: Record<string, string[]> = {
   B8: ['u', 'b'],
 };
 
-export const NOISE_VALUES = ['White', 'Pink', 'Brown'];
+export enum Noise_Types {
+  WHITE = 'whiteNoise',
+  PINK = 'pinkNoise',
+  BROWN = 'brownNoise',
+}
 
 export enum LFOMode {
   TREMOLO = 'TREMOLO',
@@ -306,7 +310,7 @@ export enum ControlTypes {
   MASTER = 'master',
   DEFAULT = 'default',
   DISTORTION = 'distortion',
-  FLANGER = 'flanger',
+  PHASER = 'phaser',
   DELAY = 'delay',
   REVERB = 'reverb',
   CHORUS = 'chorus',
@@ -320,7 +324,7 @@ export enum Waves {
   SQUARE = 'square',
 }
 
-export const FILTER_VALUES = [
+export const FILTER_TYPES = [
   'Lowpass',
   'Highpass',
   'Bandpass',
@@ -336,7 +340,7 @@ export enum FXs {
   DELAY = 'delay',
   DISTORTION = 'distortion',
   FILTER = 'filter',
-  FLANGER = 'flanger',
+  PHASER = 'phaser',
   REVERB = 'reverb',
   CHORUS = 'chorus',
   COMPRESSOR = 'compressor',

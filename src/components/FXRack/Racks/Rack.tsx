@@ -1,15 +1,25 @@
-import { FC, PropsWithChildren } from 'react';
+import { type FC, type PropsWithChildren, useContext } from 'react';
 import { theme } from '../../../styles/_variables';
 import { FXs } from '../../../utils/constants';
 import './Racks.scss';
+import { SettingsContext } from '../../../contexts/Context';
+import {
+  Chorus_ActionTypes,
+  Compressor_ActionTypes,
+  Delay_ActionTypes,
+  Distortion_ActionTypes,
+  Phaser_ActionTypes,
+  Reverb_ActionTypes,
+} from '../../../contexts/types';
 
 interface RackProps extends PropsWithChildren {
   type: FXs;
   isActive: boolean;
-  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Rack: FC<RackProps> = ({ type, isActive, setIsActive, children }) => {
+export const Rack: FC<RackProps> = ({ type, isActive, children }) => {
+  const { dispatch } = useContext(SettingsContext);
+
   let rackType: FXs = FXs.DISTORTION;
   let backgroundColor = theme.darkGrey;
 
@@ -18,9 +28,9 @@ const Rack: FC<RackProps> = ({ type, isActive, setIsActive, children }) => {
       rackType = FXs.DISTORTION;
       backgroundColor = theme.distortionColor;
       break;
-    case FXs.FLANGER:
-      rackType = FXs.FLANGER;
-      backgroundColor = theme.flangerColor;
+    case FXs.PHASER:
+      rackType = FXs.PHASER;
+      backgroundColor = theme.phaserColor;
       break;
     case FXs.DELAY:
       rackType = FXs.DELAY;
@@ -40,6 +50,86 @@ const Rack: FC<RackProps> = ({ type, isActive, setIsActive, children }) => {
       break;
     default:
   }
+
+  const handleOnClick = () => {
+    if (rackType === FXs.DISTORTION) {
+      if (isActive) {
+        dispatch({
+          type: Distortion_ActionTypes.DeactivateClipping,
+          payload: {},
+        });
+        dispatch({
+          type: Distortion_ActionTypes.DeactivateBitcrusher,
+          payload: {},
+        });
+      } else {
+        dispatch({
+          type: Distortion_ActionTypes.ActivateClipping,
+          payload: {},
+        });
+      }
+    } else if (rackType === FXs.PHASER) {
+      if (isActive) {
+        dispatch({
+          type: Phaser_ActionTypes.Deactivate,
+          payload: {},
+        });
+      } else {
+        dispatch({
+          type: Phaser_ActionTypes.Activate,
+          payload: {},
+        });
+      }
+    } else if (rackType === FXs.CHORUS) {
+      if (isActive) {
+        dispatch({
+          type: Chorus_ActionTypes.Deactivate,
+          payload: {},
+        });
+      } else {
+        dispatch({
+          type: Chorus_ActionTypes.Activate,
+          payload: {},
+        });
+      }
+    } else if (rackType === FXs.DELAY) {
+      if (isActive) {
+        dispatch({
+          type: Delay_ActionTypes.Deactivate,
+          payload: {},
+        });
+      } else {
+        dispatch({
+          type: Delay_ActionTypes.Activate,
+          payload: {},
+        });
+      }
+    } else if (rackType === FXs.REVERB) {
+      if (isActive) {
+        dispatch({
+          type: Reverb_ActionTypes.Deactivate,
+          payload: {},
+        });
+      } else {
+        dispatch({
+          type: Reverb_ActionTypes.Activate,
+          payload: {},
+        });
+      }
+    } else if (rackType === FXs.COMPRESSOR) {
+      if (isActive) {
+        dispatch({
+          type: Compressor_ActionTypes.Deactivate,
+          payload: {},
+        });
+      } else {
+        dispatch({
+          type: Compressor_ActionTypes.Activate,
+          payload: {},
+        });
+      }
+    }
+  };
 
   return (
     <div className={`rack ${rackType}`}>
@@ -72,7 +162,7 @@ const Rack: FC<RackProps> = ({ type, isActive, setIsActive, children }) => {
               ? `rack-button__active rack-button__${rackType}__active`
               : ''
           }`}
-          onClick={() => setIsActive(!isActive)}
+          onClick={handleOnClick}
           style={{
             backgroundColor,
           }}
@@ -84,5 +174,3 @@ const Rack: FC<RackProps> = ({ type, isActive, setIsActive, children }) => {
     </div>
   );
 };
-
-export default Rack;

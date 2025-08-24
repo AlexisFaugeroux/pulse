@@ -5,7 +5,7 @@ interface InactivePanelProps {
   isActive: boolean;
 }
 
-const InactivePanel: FC<InactivePanelProps> = ({ isActive }) => {
+export const InactivePanel: FC<InactivePanelProps> = ({ isActive }) => {
   return (
     <div
       className="inactive-panel"
@@ -15,5 +15,3 @@ const InactivePanel: FC<InactivePanelProps> = ({ isActive }) => {
     ></div>
   );
 };
-
-export default InactivePanel;

@@ -1,39 +1,29 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type FC, useContext } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
-import { Chorus_ActionTypes } from '../../../contexts/types';
-import { initialSettings } from '../../../nodesConfig';
 import { ControlTypes, FXs } from '../../../utils/constants';
-import Knob from '../../utils/Knob/Knob';
-import Rack from './Rack';
+import { Knob } from '../../utils/Knob/Knob';
+import { Rack } from './Rack';
 import './Racks.scss';
 
-const ChorusRack: FC = () => {
-  const { dispatch } = useContext(SettingsContext);
-  const [isActive, setIsActive] = useState(false);
-
+export const ChorusRack: FC = () => {
   const {
-    chorus: { delay, depth, speed, feedback, wetGain },
-  } = initialSettings;
+    state: { chorus },
+  } = useContext(SettingsContext);
 
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: Chorus_ActionTypes.Activate,
-        payload: {},
-      });
-    } else {
-      dispatch({
-        type: Chorus_ActionTypes.Deactivate,
-        payload: {},
-      });
-    }
-  }, [isActive, dispatch]);
+  const { isActive, rate, time, depth, feedback, stereoPhase, wetGain } =
+    chorus;
 
   return (
-    <Rack type={FXs.CHORUS} isActive={isActive} setIsActive={setIsActive}>
+    <Rack type={FXs.CHORUS} isActive={isActive}>
       <Knob
-        initialValue={delay}
-        label="delay"
+        initialValue={rate}
+        label="rate"
+        type={ControlTypes.CHORUS}
+        parent={FXs.CHORUS}
+      />
+      <Knob
+        initialValue={time}
+        label="time"
         type={ControlTypes.CHORUS}
         parent={FXs.CHORUS}
       />
@@ -44,14 +34,14 @@ const ChorusRack: FC = () => {
         parent={FXs.CHORUS}
       />
       <Knob
-        initialValue={speed}
-        label="speed"
+        initialValue={feedback}
+        label="feedback"
         type={ControlTypes.CHORUS}
         parent={FXs.CHORUS}
       />
       <Knob
-        initialValue={feedback}
-        label="feedback"
+        initialValue={stereoPhase}
+        label="phase"
         type={ControlTypes.CHORUS}
         parent={FXs.CHORUS}
       />
@@ -64,5 +54,3 @@ const ChorusRack: FC = () => {
     </Rack>
   );
 };
-
-export default ChorusRack;

@@ -1,5 +1,13 @@
-import { currentOscillators } from '../../contexts/reducers/oscillatorTriggerReducer';
-import { initialSettings, oscAGain, oscBGain } from '../../nodesConfig';
+import { currentOscillators } from '../../contexts/reducers/oscillators/oscillatorTriggerReducer';
+import {
+  brownNoiseGain,
+  oscAGain,
+  oscBGain,
+  pinkNoiseGain,
+  subGain,
+  whiteNoiseGain,
+} from '../../nodesConfig';
+import { LFOSettings } from '../../types/types';
 import { LFOMode, TIME_CONSTANT } from '../constants';
 import { linearToLinearRange, roundTwoDigits } from '../helpers';
 
@@ -9,15 +17,15 @@ export default class LFO {
   mixGain;
   mode: LFOMode;
 
-  constructor(public audioContext: AudioContext) {
+  constructor(public audioContext: AudioContext, public settings: LFOSettings) {
     this.audioContext = audioContext;
     this.node = this.audioContext.createOscillator();
-    this.node.type = initialSettings.lfo.type;
-    this.node.frequency.value = initialSettings.lfo.frequency;
+    this.node.type = settings.type;
+    this.node.frequency.value = settings.frequency;
     this.easing = 0.006;
 
     this.mixGain = this.audioContext.createGain();
-    this.mixGain.gain.value = initialSettings.lfo.gain;
+    this.mixGain.gain.value = settings.gain;
 
     this.mode = LFOMode.TREMOLO;
 
@@ -41,6 +49,10 @@ export default class LFO {
 
     this.mixGain.connect(oscAGain.gain);
     this.mixGain.connect(oscBGain.gain);
+    this.mixGain.connect(subGain.gain);
+    this.mixGain.connect(whiteNoiseGain.gain);
+    this.mixGain.connect(brownNoiseGain.gain);
+    this.mixGain.connect(pinkNoiseGain.gain);
   }
 
   deactivate() {
@@ -59,6 +71,10 @@ export default class LFO {
         this.disconnect();
         this.connect(oscAGain.gain);
         this.connect(oscBGain.gain);
+        this.connect(subGain.gain);
+        this.connect(whiteNoiseGain.gain);
+        this.connect(pinkNoiseGain.gain);
+        this.connect(brownNoiseGain.gain);
         return;
 
       case LFOMode.VIBRATO:

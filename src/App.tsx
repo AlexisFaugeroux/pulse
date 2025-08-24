@@ -1,16 +1,16 @@
 import './App.scss';
-import Analyser from './components/Analyser/Analyser';
-import Envelope from './components/Envelope/Envelope';
-import FXRack from './components/FXRack/FXRack';
-import Filter from './components/Filter/Filter';
-import Header from './components/Header/Header';
-import Keyboard from './components/Keyboard/Keyboard';
-import LFO from './components/LFO/LFO';
-import NoiseOsc from './components/NoiseOsc/NoiseOsc';
-import Oscillator from './components/Oscillator/Oscillator';
-import SubOsc from './components/SubOsc/SubOsc';
+import { Analyser } from './components/Analyser/Analyser';
+import { Envelope } from './components/Envelope/Envelope';
+import { FXRack } from './components/FXRack/FXRack';
+import { Filter } from './components/Filter/Filter';
+import { Header } from './components/Header/Header';
+import { Keyboard } from './components/Keyboard/Keyboard';
+import { LFO } from './components/LFO/LFO';
+import { NoiseOsc } from './components/NoiseOsc/NoiseOsc';
+import { Oscillator } from './components/Oscillator/Oscillator';
+import { SubOsc } from './components/SubOsc/SubOsc';
 import { Provider } from './contexts/Context';
-import AudioNodesConnect from './utils/AudioNodesConnect';
+import { AudioNodesConnect } from './utils/AudioNodesConnect';
 
 function App() {
   return (
@@ -24,8 +24,8 @@ function App() {
                 <Oscillator id="oscillatorA" label="oscillator a" />
                 <Oscillator id="oscillatorB" label="oscillator b" />
                 <div className="subnoise">
-                  <SubOsc />
-                  <NoiseOsc />
+                  <SubOsc id="subOscillator" label="sub" />
+                  <NoiseOsc id="noiseOsc" label="noise" />
                 </div>
               </div>
 

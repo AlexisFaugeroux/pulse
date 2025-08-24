@@ -1,7 +1,7 @@
 @use './styles/variables' as v;
 
 $backgroundHeight: calc(100vh - 3%);
-$backgroundWidth: calc(100vw - 10%);
+$backgroundWidth: calc(100vw - 5%);
 
 $mainHeight: calc($backgroundHeight - v.$headerHeight);
 
@@ -31,6 +31,7 @@ body {
 .background {
   height: $backgroundHeight;
   width: $backgroundWidth;
+  max-width: 1500px;
   position: absolute;
   left: 50%;
   top: 50%;

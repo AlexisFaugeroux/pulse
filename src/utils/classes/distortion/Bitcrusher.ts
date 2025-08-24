@@ -1,20 +1,21 @@
-import { initialSettings } from '../../../nodesConfig';
+import { DistortionSettings } from '../../../types/types';
 import { FXs } from '../../constants';
 import { linearToLinearRange } from '../../helpers';
-import FX from '../FX';
+import FX from '../FXs/FX';
 
 export default class BitcrusherDistortion extends FX {
   node: AudioWorkletNode | null;
 
-  constructor(audioContext: AudioContext) {
+  constructor(
+    public audioContext: AudioContext,
+    public settings: DistortionSettings,
+  ) {
     super(audioContext, FXs.BITCRUSHER);
     this.node = null;
   }
 
   async init() {
-    const {
-      distortion: { bitcrusher },
-    } = initialSettings;
+    const { bitcrusher } = this.settings;
 
     const bitDepth = linearToLinearRange(bitcrusher.bitDepth, [16, 1]);
     const downsampling = Math.ceil(

@@ -1,36 +1,19 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { type FC, useContext } from 'react';
 import { SettingsContext } from '../../../contexts/Context';
-import { Delay_ActionTypes } from '../../../contexts/types';
-import { initialSettings } from '../../../nodesConfig';
 import { ControlTypes, FXs } from '../../../utils/constants';
-import Knob from '../../utils/Knob/Knob';
-import Rack from './Rack';
+import { Knob } from '../../utils/Knob/Knob';
+import { Rack } from './Rack';
 import './Racks.scss';
 
-const DelayRack: FC = () => {
-  const { dispatch } = useContext(SettingsContext);
-  const [isActive, setIsActive] = useState(false);
-
+export const DelayRack: FC = () => {
   const {
-    delay: { time, feedback, wetGain },
-  } = initialSettings;
+    state: { delay },
+  } = useContext(SettingsContext);
 
-  useEffect(() => {
-    if (isActive) {
-      dispatch({
-        type: Delay_ActionTypes.Activate,
-        payload: {},
-      });
-    } else {
-      dispatch({
-        type: Delay_ActionTypes.Deactivate,
-        payload: {},
-      });
-    }
-  }, [isActive, dispatch]);
+  const {isActive, time, feedback, wetGain } = delay;
 
   return (
-    <Rack type={FXs.DELAY} isActive={isActive} setIsActive={setIsActive}>
+    <Rack type={FXs.DELAY} isActive={isActive}>
       <Knob
         initialValue={time}
         label="time"
@@ -52,5 +35,3 @@ const DelayRack: FC = () => {
     </Rack>
   );
 };
-
-export default DelayRack;

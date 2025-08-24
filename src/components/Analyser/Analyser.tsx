@@ -5,7 +5,7 @@ import { analyser } from '../../nodesConfig';
 import AnalyserClass from '../../utils/classes/Analyser';
 import './Analyser.scss';
 
-const Analyser: FC = () => {
+export const Analyser: FC = () => {
   const [analyserMode, setAnalyserMode] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -98,5 +98,3 @@ const Analyser: FC = () => {
     </div>
   );
 };
-
-export default Analyser;
