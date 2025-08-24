@@ -25,11 +25,11 @@ export function createAudioNodes(audioContext: AudioContext): AudioNodes{
   subGain.gain.value = settings.oscillators.subOscillator.gain;
 
   const whiteNoiseGain = audioContext.createGain();
-  whiteNoiseGain.gain.value = settings.noises.whiteNoise.gain;
+  whiteNoiseGain.gain.value = settings.noises.whiteNoise.gain * 0.5;
   const pinkNoiseGain = audioContext.createGain();
-  pinkNoiseGain.gain.value = settings.noises.pinkNoise.gain;
+  pinkNoiseGain.gain.value = settings.noises.pinkNoise.gain * 0.5;
   const brownNoiseGain = audioContext.createGain();
-  brownNoiseGain.gain.value = settings.noises.brownNoise.gain;
+  brownNoiseGain.gain.value = settings.noises.brownNoise.gain * 0.5;
 
   return {
     masterGain,

@@ -8,10 +8,9 @@ let graph: AudioGraph | null = null;
 export async function initAudioGraph(): Promise<AudioGraph> {
   const ctx = getAudioContext();
 
-  const nodes = createAudioNodes(ctx);
-  await connectAudioNodes(nodes);
+  graph = { ctx, nodes: {...createAudioNodes(ctx)} };
 
-  graph = { ctx, nodes };
+  await connectAudioNodes(graph.nodes);
 
   return graph;
 }

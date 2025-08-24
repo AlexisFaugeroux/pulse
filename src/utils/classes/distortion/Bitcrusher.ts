@@ -22,9 +22,13 @@ export default class BitcrusherDistortion extends FX {
       linearToLinearRange(bitcrusher.downsampling, [1, 40]),
     );
 
-    await this.audioContext.audioWorklet.addModule(
-      'src/utils/classes/worklets/bitcrusher-processor.js',
-    );
+    try {
+      await this.audioContext.audioWorklet.addModule(
+        new URL('../worklets/bitcrusher-processor.js', import.meta.url),
+      );
+    } catch (e) {
+      console.error('Failed to load bitcrusher worklet', e);
+    }
 
     this.node = new AudioWorkletNode(this.audioContext, 'bitcrusher', {
       parameterData: {

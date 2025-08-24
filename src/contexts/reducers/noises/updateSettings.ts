@@ -26,7 +26,7 @@ export function updateSettings(
 
   // Noise is too loud compared with oscillators volume
   const reducedGainValue =
-    roundTwoDigitsNonFinite(newValue) - roundTwoDigitsNonFinite(newValue) * 0.8;
+    roundTwoDigitsNonFinite(newValue) * 0.5;
 
   const {
     ctx,
