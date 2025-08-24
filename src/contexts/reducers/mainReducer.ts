@@ -99,7 +99,7 @@ export const mainReducer = (
       }),
       oscillators: oscillatorPresetReducer(oscillators, payload.oscillators),
       noises: noisesPresetReducer(noises, payload.noises),
-      envelope: envelopePresetReducer(payload.envelope),
+      envelope: envelopePresetReducer(envelope, payload.envelope),
       filter: filterPresetReducer(filter, payload.filter),
       lfo: lfoPresetReducer(lfo, payload.lfo),
       distortion: distortionPresetReducer(distortion, payload.distortion),

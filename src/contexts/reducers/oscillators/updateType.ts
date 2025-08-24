@@ -1,11 +1,16 @@
+import { getAudioNode } from '../../../audio/audioGraph';
 import type { Oscillator_SettingsActions } from '../../types';
-import { currentOscillators } from './oscillatorTriggerReducer';
 import { OscillatorState } from './types';
 
 export function updateType(
   state: OscillatorState,
   action: Oscillator_SettingsActions,
 ): typeof state {
+  const activeOscillators = getAudioNode('activeOscillators');
+  if (!activeOscillators) {
+    console.error("Could not update oscillator type, audio graph is not initialized");
+    return state;
+  }
   const { oscillatorA, oscillatorB, subOscillator } = state;
   const { id, parent } = action.payload;
 
@@ -15,7 +20,7 @@ export function updateType(
   }
 
   if (parent === 'oscillatorA') {
-    currentOscillators.forEach(({ node, parent: currOscParent }) => {
+    activeOscillators.forEach(({ node, parent: currOscParent }) => {
       if (currOscParent === parent) {
         node.type = id as OscillatorType;
       }
@@ -26,7 +31,7 @@ export function updateType(
       oscillatorA: { ...oscillatorA, type: id as OscillatorType },
     };
   } else if (parent === 'oscillatorB') {
-    currentOscillators.forEach(({ node, parent: currOscParent }) => {
+    activeOscillators.forEach(({ node, parent: currOscParent }) => {
       if (currOscParent === parent) {
         node.type = id as OscillatorType;
       }
@@ -36,7 +41,7 @@ export function updateType(
       oscillatorB: { ...oscillatorB, type: id as OscillatorType },
     };
   } else if (parent === 'subOscillator') {
-    currentOscillators.forEach(({ node, parent: currOscParent }) => {
+    activeOscillators.forEach(({ node, parent: currOscParent }) => {
       if (currOscParent === parent) {
         node.type = id as OscillatorType;
       }

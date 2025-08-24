@@ -8,8 +8,10 @@ import Phaser from '../utils/classes/FXs/Phaser';
 import Reverb from '../utils/classes/FXs/Reverb';
 import LFO from '../utils/classes/LFO';
 import Limiter from '../utils/classes/Limiter';
+import Oscillator from '../utils/classes/Oscillator';
 import Bitcrusher from '../utils/classes/distortion/Bitcrusher';
 import Clipping from '../utils/classes/distortion/Clipping';
+import Noise from '../utils/classes/noises/Noise';
 import type { AudioNodes } from "./types";
 
 const { settings } = presets[0];
@@ -25,11 +27,15 @@ export function createAudioNodes(audioContext: AudioContext): AudioNodes{
   subGain.gain.value = settings.oscillators.subOscillator.gain;
 
   const whiteNoiseGain = audioContext.createGain();
-  whiteNoiseGain.gain.value = settings.noises.whiteNoise.gain;
+  whiteNoiseGain.gain.value = settings.noises.whiteNoise.gain * 0.5;
   const pinkNoiseGain = audioContext.createGain();
-  pinkNoiseGain.gain.value = settings.noises.pinkNoise.gain;
+  pinkNoiseGain.gain.value = settings.noises.pinkNoise.gain * 0.5;
   const brownNoiseGain = audioContext.createGain();
-  brownNoiseGain.gain.value = settings.noises.brownNoise.gain;
+  brownNoiseGain.gain.value = settings.noises.brownNoise.gain * 0.5;
+
+
+  const activeOscillators: Oscillator[] = [];
+  const activeNoises: Noise[] = [];
 
   return {
     masterGain,
@@ -51,5 +57,7 @@ export function createAudioNodes(audioContext: AudioContext): AudioNodes{
     limiter: new Limiter(audioContext),
     phaser: new Phaser(audioContext, settings.phaser),
     reverb: new Reverb(audioContext, settings.reverb),
+    activeOscillators,
+    activeNoises,
   };
 }

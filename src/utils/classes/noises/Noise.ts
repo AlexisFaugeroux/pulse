@@ -28,10 +28,21 @@ export default class Noise {
     this.gateGain = this.audioContext.createGain();
     this.gateGain.gain.value = 0;
   }
+
   async init() {
-    await this.audioContext.audioWorklet.addModule(
-      `src/utils/classes/worklets/${this.noiseType.toLowerCase()}-processor.js`,
-    );
+    try {
+      await this.audioContext.audioWorklet.addModule(
+        new URL(
+          `../worklets/${this.noiseType.toLowerCase()}-processor.js`,
+          import.meta.url,
+        ),
+      );
+    } catch (e) {
+      console.error(
+        `Failed to load ${this.noiseType.toLowerCase()} worklet`,
+        e,
+      );
+    }
 
     this.node = new AudioWorkletNode(this.audioContext, this.noiseType);
     this.wireUp(this.node);

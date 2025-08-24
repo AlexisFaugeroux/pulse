@@ -23,7 +23,7 @@ export function noisesPresetReducer(state: NoisesState, preset: NoisesState): No
     const { gain } = whiteNoise;
 
     const reducedGainValue =
-      roundTwoDigitsNonFinite(gain) - roundTwoDigitsNonFinite(gain) * 0.8;
+      roundTwoDigitsNonFinite(gain) * 0.5;
 
     whiteNoiseGain.gain.setTargetAtTime(
       reducedGainValue,
@@ -36,11 +36,13 @@ export function noisesPresetReducer(state: NoisesState, preset: NoisesState): No
 
     whiteNoiseGain.connect(filter.dryGain);
     whiteNoiseGain.connect(filter.node);
+
+    return { ...preset };
   } else if (pinkNoise.isActive) {
     const { gain } = pinkNoise;
 
     const reducedGainValue =
-      roundTwoDigitsNonFinite(gain) - roundTwoDigitsNonFinite(gain) * 0.8;
+      roundTwoDigitsNonFinite(gain) * 0.5;
 
     pinkNoiseGain.gain.setTargetAtTime(
       reducedGainValue,
@@ -53,11 +55,13 @@ export function noisesPresetReducer(state: NoisesState, preset: NoisesState): No
 
     pinkNoiseGain.connect(filter.dryGain);
     pinkNoiseGain.connect(filter.node);
+  
+    return { ...preset };
   } else if (brownNoise.isActive) {
     const { gain } = brownNoise;
 
     const reducedGainValue =
-      roundTwoDigitsNonFinite(gain) - roundTwoDigitsNonFinite(gain) * 0.8;
+      roundTwoDigitsNonFinite(gain) * 0.5;
 
     brownNoiseGain.gain.setTargetAtTime(
       reducedGainValue,
@@ -70,7 +74,9 @@ export function noisesPresetReducer(state: NoisesState, preset: NoisesState): No
 
     brownNoiseGain.connect(filter.dryGain);
     brownNoiseGain.connect(filter.node);
+  
+    return { ...preset };
   }
 
-  return { ...preset };
+  return state;
 }

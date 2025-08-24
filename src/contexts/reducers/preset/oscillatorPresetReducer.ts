@@ -1,7 +1,6 @@
 import type { OscillatorState } from '../oscillators/types';
 import { roundTwoDigitsNonFinite } from '../../../utils/helpers';
 import { TIME_CONSTANT } from '../../../utils/constants';
-import { currentOscillators } from '../oscillators/oscillatorTriggerReducer';
 import { getAudioGraph } from '../../../audio/audioGraph';
 
 export function oscillatorPresetReducer(
@@ -14,7 +13,7 @@ export function oscillatorPresetReducer(
     return state;
   }
 
-  const { ctx, nodes: { oscAGain, oscBGain, subGain }} = graph;
+  const { ctx, nodes: {activeOscillators, oscAGain, oscBGain, subGain }} = graph;
 
   const {
     oscillatorA: presetOscillatorA,
@@ -38,12 +37,12 @@ export function oscillatorPresetReducer(
     TIME_CONSTANT,
   );
 
-  if (currentOscillators.length > 0) {
-    currentOscillators.forEach((osc) => {
+  if (activeOscillators.length > 0) {
+    activeOscillators.forEach((osc) => {
       osc.node.disconnect();
       osc.stop();
     });
-    currentOscillators.forEach(({ node, frequency, octaveShift }) => {
+    activeOscillators.forEach(({ node, frequency, octaveShift }) => {
       node.detune.value = presetOscillatorA.detune * 100;
       node.detune.value = presetOscillatorB.detune * 100;
 
