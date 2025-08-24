@@ -54,7 +54,6 @@ export const bitcrusherDistortion = new BitcrusherDistortion(
   audioContext,
   settings.distortion,
 );
-await bitcrusherDistortion.init();
 
 // Chorus
 export const chorus = new Chorus(audioContext, settings.chorus);

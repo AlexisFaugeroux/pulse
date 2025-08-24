@@ -12,9 +12,10 @@ export default class BitcrusherDistortion extends FX {
   ) {
     super(audioContext, FXs.BITCRUSHER);
     this.node = null;
+    this.init();
   }
 
-  async init() {
+  private init() {
     const { bitcrusher } = this.settings;
 
     const bitDepth = linearToLinearRange(bitcrusher.bitDepth, [16, 1]);
@@ -22,7 +23,7 @@ export default class BitcrusherDistortion extends FX {
       linearToLinearRange(bitcrusher.downsampling, [1, 40]),
     );
 
-    await this.audioContext.audioWorklet.addModule(
+    /* await this.audioContext.audioWorklet.addModule(
       'src/utils/classes/worklets/bitcrusher-processor.js',
     );
 
@@ -32,7 +33,20 @@ export default class BitcrusherDistortion extends FX {
         downsampling,
       },
     });
-    this.wireUp(this.node);
+    this.wireUp(this.node); */
+
+    this.audioContext.audioWorklet
+      .addModule('src/utils/classes/worklets/bitcrusher-processor.js')
+      .then(() => {
+        this.node = new AudioWorkletNode(this.audioContext, 'bitcrusher', {
+          parameterData: {
+            bitDepth,
+            downsampling,
+          },
+        });
+        this.wireUp(this.node);
+      })
+      .catch((e) => console.error(e));
   }
 
   setBitDepth(value: number) {
