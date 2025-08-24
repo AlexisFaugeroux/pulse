@@ -11,7 +11,7 @@ export function updateType(
 
   if (!id) {
     console.error('Update oscillator type: no id provided');
-    return { ...state };
+    return state;
   }
 
   if (parent === 'oscillatorA') {
@@ -46,6 +46,6 @@ export function updateType(
       subOscillator: { ...subOscillator, type: id as OscillatorType },
     };
   } else {
-    return { ...state };
+    return state;
   }
 }

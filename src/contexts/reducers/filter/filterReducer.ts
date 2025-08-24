@@ -1,4 +1,4 @@
-import { filter } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import { FilterSettings } from '../../../types/types';
 import { Filter_ActionTypes, Filter_SettingsActions } from '../../types';
 import { updateSettings } from './updateSettings';
@@ -8,6 +8,13 @@ const filterReducer = (
   state: FilterSettings,
   action: Filter_SettingsActions,
 ): FilterSettings => {
+  const filter = getAudioNode('filter');
+  
+  if (!filter) {
+    console.error("filter node is not initialized");
+    return state;
+  }
+
   switch (action.type) {
     case Filter_ActionTypes.Activate:
       filter.activate({ dryValue: 0, wetValue: state.wetGain });
@@ -24,7 +31,7 @@ const filterReducer = (
 
     default:
       console.error('Reducer error action', action);
-      return { ...state };
+      return state;
   }
 };
 

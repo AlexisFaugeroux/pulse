@@ -16,7 +16,7 @@ const noisesReducer = (
     case Noise_SettingsActionTypes.Activate:
       if (!id) {
         console.error('Activate noise: no id provided');
-        return { ...state };
+        return state;
       }
       return {
         ...state,
@@ -25,7 +25,7 @@ const noisesReducer = (
     case Noise_SettingsActionTypes.Deactivate:
       if (!id) {
         console.error('Deactivate noise: no id provided');
-        return { ...state };
+        return state;
       }
       return {
         ...state,
@@ -37,7 +37,7 @@ const noisesReducer = (
     case Noise_SettingsActionTypes.UpdateType:
       return updateType(state, action);
     default:
-      return { ...state };
+      return state;
   }
 };
 

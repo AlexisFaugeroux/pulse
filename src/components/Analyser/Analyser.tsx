@@ -1,9 +1,9 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import inactiveIcon from '../../assets/main-light-switch-off.png';
 import activeIcon from '../../assets/main-light-switch-on.png';
-import { analyser } from '../../nodesConfig';
 import AnalyserClass from '../../utils/classes/Analyser';
 import './Analyser.scss';
+import { getAudioNode } from '../../audio/audioGraph';
 
 export const Analyser: FC = () => {
   const [analyserMode, setAnalyserMode] = useState(0);
@@ -52,7 +52,8 @@ export const Analyser: FC = () => {
   );
 
   useEffect(() => {
-    render(analyser);
+    const analyser = getAudioNode('analyser');
+    analyser && render(analyser);
   }, [analyserMode, render]);
 
   return (

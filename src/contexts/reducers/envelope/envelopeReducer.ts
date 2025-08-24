@@ -17,7 +17,7 @@ const envelopeReducer = (
       return updateSettings(state, action);
     default:
       console.error('Reducer error action', action);
-      return { ...state };
+      return state;
   }
 };
 

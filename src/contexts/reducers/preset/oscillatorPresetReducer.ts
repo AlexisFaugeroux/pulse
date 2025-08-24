@@ -1,17 +1,21 @@
 import type { OscillatorState } from '../oscillators/types';
-import {
-  audioContext,
-  oscAGain,
-  oscBGain,
-  subGain,
-} from '../../../nodesConfig';
 import { roundTwoDigitsNonFinite } from '../../../utils/helpers';
 import { TIME_CONSTANT } from '../../../utils/constants';
 import { currentOscillators } from '../oscillators/oscillatorTriggerReducer';
+import { getAudioGraph } from '../../../audio/audioGraph';
 
 export function oscillatorPresetReducer(
+  state: OscillatorState,
   preset: OscillatorState,
 ): OscillatorState {
+  const graph = getAudioGraph();
+  if (!graph) {
+    console.error("graph node is not initialized");
+    return state;
+  }
+
+  const { ctx, nodes: { oscAGain, oscBGain, subGain }} = graph;
+
   const {
     oscillatorA: presetOscillatorA,
     oscillatorB: presetOscillatorB,
@@ -20,17 +24,17 @@ export function oscillatorPresetReducer(
 
   oscAGain.gain.setTargetAtTime(
     roundTwoDigitsNonFinite(presetOscillatorA.gain),
-    audioContext.currentTime,
+    ctx.currentTime,
     TIME_CONSTANT,
   );
   oscBGain.gain.setTargetAtTime(
     roundTwoDigitsNonFinite(presetOscillatorB.gain),
-    audioContext.currentTime,
+    ctx.currentTime,
     TIME_CONSTANT,
   );
   subGain.gain.setTargetAtTime(
     roundTwoDigitsNonFinite(presetSubOscillator.gain),
-    audioContext.currentTime,
+    ctx.currentTime,
     TIME_CONSTANT,
   );
 
@@ -59,20 +63,20 @@ export function oscillatorPresetReducer(
       if (newFrequencyA !== node.frequency.value) {
         node.frequency.setValueAtTime(
           newFrequencyA,
-          audioContext.currentTime + 0.006,
+          ctx.currentTime + 0.006,
         );
       }
       if (newFrequencyB !== node.frequency.value) {
         node.frequency.setValueAtTime(
           newFrequencyB,
-          audioContext.currentTime + 0.006,
+          ctx.currentTime + 0.006,
         );
       }
 
       if (newFrequencySub !== node.frequency.value) {
         node.frequency.setValueAtTime(
           newFrequencySub,
-          audioContext.currentTime + 0.006,
+          ctx.currentTime + 0.006,
         );
       }
     });

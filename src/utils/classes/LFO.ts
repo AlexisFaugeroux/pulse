@@ -1,12 +1,5 @@
+import { getAudioGraph } from '../../audio/audioGraph';
 import { currentOscillators } from '../../contexts/reducers/oscillators/oscillatorTriggerReducer';
-import {
-  brownNoiseGain,
-  oscAGain,
-  oscBGain,
-  pinkNoiseGain,
-  subGain,
-  whiteNoiseGain,
-} from '../../nodesConfig';
 import { LFOSettings } from '../../types/types';
 import { LFOMode, TIME_CONSTANT } from '../constants';
 import { linearToLinearRange, roundTwoDigits } from '../helpers';
@@ -17,7 +10,10 @@ export default class LFO {
   mixGain;
   mode: LFOMode;
 
-  constructor(public audioContext: AudioContext, public settings: LFOSettings) {
+  constructor(
+    public audioContext: AudioContext,
+    public settings: LFOSettings,
+  ) {
     this.audioContext = audioContext;
     this.node = this.audioContext.createOscillator();
     this.node.type = settings.type;
@@ -42,17 +38,32 @@ export default class LFO {
   }
 
   activate({ gain }: { gain: number }) {
-    this.mixGain.gain.setValueAtTime(
-      gain,
-      this.audioContext.currentTime + TIME_CONSTANT,
-    );
+    const graph = getAudioGraph();
 
-    this.mixGain.connect(oscAGain.gain);
-    this.mixGain.connect(oscBGain.gain);
-    this.mixGain.connect(subGain.gain);
-    this.mixGain.connect(whiteNoiseGain.gain);
-    this.mixGain.connect(brownNoiseGain.gain);
-    this.mixGain.connect(pinkNoiseGain.gain);
+    if (graph) {
+      const {
+        oscAGain,
+        oscBGain,
+        subGain,
+        whiteNoiseGain,
+        brownNoiseGain,
+        pinkNoiseGain,
+      } = graph.nodes;
+
+      this.mixGain.gain.setValueAtTime(
+        gain,
+        this.audioContext.currentTime + TIME_CONSTANT,
+      );
+
+      this.mixGain.connect(oscAGain.gain);
+      this.mixGain.connect(oscBGain.gain);
+      this.mixGain.connect(subGain.gain);
+      this.mixGain.connect(whiteNoiseGain.gain);
+      this.mixGain.connect(brownNoiseGain.gain);
+      this.mixGain.connect(pinkNoiseGain.gain);
+    } else {
+      console.error('Could not activate LFO, audio graph is null');
+    }
   }
 
   deactivate() {
@@ -65,27 +76,43 @@ export default class LFO {
   }
 
   setMode(mode: LFOMode) {
-    this.mode = mode;
-    switch (mode) {
-      case LFOMode.TREMOLO:
-        this.disconnect();
-        this.connect(oscAGain.gain);
-        this.connect(oscBGain.gain);
-        this.connect(subGain.gain);
-        this.connect(whiteNoiseGain.gain);
-        this.connect(pinkNoiseGain.gain);
-        this.connect(brownNoiseGain.gain);
-        return;
+    const graph = getAudioGraph();
 
-      case LFOMode.VIBRATO:
-        this.disconnect();
-        currentOscillators.forEach((oscillator) => {
-          this.connect(oscillator.node.frequency);
-        });
-        return;
+    if (graph) {
+      const {
+        oscAGain,
+        oscBGain,
+        subGain,
+        whiteNoiseGain,
+        brownNoiseGain,
+        pinkNoiseGain,
+      } = graph.nodes;
 
-      default:
-        return console.error('setMode: unknown lfo mode');
+      this.mode = mode;
+      switch (mode) {
+        case LFOMode.TREMOLO:
+          this.disconnect();
+          this.connect(oscAGain.gain);
+          this.connect(oscBGain.gain);
+          this.connect(subGain.gain);
+          this.connect(whiteNoiseGain.gain);
+          this.connect(pinkNoiseGain.gain);
+          this.connect(brownNoiseGain.gain);
+          return;
+
+        case LFOMode.VIBRATO:
+          this.disconnect();
+          currentOscillators.forEach((oscillator) => {
+            this.connect(oscillator.node.frequency);
+          });
+          return;
+
+        default:
+          return console.error('setMode: unknown lfo mode');
+      }
+    }
+    else {
+      console.error('Could not set LFO mode, audio graph is null');
     }
   }
 

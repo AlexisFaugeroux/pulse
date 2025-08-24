@@ -1,7 +1,13 @@
-import { chorus } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import type { ChorusSettings } from '../../../types/types';
 
-export function chorusPresetReducer(preset: ChorusSettings): ChorusSettings {
+export function chorusPresetReducer(state: ChorusSettings, preset: ChorusSettings): ChorusSettings {
+  const chorus = getAudioNode('chorus');
+  if (!chorus) {
+    console.error("chorus node is not initialized");
+    return state;
+  }
+
   const {
     isActive,
     dryGain,

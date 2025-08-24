@@ -1,4 +1,4 @@
-import { lfo } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import { LFOMode } from '../../../utils/constants';
 import type { LFO_SettingsActions } from '../../types';
 
@@ -12,9 +12,16 @@ export function updateSettings(
   },
   action: LFO_SettingsActions,
 ): typeof state {
+  const lfo = getAudioNode('lfo');
+  
+  if (!lfo) {
+    console.error("lfo node is not initialized");
+    return state;
+  }
+
   const { id, value } = action.payload;
 
-  if (!value) return { ...state };
+  if (!value) return state;
 
   if (id === 'rate') {
     lfo.setRate(value);
@@ -28,5 +35,5 @@ export function updateSettings(
 
     return { ...state, gain: value };
   }
-  return { ...state };
+  return state;
 }

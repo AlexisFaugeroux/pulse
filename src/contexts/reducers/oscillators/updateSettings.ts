@@ -1,4 +1,4 @@
-import { audioContext, oscAGain, oscBGain, subGain } from '../../../nodesConfig';
+import { getAudioGraph } from '../../../audio/audioGraph';
 import { TIME_CONSTANT } from '../../../utils/constants';
 import { roundTwoDigitsNonFinite } from '../../../utils/helpers';
 import type { Oscillator_SettingsActions } from '../../types';
@@ -9,20 +9,33 @@ export function updateSettings(
   state: OscillatorState,
   action: Oscillator_SettingsActions,
 ): typeof state {
+  const graph = getAudioGraph();
+  if (!graph) {
+    console.error(
+      'Could not update noise settings, audio graph is not initialized',
+    );
+    return state;
+  }
+
   const { id, parent, value: newValue } = action.payload;
 
   if (!id || newValue === undefined || !parent) {
     console.error(
       'Update oscillator settings: no id, value or parent component provided',
     );
-    return { ...state };
+    return state;
   }
+
+  const {
+    ctx,
+    nodes: {oscAGain, oscBGain, subGain },
+  } = graph;
 
   if (id === 'level') {
     if (parent === 'oscillatorA') {
       oscAGain.gain.setTargetAtTime(
         roundTwoDigitsNonFinite(newValue),
-        audioContext.currentTime,
+        ctx.currentTime,
         TIME_CONSTANT,
       );
       return {
@@ -35,7 +48,7 @@ export function updateSettings(
     } else if (parent === 'oscillatorB') {
       oscBGain.gain.setTargetAtTime(
         roundTwoDigitsNonFinite(newValue),
-        audioContext.currentTime,
+        ctx.currentTime,
         TIME_CONSTANT,
       );
       return {
@@ -48,7 +61,7 @@ export function updateSettings(
     } else if (parent === 'subOscillator') {
       subGain.gain.setTargetAtTime(
         roundTwoDigitsNonFinite(newValue),
-        audioContext.currentTime,
+        ctx.currentTime,
         TIME_CONSTANT,
       );
       return {
@@ -73,7 +86,7 @@ export function updateSettings(
           if (newFrequency !== node.frequency.value) {
             node.frequency.setValueAtTime(
               newFrequency,
-              audioContext.currentTime + 0.006,
+              ctx.currentTime + 0.006,
             );
           }
         }

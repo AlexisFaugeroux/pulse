@@ -1,7 +1,17 @@
-import { filter } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import type { FilterSettings } from '../../../types/types';
 
-export function filterPresetReducer(preset: FilterSettings): FilterSettings {
+export function filterPresetReducer(
+  state: FilterSettings,
+  preset: FilterSettings,
+): FilterSettings {
+  const filter = getAudioNode('filter');
+
+  if (!filter) {
+    console.error('filter node is not initialized');
+    return state;
+  }
+
   const { frequency, Q, gain, type } = preset;
 
   filter.setFrequency(frequency);

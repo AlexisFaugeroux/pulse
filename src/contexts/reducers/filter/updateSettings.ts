@@ -1,4 +1,4 @@
-import { filter } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import type { FilterSettings } from '../../../types/types';
 import type { Filter_SettingsActions } from '../../types';
 
@@ -6,8 +6,15 @@ export function updateSettings(
   state: FilterSettings,
   action: Filter_SettingsActions,
 ): FilterSettings {
+  const filter = getAudioNode('filter');
+  
+  if (!filter) {
+    console.error("filter node is not initialized");
+    return state;
+  }
+
   const { id, value } = action.payload;
-  if (!value) return { ...state };
+  if (!value) return state;
 
   if (id === 'cutoff') {
     filter.setFrequency(value);
@@ -23,5 +30,5 @@ export function updateSettings(
     filter.setGain(value);
     return { ...state, gain: value };
   }
-  return { ...state };
+  return state;
 }

@@ -1,9 +1,4 @@
-import {
-  audioContext,
-  brownNoiseGain,
-  pinkNoiseGain,
-  whiteNoiseGain,
-} from '../../../nodesConfig';
+import { getAudioGraph } from '../../../audio/audioGraph';
 import { TIME_CONSTANT } from '../../../utils/constants';
 import { roundTwoDigitsNonFinite } from '../../../utils/helpers';
 import type { Noise_SettingsActions } from '../../types/noises';
@@ -13,31 +8,44 @@ export function updateSettings(
   state: NoisesState,
   action: Noise_SettingsActions,
 ): typeof state {
+  const graph = getAudioGraph();
+  if (!graph) {
+    console.error(
+      'Could not update noise settings, audio graph is not initialized',
+    );
+    return state;
+  }
+
   const { whiteNoise, pinkNoise, brownNoise } = state;
   const { value: newValue } = action.payload;
 
   if (newValue === undefined) {
     console.error('Update noise settings: no value provided');
-    return { ...state };
+    return state;
   }
 
   // Noise is too loud compared with oscillators volume
   const reducedGainValue =
-    roundTwoDigitsNonFinite(newValue) - roundTwoDigitsNonFinite(newValue) * 0.7;
+    roundTwoDigitsNonFinite(newValue) - roundTwoDigitsNonFinite(newValue) * 0.8;
+
+  const {
+    ctx,
+    nodes: { whiteNoiseGain, pinkNoiseGain, brownNoiseGain },
+  } = graph;
 
   whiteNoiseGain.gain.setTargetAtTime(
     reducedGainValue,
-    audioContext.currentTime,
+    ctx.currentTime,
     TIME_CONSTANT,
   );
   pinkNoiseGain.gain.setTargetAtTime(
     reducedGainValue,
-    audioContext.currentTime,
+    ctx.currentTime,
     TIME_CONSTANT,
   );
   brownNoiseGain.gain.setTargetAtTime(
     reducedGainValue,
-    audioContext.currentTime,
+    ctx.currentTime,
     TIME_CONSTANT,
   );
 

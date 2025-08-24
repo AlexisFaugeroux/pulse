@@ -1,4 +1,4 @@
-import { compressor } from '../../../nodesConfig';
+import { getAudioNode } from '../../../audio/audioGraph';
 import type { CompressorSettings } from '../../../types/types';
 import type { Compressor_SettingsActions } from '../../types';
 
@@ -6,8 +6,15 @@ export function updateSettings(
   state: CompressorSettings,
   action: Compressor_SettingsActions,
 ): CompressorSettings {
+  const compressor = getAudioNode('compressor');
+
+  if (!compressor) {
+    console.error("compressor node is not initialized");
+    return state;
+  }
+
   const { id, value } = action.payload;
-  if (!id || !value) return { ...state };
+  if (!id || !value) return state;
 
   if (id === 'mix' && state.isActive) {
     const newDryValue = 1 - value;
@@ -42,5 +49,5 @@ export function updateSettings(
     return { ...state, release: value };
   }
 
-  return { ...state };
+  return state;
 }

@@ -1,26 +1,33 @@
-import {
-  whiteNoiseGain,
-  pinkNoiseGain,
-  brownNoiseGain,
-  audioContext,
-  filter,
-} from '../../../nodesConfig';
+import { getAudioGraph } from '../../../audio/audioGraph';
 import { TIME_CONSTANT } from '../../../utils/constants';
 import { roundTwoDigitsNonFinite } from '../../../utils/helpers';
 import { NoisesState } from '../noises/types';
 
-export function noisesPresetReducer(preset: NoisesState): NoisesState {
+export function noisesPresetReducer(state: NoisesState, preset: NoisesState): NoisesState {
+  const graph = getAudioGraph();
+  if (!graph) {
+    console.error(
+      'Could not update noise settings, audio graph is not initialized',
+    );
+    return state;
+  }
+
   const { whiteNoise, pinkNoise, brownNoise } = preset;
+
+  const {
+    ctx,
+    nodes: { filter, whiteNoiseGain, pinkNoiseGain, brownNoiseGain },
+  } = graph;
 
   if (whiteNoise.isActive) {
     const { gain } = whiteNoise;
 
     const reducedGainValue =
-      roundTwoDigitsNonFinite(gain) - roundTwoDigitsNonFinite(gain) * 0.7;
+      roundTwoDigitsNonFinite(gain) - roundTwoDigitsNonFinite(gain) * 0.8;
 
     whiteNoiseGain.gain.setTargetAtTime(
       reducedGainValue,
-      audioContext.currentTime,
+      ctx.currentTime,
       TIME_CONSTANT,
     );
 
@@ -33,11 +40,11 @@ export function noisesPresetReducer(preset: NoisesState): NoisesState {
     const { gain } = pinkNoise;
 
     const reducedGainValue =
-      roundTwoDigitsNonFinite(gain) - roundTwoDigitsNonFinite(gain) * 0.7;
+      roundTwoDigitsNonFinite(gain) - roundTwoDigitsNonFinite(gain) * 0.8;
 
     pinkNoiseGain.gain.setTargetAtTime(
       reducedGainValue,
-      audioContext.currentTime,
+      ctx.currentTime,
       TIME_CONSTANT,
     );
 
@@ -50,11 +57,11 @@ export function noisesPresetReducer(preset: NoisesState): NoisesState {
     const { gain } = brownNoise;
 
     const reducedGainValue =
-      roundTwoDigitsNonFinite(gain) - roundTwoDigitsNonFinite(gain) * 0.7;
+      roundTwoDigitsNonFinite(gain) - roundTwoDigitsNonFinite(gain) * 0.8;
 
     brownNoiseGain.gain.setTargetAtTime(
       reducedGainValue,
-      audioContext.currentTime,
+      ctx.currentTime,
       TIME_CONSTANT,
     );
 

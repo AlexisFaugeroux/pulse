@@ -1,9 +1,4 @@
-import {
-  brownNoiseGain,
-  filter,
-  pinkNoiseGain,
-  whiteNoiseGain,
-} from '../../../nodesConfig';
+import { getAudioGraph } from '../../../audio/audioGraph';
 import { Noise_Types } from '../../../utils/constants';
 import type { Noise_SettingsActions } from '../../types/noises';
 import type { NoisesState } from './types';
@@ -12,11 +7,22 @@ export function updateType(
   state: NoisesState,
   action: Noise_SettingsActions,
 ): typeof state {
+  const graph = getAudioGraph();
+  if (!graph) {
+    console.error(
+      'Could not update noise type, audio graph is not initialized',
+    );
+    return state;
+  }
+
+  const {
+    nodes: { filter, whiteNoiseGain, pinkNoiseGain, brownNoiseGain },
+  } = graph;
   const { id } = action.payload;
 
   if (!id) {
     console.error('Update noise type: no id provided');
-    return { ...state };
+    return state;
   }
   if (id === Noise_Types.WHITE) {
     pinkNoiseGain.disconnect();
@@ -55,5 +61,5 @@ export function updateType(
       pinkNoise: { ...state.pinkNoise, isActive: false },
     };
   }
-  return { ...state };
+  return state;
 }
